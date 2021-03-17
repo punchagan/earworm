@@ -7,7 +7,7 @@ set -e
 PHONE_IP=192.168.1.106
 ADB_PORT=5555
 TARGET_DIR=$HOME/Music/PhoneBackup
-SRC_DIRS=("Record" "VoiceRecorder")
+SRC_DIRS=("Recorders")
 
 
 function check_setup () {
