@@ -106,7 +106,6 @@
       }
       .song-controls {
           flex: 1;
-          text-align: center;
       }
       .play-button {
           align-items: center;
@@ -122,14 +121,21 @@
       }
       .loopcontrol {
           flex: 0;
-          font-size: 0.5em;
           margin-right: 2em;
           border: solid var(--plyr-color-main) 1px;
-          padding: 1em;
+          padding: 0.5em;
           text-decoration: none;
-          background: 0 0;
-          font-weight: 900;
-          border-radius: 0.5em;
+          border-radius: 0.25em;
+          cursor: pointer;
+          color: white;
+          display: flex;
+          align-items: center;
+          background: var(--plyr-audio-control-background-hover,var(--plyr-color-main,var(--plyr-color-main,#00b3ff)));
+      }
+      .loopcontrol .state {
+          padding-left: 0.5em;
+          font-size: 0.6em;
+          width: 3em;
       }
     </style>
     <title>Punch's Covers</title>  <!-- ' -->
@@ -139,26 +145,29 @@
     <div id="container">
       <div class="player">
         <audio id="player"></audio>
-        <a href="#" class="loopcontrol" onClick="changeLoopState()"></a>
+        <span class="loopcontrol" onClick="changeLoopState()">
+          &#10227;
+          <span class="state"></span>
+        </span>
       </div>
       <ul class="songlist">
         {% for song in songs %}
         <li class="song">
+          <span class="song-controls">
+            <button class="play-button" onClick="playSong({{loop.index0}})">&#9654;</button>
+          </span>
           <small class="song-title">
             {{song.title}}
-          </small>
-          <small class="song-date">
-            {{song.creation_time.strftime('%Y-%m-%d')}}
-          </small>
-          <small class="song-album">
-            {{song.album}}
           </small>
           <small class="song-duration">
             {{song.duration}}
           </small>
-          <span class="song-controls">
-            <button class="play-button" onClick="playSong({{loop.index0}})">&#9654;</button>
-          </span>
+          <small class="song-album">
+            {{song.album}}
+          </small>
+          <small class="song-date">
+            {{song.creation_time.strftime('%Y-%m-%d')}}
+          </small>
         </li>
         {% endfor %}
       </ul>
@@ -195,13 +204,13 @@
 
       let loopState = 0;
       const loopText = {
-        0: "Looping Off",
-        1: "Looping Song",
-        2: "Looping All",
+        0: "Off",
+        1: "Song",
+        2: "All",
       }
       const changeLoopState = () => {
         loopState = (loopState + 1) % 3;
-        document.querySelector('.loopcontrol').textContent = loopText[loopState];
+        document.querySelector('.loopcontrol .state').textContent = loopText[loopState];
       }
 
       const handleLoopState = (event) => {
