@@ -90,8 +90,19 @@
           border-radius: 1em;
       }
       .song small {
-          flex: 11;
           align-items: center;
+      }
+      .song-title {
+          flex: 6;
+      }
+      .song-duration {
+          flex: 1;
+      }
+      .song-album {
+          flex: 2;
+      }
+      .song-date {
+          flex: 2;
       }
       .song-controls {
           flex: 1;
@@ -133,8 +144,17 @@
       <ul class="songlist">
         {% for song in songs %}
         <li class="song">
-          <small class="song-info">
-            {{song.title}} &mdash; {{song.album}} &mdash; {{song.creation_time.strftime('%Y-%m-%d')}}
+          <small class="song-title">
+            {{song.title}}
+          </small>
+          <small class="song-date">
+            {{song.creation_time.strftime('%Y-%m-%d')}}
+          </small>
+          <small class="song-album">
+            {{song.album}}
+          </small>
+          <small class="song-duration">
+            {{song.duration}}
           </small>
           <span class="song-controls">
             <button class="play-button" onClick="playSong({{loop.index0}})">&#9654;</button>

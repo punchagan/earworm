@@ -23,12 +23,15 @@ def get_metadata(music_dir):
         if tags.album is None:
             continue
         date = [int(x) for x in path.split('_', 1)[1].split('.', 1)[0].split('_')]
+        duration = int(tags.duration)
+        mins, secs = duration // 60, duration % 60
         song = {
             'path': path,
             'src': os.path.basename(path),
             'title': tags.title,
             'album': tags.album,
-            'creation_time': datetime.datetime(*date)
+            'creation_time': datetime.datetime(*date),
+            'duration': f'{mins}:{secs:02d}'
         }
         songs.append(song)
         if not tags.title:
