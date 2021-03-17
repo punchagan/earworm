@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+import datetime
 import glob
 import json
 import os
@@ -7,32 +8,30 @@ import subprocess
 
 import dateutil.parser
 import jinja2
+from tinytag import TinyTag
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(HERE, 'out')
 TEMPLATE_FILE = "template.html"
 
-FFPROBE = ['ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format', '-show_entries',
-           "format=tags"]
 
 def get_metadata(music_dir):
-    paths = glob.glob(f'{music_dir}/**/*.m4a', recursive=True)
-    # FIXME: Tried using tinytag, music_tag, mutagen, but none of them
-    # give me required metadata. Should I use a different tagging
-    # programme? Or a different recorder?
-    metadata = {
-        path: json.loads(subprocess.check_output(FFPROBE + [path]))['format']['tags']
-        for path in paths
-    }
+    paths = glob.glob(f'{music_dir}/**/*.mp3', recursive=True)
+    metadata = {path: TinyTag.get(path) for path in paths}
     songs = []
-    for path, info in metadata.items():
-        if 'album' not in info:
+    for path, tags in metadata.items():
+        if tags.album is None:
             continue
-        info['path'] = path
-        info['src'] = os.path.basename(path)
-        info['creation_time'] = dateutil.parser.isoparse(info['creation_time'])
-        songs.append(info)
-        if 'title' not in info:
+        date = [int(x) for x in path.split('_', 1)[1].split('.', 1)[0].split('_')]
+        song = {
+            'path': path,
+            'src': os.path.basename(path),
+            'title': tags.title,
+            'album': tags.album,
+            'creation_time': datetime.datetime(*date)
+        }
+        songs.append(song)
+        if not tags.title:
             print("NOTE: No title for", path)
 
     n = len(songs)
