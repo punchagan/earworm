@@ -19,11 +19,6 @@
       href="https://cdn.plyr.io/static/fonts/gordita-bold.woff2"
     />
     <script src="https://cdn.plyr.io/3.6.4/plyr.js"></script>
-    <script type="text/javascript">
-      document.addEventListener('DOMContentLoaded', () => {
-        const players = Plyr.setup('.player', {settings: []});
-      });
-    </script>
     <style>
       :root {
           --plyr-color-main:#00b3ff;
@@ -60,7 +55,7 @@
       img,
       video {
           max-width:100%;
-          vertical-align:middle
+          vertical-align: middle;
       }
       nav {
           display:flex;
@@ -84,11 +79,46 @@
           display: none;
       }
       .song {
-          margin-bottom: 6rem;
+          text-align: left;
+          padding: 1rem 1rem;
+          display: flex;
+          align-items: center;
+          border-bottom: dashed 1px;
+      }
+      .current {
+          background: lightskyblue;
+          border-radius: 1em;
       }
       .song small {
-           font-size: .8125rem;
-          display: block;
+          flex: 11;
+          align-items: center;
+      }
+      .song-controls {
+          flex: 1;
+          text-align: center;
+      }
+      .play-button {
+          align-items: center;
+          border: 0;
+          border-radius: 0.5em;
+          padding: 0.5em 1em;
+          background: var(--plyr-audio-control-background-hover,var(--plyr-color-main,var(--plyr-color-main,#00b3ff)));
+          color: white;
+      }
+      .player {
+          display: flex;
+          align-items: center;
+      }
+      .loopcontrol {
+          flex: 0;
+          font-size: 0.5em;
+          margin-right: 2em;
+          border: solid var(--plyr-color-main) 1px;
+          padding: 1em;
+          text-decoration: none;
+          background: 0 0;
+          font-weight: 900;
+          border-radius: 0.5em;
       }
     </style>
     <title>Punch's Covers</title>  <!-- ' -->
@@ -96,19 +126,89 @@
 
   <body>
     <div id="container">
+      <div class="player">
+        <audio id="player"></audio>
+        <a href="#" class="loopcontrol" onClick="changeLoopState()"></a>
+      </div>
       <ul class="songlist">
         {% for song in songs %}
         <li class="song">
-          <audio class="player" loop>
-            <source src="music/{{song.src}}" type="audio/mp3" />
-          </audio>
-          <span class="plyr__cite plyr__cite--audio">
-            <small>
+          <small class="song-info">
             {{song.title}} &mdash; {{song.album}} &mdash; {{song.creation_time.strftime('%Y-%m-%d')}}
           </small>
-        </span>
+          <span class="song-controls">
+            <button class="play-button" onClick="playSong({{loop.index0}})">&#9654;</button>
+          </span>
         </li>
         {% endfor %}
       </ul>
     </div>
+
+    <script type="text/javascript">
+      const songs = {{metadata}};
+
+      const setSource = (index) => {
+        const song = songs[index]
+        const {title, src} = song
+        const source = {
+          title,
+          type: 'audio',
+          sources: [
+            {
+              src,
+              type: 'audio/mp3',
+            },
+          ],
+        }
+        player.source = source
+
+        const songElements = document.querySelectorAll('.song')
+        songElements.forEach(it => it.classList.remove('current'))
+        songElements[index].classList.add('current')
+
+      };
+
+      const playSong = (index) => {
+        setSource(index);
+        player.play();
+      };
+
+      let loopState = 0;
+      const loopText = {
+        0: "Looping Off",
+        1: "Looping Song",
+        2: "Looping All",
+      }
+      const changeLoopState = () => {
+        loopState = (loopState + 1) % 3;
+        document.querySelector('.loopcontrol').textContent = loopText[loopState];
+      }
+
+      const handleLoopState = (event) => {
+        switch (loopState) {
+        case 1:
+          player.currentTime = 0;
+          player.play();
+          break;
+        case 2:
+          const current = songs.findIndex(it => it.title === player.config.title);
+          const next = (current + 1) % songs.length;
+          playSong(next);
+          break;
+        default:
+          console.log(loopState);
+          break;
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const player = new Plyr('#player', {settings: []});
+        window.player = player;
+        player.on('ended', handleLoopState);
+        setSource(0);
+        changeLoopState();
+      });
+
+    </script>
+  </body>
 </html>

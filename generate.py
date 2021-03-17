@@ -45,7 +45,8 @@ def generate_index(songs, music_dir):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
-    output = template.render(songs=songs)
+    metadata = [{'src': f'music/{s["src"]}', 'title': s['title']} for s in songs]
+    output = template.render(songs=songs, metadata=json.dumps(metadata))
     with open(os.path.join(OUT_DIR, 'index.html'), 'w') as f:
         f.write(output)
 
@@ -64,8 +65,8 @@ def generate_site(music_dir):
     shutil.rmtree(OUT_DIR)
     os.makedirs(OUT_DIR, exist_ok=True)
 
-    generate_index(songs, music_dir)
     copy_media(songs)
+    generate_index(songs, music_dir)
 
 
 if __name__ == "__main__":
