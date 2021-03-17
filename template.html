@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.4/plyr.css" />
+    <!-- Preload -->
+    <link
+      rel="preload"
+      as="font"
+      crossorigin
+      type="font/woff2"
+      href="https://cdn.plyr.io/static/fonts/gordita-medium.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      crossorigin
+      type="font/woff2"
+      href="https://cdn.plyr.io/static/fonts/gordita-bold.woff2"
+    />
+    <script src="https://cdn.plyr.io/3.6.4/plyr.js"></script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        const players = Plyr.setup('.player', {settings: []});
+      });
+    </script>
+    <style>
+      :root {
+          --plyr-color-main:#00b3ff;
+          --plyr-font-size-base:13px;
+          --plyr-font-size-small:12px;
+          --plyr-font-size-time:11px;
+          --plyr-font-size-badges:9px;
+          --plyr-font-size-menu:var(--plyr-font-size-base);
+          --plyr-font-weight-regular:600;
+          --plyr-font-weight-bold:600;
+          --plyr-font-size-captions-medium:18px;
+          --plyr-font-size-captions-large:21px;
+          --plyr-font-family: Gordita,Avenir,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+      }
+      html {
+          background:linear-gradient(to left top,#e0f6ff,#f5fcff);
+          background-attachment:fixed;
+          height: 100%;
+      }
+      body {
+          display:flex;
+          flex-direction:column;
+          min-height:100%;
+          -moz-osx-font-smoothing:grayscale;
+          -webkit-font-smoothing:antialiased;
+      }
+      li,
+      ul {
+          list-style:none;
+          margin:0;
+          padding:0
+      }
+      audio,
+      img,
+      video {
+          max-width:100%;
+          vertical-align:middle
+      }
+      nav {
+          display:flex;
+          justify-content:center;
+          margin-bottom:16px
+      }
+      .plyr {
+          border-radius:8px;
+          box-shadow:0 2px 15px rgba(0,0,0,.1);
+          margin:16px auto
+      }
+      .plyr.plyr--audio {
+          max-width:480px
+      }
+      #container {
+          margin: auto;
+          width: 600px;
+          text-align: center;
+      }
+      .plyr audio {
+          display: none;
+      }
+      .song {
+          margin-bottom: 6rem;
+      }
+      .song small {
+           font-size: .8125rem;
+          display: block;
+      }
+    </style>
+    <title>Punch's Covers</title>  <!-- ' -->
+  </head>
+
+  <body>
+    <div id="container">
+      <ul class="songlist">
+        {% for song in songs %}
+        <li class="song">
+          <audio class="player" loop>
+            <source src="music/{{song.src}}" type="audio/mp3" />
+          </audio>
+          <span class="plyr__cite plyr__cite--audio">
+            <small>
+            {{song.title}} &mdash; {{song.album}} &mdash; {{song.creation_time.strftime('%Y-%m-%d')}}
+          </small>
+        </span>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+</html>
