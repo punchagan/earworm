@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.6.4/plyr.css" />
     <!-- Preload -->
     <link
@@ -39,9 +40,8 @@
           height: 100%;
       }
       body {
-          display:flex;
-          flex-direction:column;
           min-height:100%;
+          margin: 0;
           -moz-osx-font-smoothing:grayscale;
           -webkit-font-smoothing:antialiased;
       }
@@ -65,15 +65,12 @@
       .plyr {
           border-radius:8px;
           box-shadow:0 2px 15px rgba(0,0,0,.1);
-          margin:16px auto
+          margin:16px auto;
       }
       #container {
           margin: auto;
           max-width: 600px;
           text-align: center;
-      }
-      .plyr {
-          flex: 200;
       }
       .plyr audio {
           display: none;
@@ -126,8 +123,13 @@
           bottom: 0px;
           background: white;
       }
+      .plyr {
+          width: 100%;
+          margin-left: 0.5em;
+      }
       .loopcontrol {
-          margin: 0 2em;
+          flex: 0;
+          margin: 0 0.5em;
           border: solid var(--plyr-color-main) 1px;
           padding: 0.5em;
           text-decoration: none;
@@ -144,8 +146,20 @@
           width: 3em;
       }
       @media (max-width: 768px) {
+          body {
+              margin: 0;
+          }
           #container {
               width: 100%;
+              flex-direction: column;
+          }
+          .song-album {
+              display: none;
+          }
+          .song-date {
+              display: none;
+          }
+          .loopcontrol {
               flex-direction: column;
           }
       }
