@@ -67,16 +67,19 @@
           box-shadow:0 2px 15px rgba(0,0,0,.1);
           margin:16px auto
       }
-      .plyr.plyr--audio {
-          max-width:480px
-      }
       #container {
           margin: auto;
-          width: 600px;
+          max-width: 600px;
           text-align: center;
+      }
+      .plyr {
+          flex: 200;
       }
       .plyr audio {
           display: none;
+      }
+      .songlist {
+          margin: 50px 0px 100px;
       }
       .song {
           text-align: left;
@@ -118,10 +121,13 @@
       .player {
           display: flex;
           align-items: center;
+          width: 100%;
+          position: fixed;
+          bottom: 0px;
+          background: white;
       }
       .loopcontrol {
-          flex: 0;
-          margin-right: 2em;
+          margin: 0 2em;
           border: solid var(--plyr-color-main) 1px;
           padding: 0.5em;
           text-decoration: none;
@@ -137,19 +143,25 @@
           font-size: 0.6em;
           width: 3em;
       }
+      @media (max-width: 768px) {
+          #container {
+              width: 100%;
+              flex-direction: column;
+          }
+      }
     </style>
     <title>Punch's Covers</title>  <!-- ' -->
   </head>
 
   <body>
+    <div class="player">
+      <audio id="player"></audio>
+      <span class="loopcontrol" onClick="changeLoopState()">
+        &#10227;
+        <span class="state"></span>
+      </span>
+    </div>
     <div id="container">
-      <div class="player">
-        <audio id="player"></audio>
-        <span class="loopcontrol" onClick="changeLoopState()">
-          &#10227;
-          <span class="state"></span>
-        </span>
-      </div>
       <ul class="songlist">
         {% for song in songs %}
         <li class="song">
