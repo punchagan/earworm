@@ -83,29 +83,39 @@
           padding: 1rem 1rem;
           display: flex;
           align-items: center;
-          border-bottom: dashed 1px;
+          box-shadow: 0 2px 5px rgba(0,0,0,.1);
+          margin: 15px;
       }
       .current {
           background: lightskyblue;
-          border-radius: 1em;
       }
       .song small {
           align-items: center;
       }
-      .song-title {
-          flex: 6;
+      .song-description {
+          flex: 8;
+          display: flex;
+          flex-direction: column;
       }
-      .song-duration {
-          flex: 1;
+      .song-title {
+          font-weight: bold;
+          font-size: 0.9em;
       }
       .song-album {
+          opacity: 0.5;
+          margin: 0.25em 0;
+      }
+      .song-duration {
           flex: 2;
+          opacity: 0.8;
       }
       .song-date {
           flex: 2;
+          opacity: 0.5;
       }
       .song-controls {
           flex: 1;
+          margin: 0 1em;
       }
       .play-button {
           align-items: center;
@@ -122,6 +132,7 @@
           position: fixed;
           bottom: 0px;
           background: white;
+          z-index: 1000;
       }
       .plyr {
           width: 100%;
@@ -139,9 +150,9 @@
           display: flex;
           align-items: center;
           background: var(--plyr-audio-control-background-hover,var(--plyr-color-main,var(--plyr-color-main,#00b3ff)));
+          text-align: center;
       }
       .loopcontrol .state {
-          padding-left: 0.5em;
           font-size: 0.6em;
           width: 3em;
       }
@@ -152,9 +163,6 @@
           #container {
               width: 100%;
               flex-direction: column;
-          }
-          .song-album {
-              display: none;
           }
           .song-date {
               display: none;
@@ -182,14 +190,16 @@
           <span class="song-controls">
             <button class="play-button" onClick="playSong({{loop.index0}})">&#9654;</button>
           </span>
-          <small class="song-title">
-            {{song.title}}
-          </small>
+          <span class="song-description">
+            <span class="song-title">
+              {{song.title}}
+            </span>
+            <small class="song-album">
+              {{song.album}}
+            </small>
+          </span>
           <small class="song-duration">
             {{song.duration}}
-          </small>
-          <small class="song-album">
-            {{song.album}}
           </small>
           <small class="song-date">
             {{song.creation_time.strftime('%Y-%m-%d')}}
