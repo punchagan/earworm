@@ -128,4 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Output directory
 /out/
+# env vars configured using direnv
+/.envrc
