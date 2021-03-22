@@ -1,0 +1,155 @@
+:root {
+    --plyr-color-main:#00b3ff;
+    --plyr-font-size-base:13px;
+    --plyr-font-size-small:12px;
+    --plyr-font-size-time:11px;
+    --plyr-font-size-badges:9px;
+    --plyr-font-size-menu:var(--plyr-font-size-base);
+    --plyr-font-weight-regular:600;
+    --plyr-font-weight-bold:600;
+    --plyr-font-size-captions-medium:18px;
+    --plyr-font-size-captions-large:21px;
+    --plyr-font-family: Gordita,Avenir,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+html {
+    background:linear-gradient(to left top,#e0f6ff,#f5fcff);
+    background-attachment:fixed;
+    height: 100%;
+}
+body {
+    min-height:100%;
+    margin: 0;
+    -moz-osx-font-smoothing:grayscale;
+    -webkit-font-smoothing:antialiased;
+    font-family: Gordita,Avenir,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight: 500;
+}
+li,
+ul {
+    list-style:none;
+    margin:0;
+    padding:0
+}
+audio,
+img,
+video {
+    max-width:100%;
+    vertical-align: middle;
+}
+nav {
+    display:flex;
+    justify-content:center;
+    margin-bottom:16px
+}
+.plyr {
+    border-radius:8px;
+    box-shadow:0 2px 15px rgba(0,0,0,.1);
+    margin:16px auto;
+}
+#container {
+    margin: auto;
+    max-width: 600px;
+    text-align: center;
+}
+.plyr audio {
+    display: none;
+}
+.songlist {
+    margin: 0px 0px 100px;
+}
+.song {
+    text-align: left;
+    padding: 1rem 1rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    margin: 15px;
+    background-color: #eee;
+}
+.current {
+    background: white;
+    outline: 3px solid yellow;
+}
+.song small {
+    align-items: center;
+}
+.song-description {
+    flex: 8;
+    display: flex;
+    flex-direction: column;
+}
+.song-title {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.song-album {
+    opacity: 0.5;
+    margin: 0.25em 0;
+}
+.song-duration {
+    flex: 2;
+    opacity: 0.8;
+}
+.song-date {
+    flex: 2;
+    opacity: 0.5;
+}
+.song-controls {
+    flex: 1;
+    margin: 0 1em;
+}
+.play-button {
+    align-items: center;
+    border: 0;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    background: var(--plyr-audio-control-background-hover,var(--plyr-color-main,var(--plyr-color-main,#00b3ff)));
+    color: white;
+}
+.player {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    background: #eee;
+    border: 1px solid #ccc;
+    z-index: 1000;
+}
+.plyr {
+    width: 100%;
+    margin-left: 0.5em;
+}
+.loopcontrol {
+    flex: 0;
+    margin: 0 0.5em;
+    border: solid var(--plyr-color-main) 1px;
+    padding: 0.5em;
+    text-decoration: none;
+    border-radius: 0.25em;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    background: var(--plyr-audio-control-background-hover,var(--plyr-color-main,var(--plyr-color-main,#00b3ff)));
+    text-align: center;
+}
+.loopcontrol .state {
+    font-size: 0.6em;
+    width: 3em;
+}
+@media (max-width: 768px) {
+    body {
+        margin: 0;
+    }
+    #container {
+        width: 100%;
+        flex-direction: column;
+    }
+    .song-date {
+        display: none;
+    }
+    .loopcontrol {
+        flex-direction: column;
+    }
+}
