@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import datetime
 import glob
+import io
 import json
 import os
 import shutil
@@ -80,24 +81,28 @@ def create_covers(songs):
         image_path = os.path.join(covers_dir, f'{song["album_slug"]}.jpg')
         if os.path.exists(image_path):
             continue
-        with open(image_path, 'wb') as f:
-            f.write(song['image'])
+        img = resize_image(song['image'])
+        img.save(image_path, quality=95, optimize=True)
         cover_images.append(image_path)
     return cover_images
+
+
+def resize_image(data):
+    img = Image.open(io.BytesIO(data))
+    w, h = img.size
+    l = max(w, h)
+    if l <= 300:
+        return img
+    square = Image.new(img.mode, (l, l), (0, 0, 0))
+    paste_coords = ((h - w) // 2, 0) if h > w else (0, (w - h) // 2)
+    square.paste(img, paste_coords)
+    return square.resize((300, 300))
 
 
 def create_og_image(path):
     image_dir = os.path.dirname(path)
     og_path = os.path.join(image_dir, 'og-image.jpg')
-    img = Image.open(path)
-    w, h = img.size
-    l = max(w, h)
-    square = Image.new(img.mode, (l, l), (0, 0, 0))
-    paste_coords = ((h - w) // 2, 0) if h > w else (0, (w - h) // 2)
-    square.paste(img, paste_coords)
-    # NOTE: We optimize the image because often platforms have
-    # restrictions on the file size to be displayed as preview image.
-    square.resize((300, 300)).save(og_path, quality=95, optimize=True)
+    shutil.copyfile(path, og_path)
 
 
 def generate_site(music_dir, title, base_url):

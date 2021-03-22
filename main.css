@@ -100,7 +100,7 @@ nav {
     width: 2em;
     display: block;
     border-radius: 1em;
-    background-position: bottom;
+    background-position: center;
     background-size: cover;
     margin-right: 1em;
 }
