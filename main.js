@@ -19,8 +19,17 @@ const setSource = index => {
 };
 
 const playSong = index => {
-  setSource(index);
-  player.play();
+  const current = songs.findIndex(it => it.title === player.config.title);
+  const songElements = document.querySelectorAll(".song");
+  songElements.forEach(it => it.classList.remove("playing"));
+
+  if (current === index && player.playing) {
+    player.pause();
+  } else {
+    setSource(index);
+    player.play();
+    songElements[index].classList.add("playing");
+  }
 };
 
 let loopState = 0;

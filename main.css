@@ -109,7 +109,7 @@ nav {
 .song button::after {
     content: "▶";
 }
-.current button::after{
+.playing button::after{
     content: "▮▮"
 }
 .player {
