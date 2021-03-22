@@ -106,6 +106,12 @@ nav {
     background: var(--plyr-audio-control-background-hover,var(--plyr-color-main,var(--plyr-color-main,#00b3ff)));
     color: white;
 }
+.song button::after {
+    content: "▶";
+}
+.current button::after{
+    content: "▮▮"
+}
 .player {
     display: flex;
     align-items: center;
