@@ -23,10 +23,10 @@ pip install requirements.txt
 
 ## Dev Setup
 
-When working on the source (html/CSS/JS) of the site, you can
+When working on the source (py/html/CSS/JS) of the site, you can
 automatically generate the html each time you make any changes to the
 input files using `entr`.
 
 ```sh
-ls  *.{html,css,js} | entr ./generate.py /path/to/music/dir/
+ls  *.{py,html,css,js} | entr ./generate.py /path/to/music/dir/
 ```
