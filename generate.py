@@ -8,6 +8,7 @@ import subprocess
 
 import dateutil.parser
 import jinja2
+from PIL import Image
 from tinytag import TinyTag
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -47,12 +48,15 @@ def get_metadata(music_dir):
     return sorted(songs, key=lambda s: s['creation_time'], reverse=True)
 
 
-def generate_index(songs, music_dir, title):
+def generate_index(songs, music_dir, title, base_url):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
     metadata = [{'src': f'music/{s["src"]}', 'title': s['title']} for s in songs]
-    output = template.render(songs=songs, metadata=json.dumps(metadata), title=title)
+    output = template.render(songs=songs,
+                             metadata=json.dumps(metadata),
+                             title=title,
+                             base_url=base_url)
     with open(os.path.join(OUT_DIR, 'index.html'), 'w') as f:
         f.write(output)
 
@@ -67,6 +71,7 @@ def copy_media(songs):
 def create_covers(songs):
     covers_dir = os.path.join(OUT_DIR, 'covers')
     os.makedirs(covers_dir, exist_ok=True)
+    cover_images = []
     for song in songs:
         if song['image'] is None:
             continue
@@ -77,9 +82,25 @@ def create_covers(songs):
             continue
         with open(image_path, 'wb') as f:
             f.write(song['image'])
+        cover_images.append(image_path)
+    return cover_images
 
 
-def generate_site(music_dir, title):
+def create_og_image(path):
+    image_dir = os.path.dirname(path)
+    og_path = os.path.join(image_dir, 'og-image.jpg')
+    img = Image.open(path)
+    w, h = img.size
+    l = max(w, h)
+    square = Image.new(img.mode, (l, l), (0, 0, 0))
+    paste_coords = ((h - w) // 2, 0) if h > w else (0, (w - h) // 2)
+    square.paste(img, paste_coords)
+    # NOTE: We optimize the image because often platforms have
+    # restrictions on the file size to be displayed as preview image.
+    square.resize((300, 300)).save(og_path, quality=95, optimize=True)
+
+
+def generate_site(music_dir, title, base_url):
     print(f"Generating site from {music_dir}")
     songs = get_metadata(music_dir)
 
@@ -87,8 +108,10 @@ def generate_site(music_dir, title):
     os.makedirs(OUT_DIR, exist_ok=True)
 
     copy_media(songs)
-    create_covers(songs)
-    generate_index(songs, music_dir, title)
+    cover_images = create_covers(songs)
+    if cover_images and base_url:
+        create_og_image(cover_images[0])
+    generate_index(songs, music_dir, title, base_url)
 
 
 if __name__ == "__main__":
@@ -97,8 +120,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('path', action='store')
     parser.add_argument('--title', action='store', default='')
+    parser.add_argument('--base-url', action='store', default='')
 
     options = parser.parse_args()
     music_dir = os.path.abspath(os.path.expanduser(options.path))
+    title = options.title or os.path.basename(music_dir)
 
-    generate_site(music_dir, options.title or os.path.basename(music_dir))
+    generate_site(music_dir, title, options.base_url)

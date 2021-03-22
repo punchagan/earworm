@@ -20,6 +20,9 @@ pip install requirements.txt
    option on `generate.py`. When no `--title` is specified, the folder
    name of the music directory is used as the title.
 
+3. If the `--base-url` parameter is specified, an `og:image` tag is
+   added to the page, using the latest song's cover image.
+
 2. Open the `index.html` in your browser to view the playlist locally.
 
 3. Modify and use the `deploy.sh` script to push the entire `out/`

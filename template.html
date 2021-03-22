@@ -24,6 +24,9 @@
       {% include 'main.css' %}
     </style>
     <title>{{title}}</title>
+    {% if base_url %}
+      <meta property="og:image" itemprop="image" content="{{base_url}}/covers/og-image.jpg">
+    {% endif %}
   </head>
 
   <body>
