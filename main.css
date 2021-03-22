@@ -47,15 +47,12 @@ nav {
     margin:16px auto;
 }
 #container {
-    margin: auto;
     max-width: 600px;
     text-align: center;
+    margin: 0px auto 100px;
 }
 .plyr audio {
     display: none;
-}
-.songlist {
-    margin: 0px 0px 100px;
 }
 .song {
     text-align: left;
