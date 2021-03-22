@@ -47,12 +47,12 @@ def get_metadata(music_dir):
     return sorted(songs, key=lambda s: s['creation_time'], reverse=True)
 
 
-def generate_index(songs, music_dir):
+def generate_index(songs, music_dir, title):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
     metadata = [{'src': f'music/{s["src"]}', 'title': s['title']} for s in songs]
-    output = template.render(songs=songs, metadata=json.dumps(metadata))
+    output = template.render(songs=songs, metadata=json.dumps(metadata), title=title)
     with open(os.path.join(OUT_DIR, 'index.html'), 'w') as f:
         f.write(output)
 
@@ -79,7 +79,7 @@ def create_covers(songs):
             f.write(song['image'])
 
 
-def generate_site(music_dir):
+def generate_site(music_dir, title):
     print(f"Generating site from {music_dir}")
     songs = get_metadata(music_dir)
 
@@ -88,7 +88,7 @@ def generate_site(music_dir):
 
     copy_media(songs)
     create_covers(songs)
-    generate_index(songs, music_dir)
+    generate_index(songs, music_dir, title)
 
 
 if __name__ == "__main__":
@@ -96,8 +96,9 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('path', action='store')
+    parser.add_argument('--title', action='store', default='')
 
     options = parser.parse_args()
     music_dir = os.path.abspath(os.path.expanduser(options.path))
 
-    generate_site(music_dir)
+    generate_site(music_dir, options.title or os.path.basename(music_dir))
