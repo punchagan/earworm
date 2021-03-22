@@ -17,7 +17,7 @@ TEMPLATE_FILE = "template.html"
 
 def get_metadata(music_dir):
     paths = glob.glob(f'{music_dir}/**/*.mp3', recursive=True)
-    metadata = {path: TinyTag.get(path) for path in paths}
+    metadata = {path: TinyTag.get(path, image=True) for path in paths}
     songs = []
     for path, tags in metadata.items():
         if tags.album is None:
@@ -26,13 +26,16 @@ def get_metadata(music_dir):
         date = [int(x) for x in src.split('_', 1)[1].split('.', 1)[0].split('_')]
         duration = int(tags.duration)
         mins, secs = duration // 60, duration % 60
+        album_slug = tags.album.lower().replace(' ', '-')
         song = {
             'path': path,
             'src': src,
             'title': tags.title,
             'album': tags.album,
             'creation_time': datetime.datetime(*date),
-            'duration': f'{mins}:{secs:02d}'
+            'duration': f'{mins}:{secs:02d}',
+            'image': tags.get_image(),
+            'album_slug': album_slug,
         }
         songs.append(song)
         if not tags.title:
@@ -61,6 +64,21 @@ def copy_media(songs):
         shutil.copyfile(song['path'], os.path.join(music_dir, song['src']))
 
 
+def create_covers(songs):
+    covers_dir = os.path.join(OUT_DIR, 'covers')
+    os.makedirs(covers_dir, exist_ok=True)
+    for song in songs:
+        if song['image'] is None:
+            continue
+        # NOTE: We assume all the songs in an album to have the same
+        # cover image.
+        image_path = os.path.join(covers_dir, f'{song["album_slug"]}.jpg')
+        if os.path.exists(image_path):
+            continue
+        with open(image_path, 'wb') as f:
+            f.write(song['image'])
+
+
 def generate_site(music_dir):
     print(f"Generating site from {music_dir}")
     songs = get_metadata(music_dir)
@@ -69,6 +87,7 @@ def generate_site(music_dir):
     os.makedirs(OUT_DIR, exist_ok=True)
 
     copy_media(songs)
+    create_covers(songs)
     generate_index(songs, music_dir)
 
 

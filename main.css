@@ -98,6 +98,15 @@ nav {
     flex: 1;
     margin: 0 1em;
 }
+.song-cover-art {
+    height: 2em;
+    width: 2em;
+    display: block;
+    border-radius: 1em;
+    background-position: bottom;
+    background-size: cover;
+    margin-right: 1em;
+}
 .play-button {
     align-items: center;
     border: 0;
