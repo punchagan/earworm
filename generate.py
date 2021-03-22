@@ -101,7 +101,7 @@ def create_og_image(path):
 
 
 def generate_site(music_dir, title, base_url):
-    print(f"Generating site from {music_dir}")
+    print(f"Generating site from {music_dir} ...")
     songs = get_metadata(music_dir)
 
     shutil.rmtree(OUT_DIR)
@@ -112,6 +112,7 @@ def generate_site(music_dir, title, base_url):
     if cover_images and base_url:
         create_og_image(cover_images[0])
     generate_index(songs, music_dir, title, base_url)
+    print(f"Site generated!")
 
 
 if __name__ == "__main__":
