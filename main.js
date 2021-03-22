@@ -26,7 +26,9 @@ const playSong = index => {
   if (current === index && player.playing) {
     player.pause();
   } else {
-    setSource(index);
+    if (current !== index) {
+      setSource(index);
+    }
     player.play();
     songElements[index].classList.add("playing");
   }
