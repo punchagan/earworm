@@ -20,9 +20,6 @@ const setSource = index => {
 
 const playSong = index => {
   const current = songs.findIndex(it => it.title === player.config.title);
-  const songElements = document.querySelectorAll(".song");
-  songElements.forEach(it => it.classList.remove("playing"));
-
   if (current === index && player.playing) {
     player.pause();
   } else {
@@ -30,7 +27,16 @@ const playSong = index => {
       setSource(index);
     }
     player.play();
-    songElements[index].classList.add("playing");
+  }
+};
+
+const handlePlayingState = e => {
+  console.log(e, 111);
+  const current = songs.findIndex(it => it.title === player.config.title);
+  const songElements = document.querySelectorAll(".song");
+  songElements.forEach(it => it.classList.remove("playing"));
+  if (e.type === "play") {
+    songElements[current].classList.add("playing");
   }
 };
 
@@ -66,6 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const player = new Plyr("#player", { settings: [] });
   window.player = player;
   player.on("ended", handleLoopState);
+  player.on("play", handlePlayingState);
+  player.on("pause", handlePlayingState);
+  player.on("ended", handlePlayingState);
   setSource(0);
   changeLoopState();
 });
