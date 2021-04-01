@@ -49,15 +49,17 @@ def get_metadata(music_dir):
     return sorted(songs, key=lambda s: s['creation_time'], reverse=True)
 
 
-def generate_index(songs, music_dir, title, base_url):
+def generate_index(songs, title, base_url):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
     metadata = [{'src': f'music/{s["src"]}', 'title': s['title']} for s in songs]
-    output = template.render(songs=songs,
-                             metadata=json.dumps(metadata),
-                             title=title,
-                             base_url=base_url)
+    output = template.render(
+        songs=songs,
+        metadata=json.dumps(metadata),
+        title=title,
+        base_url=base_url,
+    )
     with open(os.path.join(OUT_DIR, 'index.html'), 'w') as f:
         f.write(output)
 
@@ -116,7 +118,7 @@ def generate_site(music_dir, title, base_url):
     cover_images = create_covers(songs)
     if cover_images and base_url:
         create_og_image(cover_images[0])
-    generate_index(songs, music_dir, title, base_url)
+    generate_index(songs, title, base_url)
     print(f"Site generated!")
 
 
