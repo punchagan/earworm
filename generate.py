@@ -49,7 +49,7 @@ def get_metadata(music_dir):
     return sorted(songs, key=lambda s: s['creation_time'], reverse=True)
 
 
-def generate_index(songs, title, base_url):
+def generate_index(songs, title, description, base_url):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
@@ -59,6 +59,7 @@ def generate_index(songs, title, base_url):
         metadata=json.dumps(metadata),
         title=title,
         base_url=base_url,
+        description=description,
     )
     with open(os.path.join(OUT_DIR, 'index.html'), 'w') as f:
         f.write(output)
@@ -107,7 +108,7 @@ def create_og_image(path):
     shutil.copyfile(path, og_path)
 
 
-def generate_site(music_dir, title, base_url):
+def generate_site(music_dir, title, description, base_url):
     print(f"Generating site from {music_dir} ...")
     songs = get_metadata(music_dir)
 
@@ -118,7 +119,7 @@ def generate_site(music_dir, title, base_url):
     cover_images = create_covers(songs)
     if cover_images and base_url:
         create_og_image(cover_images[0])
-    generate_index(songs, title, base_url)
+    generate_index(songs, title, description, base_url)
     print(f"Site generated!")
 
 
@@ -128,10 +129,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('path', action='store')
     parser.add_argument('--title', action='store', default=os.getenv('HTML_TITLE'))
+    parser.add_argument('--description', action='store', default=os.getenv('HTML_DESCRIPTION'))
     parser.add_argument('--base-url', action='store', default=os.getenv('BASE_URL'))
 
     options = parser.parse_args()
     music_dir = os.path.abspath(os.path.expanduser(options.path))
     title = options.title or os.path.basename(music_dir)
+    description = options.description
 
-    generate_site(music_dir, title, options.base_url)
+    generate_site(music_dir, title, description, options.base_url)
