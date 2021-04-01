@@ -90,7 +90,7 @@ def create_covers(songs):
     return cover_images
 
 
-def resize_image(data):
+def resize_image(data, size=(300, 300)):
     img = Image.open(io.BytesIO(data))
     w, h = img.size
     l = max(w, h)
@@ -99,13 +99,21 @@ def resize_image(data):
     square = Image.new(img.mode, (l, l), (0, 0, 0))
     paste_coords = ((h - w) // 2, 0) if h > w else (0, (w - h) // 2)
     square.paste(img, paste_coords)
-    return square.resize((300, 300))
+    return square.resize(size)
 
 
 def create_og_image(path):
     image_dir = os.path.dirname(path)
     og_path = os.path.join(image_dir, 'og-image.jpg')
     shutil.copyfile(path, og_path)
+
+
+def create_favicon(path):
+    favicon_path = os.path.join(OUT_DIR, 'favicon.ico')
+    with open(path, 'rb') as f:
+        data = f.read()
+    img = resize_image(data, size=(96, 96))
+    img.save(favicon_path, quality=95, optimize=True)
 
 
 def generate_site(music_dir, title, description, base_url):
@@ -119,6 +127,7 @@ def generate_site(music_dir, title, description, base_url):
     cover_images = create_covers(songs)
     if cover_images and base_url:
         create_og_image(cover_images[0])
+        create_favicon(cover_images[0])
     generate_index(songs, title, description, base_url)
     print(f"Site generated!")
 

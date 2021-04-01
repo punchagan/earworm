@@ -4,6 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.6.4/plyr.css" />
+    {% if base_url %}
+      <link rel="icon"
+            type="image/x-icon"
+            href="{{base_url}}/favicon.ico">
+    {% endif %}
     <!-- Preload -->
     <link
       rel="preload"
