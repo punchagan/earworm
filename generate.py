@@ -125,8 +125,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('path', action='store')
-    parser.add_argument('--title', action='store', default='')
-    parser.add_argument('--base-url', action='store', default='')
+    parser.add_argument('--title', action='store', default=os.getenv('HTML_TITLE'))
+    parser.add_argument('--base-url', action='store', default=os.getenv('BASE_URL'))
 
     options = parser.parse_args()
     music_dir = os.path.abspath(os.path.expanduser(options.path))
