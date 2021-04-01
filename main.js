@@ -69,7 +69,9 @@ const handleLoopState = event => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const player = new Plyr("#player", { settings: [] });
+  const player = new Plyr("#player", {
+    controls: ["rewind", "play", "fast-forward", "progress", "current-time", "duration"]
+  });
   window.player = player;
   player.on("ended", handleLoopState);
   player.on("play", handlePlayingState);
