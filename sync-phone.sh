@@ -4,9 +4,9 @@
 
 set -e
 
-PHONE_IP=192.168.1.106
+PHONE_IP="${PHONE_IP}"
 ADB_PORT=5555
-TARGET_DIR=$HOME/Music/PhoneBackup
+TARGET_DIR="${DATA_DIR}"
 SRC_DIRS=("Recorders")
 
 
