@@ -18,7 +18,20 @@ OUT_DIR = os.path.join(HERE, "out")
 TEMPLATE_FILE = "template.html"
 
 
-def get_metadata(music_dir):
+class Config:
+    def __init__(self, **config):
+        self.__dict__.update(**config)
+
+
+def read_config(config_path):
+    with open(config_path) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+    config["music_dir"] = os.path.realpath(os.path.expanduser(config["music_dir"]))
+    return Config(**config)
+
+
+def get_metadata(config):
+    music_dir = config.music_dir
     paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
     metadata = {path: TinyTag.get(path, image=True) for path in paths}
     songs = []
@@ -50,7 +63,7 @@ def get_metadata(music_dir):
     return sorted(songs, key=lambda s: s["creation_time"], reverse=True)
 
 
-def generate_index(songs, title, description, base_url):
+def generate_index(songs, config):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
@@ -58,9 +71,9 @@ def generate_index(songs, title, description, base_url):
     output = template.render(
         songs=songs,
         metadata=json.dumps(metadata),
-        title=title,
-        base_url=base_url,
-        description=description,
+        title=config.title,
+        base_url=config.base_url,
+        description=config.description,
     )
     with open(os.path.join(OUT_DIR, "index.html"), "w") as f:
         f.write(output)
@@ -117,27 +130,20 @@ def create_favicon(path):
     img.save(favicon_path, quality=95, optimize=True)
 
 
-def generate_site(music_dir, title, description, base_url):
-    print(f"Generating site from {music_dir} ...")
-    songs = get_metadata(music_dir)
+def generate_site(config):
+    print(f"Generating site from {config.music_dir} ...")
+    songs = get_metadata(config)
 
     shutil.rmtree(OUT_DIR)
     os.makedirs(OUT_DIR, exist_ok=True)
 
     copy_media(songs)
     cover_images = create_covers(songs)
-    if cover_images and base_url:
+    if cover_images and config.base_url:
         create_og_image(cover_images[0])
         create_favicon(cover_images[0])
-    generate_index(songs, title, description, base_url)
+    generate_index(songs, config)
     print(f"Site generated!")
-
-
-def read_config(config_path):
-    with open(config_path) as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-    config["music_dir"] = os.path.realpath(os.path.expanduser(config["music_dir"]))
-    return config
 
 
 if __name__ == "__main__":
@@ -149,4 +155,4 @@ if __name__ == "__main__":
     options = parser.parse_args()
     config = read_config(options.config)
 
-    generate_site(**config)
+    generate_site(config)
