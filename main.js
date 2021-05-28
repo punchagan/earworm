@@ -1,4 +1,7 @@
 const setSource = (index) => {
+  if (index < 0) {
+    index = 0;
+  }
   const song = songs[index];
   const { title, src } = song;
   const source = {
@@ -16,9 +19,21 @@ const setSource = (index) => {
   const songElements = document.querySelectorAll(".song");
   songElements.forEach((it) => it.classList.remove("current"));
   songElements[index].classList.add("current");
+  showSong(songElements[index]);
+  location.hash = song.src;
 };
 
-const getCurrentSongIndex = (songs) => songs.findIndex((it) => it.src === player.config.title);
+const showSong = (element) => {
+  const rect = element.getBoundingClientRect();
+  const inView =
+    rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+  if (!inView) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
+const getSongIndex = (songs, songId) => songs.findIndex((it) => it.src === songId);
+const getCurrentSongIndex = (songs) => getSongIndex(songs, player.config.title);
 
 const playSong = (index) => {
   const current = getCurrentSongIndex(songs);
@@ -78,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
   player.on("play", handlePlayingState);
   player.on("pause", handlePlayingState);
   player.on("ended", handlePlayingState);
-  setSource(0);
+  const index = getSongIndex(songs, location.hash.substring(1));
+  setSource(index);
   changeLoopState(2);
 });
