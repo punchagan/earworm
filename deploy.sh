@@ -3,8 +3,13 @@ set -e
 
 EXPORT_DIR="out"
 
+pushd $(dirname $0)
+
+# Purge old data
+rm -rf "${EXPORT_DIR}"
+
 # Build the site
-./generate.py "${SONG_DIR}"
+./generate.py --config my-music.yml
 
 # Push to server
 rsync -azP --copy-links --delete "${EXPORT_DIR}/" "${SERVER_HOST}":"${SONG_PUBLIC_DIR}"

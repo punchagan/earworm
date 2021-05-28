@@ -198,7 +198,6 @@ def generate_site(config):
     print(f"Generating site from {config.music_dir} ...")
     songs = get_metadata(config)
 
-    shutil.rmtree(OUT_DIR)
     os.makedirs(OUT_DIR, exist_ok=True)
 
     copy_media(songs)
