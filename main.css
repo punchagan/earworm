@@ -49,7 +49,8 @@ nav {
 #container {
     max-width: 600px;
     text-align: center;
-    margin: 0px auto 100px;
+    margin: 0px auto 0px;
+    padding-bottom: 100px;
 }
 .plyr audio {
     display: none;
