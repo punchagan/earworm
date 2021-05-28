@@ -2,7 +2,7 @@ const setSource = index => {
   const song = songs[index];
   const { title, src } = song;
   const source = {
-    title,
+    title: src,
     type: "audio",
     sources: [
       {
@@ -18,7 +18,7 @@ const setSource = index => {
   songElements[index].classList.add("current");
 };
 
-const getCurrentSongIndex = (songs) => songs.findIndex(it => it.title === player.config.title);
+const getCurrentSongIndex = (songs) => songs.findIndex(it => it.src === player.config.title);
 
 const playSong = index => {
   const current = getCurrentSongIndex(songs);
