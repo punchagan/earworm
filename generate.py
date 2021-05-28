@@ -16,7 +16,6 @@ from tinytag import TinyTag
 import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR = os.path.join(HERE, "out")
 TEMPLATE_FILE = "template.html"
 
 
@@ -28,12 +27,26 @@ class Config:
 def read_config(config_path):
     with open(config_path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
-    config["music_dir"] = os.path.realpath(os.path.expanduser(config["music_dir"]))
+
+    config_dir = os.path.dirname(config_path)
+
+    music_dir = config["music_dir"]
+    config["music_dir"] = os.path.join(config_dir, os.path.expanduser(music_dir))
+
+    metadata_csv = config.get("metadata_csv")
+    metadata_csv = (
+        os.path.join(config_dir, os.path.expanduser(metadata_csv)) if metadata_csv else None
+    )
+    config["metadata_csv"] = metadata_csv
+
+    out_dir = os.path.join(config_dir, "out")
+    config["out_dir"] = out_dir
+
     return Config(**config)
 
 
 def get_metadata(config):
-    if hasattr(config, "metadata_csv"):
+    if config.metadata_csv:
         songs = get_metadata_from_csv(config)
     else:
         songs = get_metadata_from_music_dir(config)
@@ -139,19 +152,19 @@ def generate_index(songs, config):
         base_url=config.base_url,
         description=config.description,
     )
-    with open(os.path.join(OUT_DIR, "index.html"), "w") as f:
+    with open(os.path.join(config.out_dir, "index.html"), "w") as f:
         f.write(output)
 
 
 def copy_media(songs):
-    music_dir = os.path.join(OUT_DIR, "music")
+    music_dir = os.path.join(config.out_dir, "music")
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
         shutil.copyfile(song["path"], os.path.join(music_dir, song["src"]))
 
 
 def create_covers(songs):
-    covers_dir = os.path.join(OUT_DIR, "covers")
+    covers_dir = os.path.join(config.out_dir, "covers")
     os.makedirs(covers_dir, exist_ok=True)
     cover_images = []
     for song in songs:
@@ -187,7 +200,7 @@ def create_og_image(path):
 
 
 def create_favicon(path):
-    favicon_path = os.path.join(OUT_DIR, "favicon.ico")
+    favicon_path = os.path.join(config.out_dir, "favicon.ico")
     with open(path, "rb") as f:
         data = f.read()
     img = resize_image(data, size=(96, 96))
@@ -198,7 +211,7 @@ def generate_site(config):
     print(f"Generating site from {config.music_dir} ...")
     songs = get_metadata(config)
 
-    os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(config.out_dir, exist_ok=True)
 
     copy_media(songs)
     cover_images = create_covers(songs)
@@ -212,10 +225,10 @@ def generate_site(config):
 if __name__ == "__main__":
     import argparse
 
-    config_default = os.path.join(HERE, "config.yml")
+    config_default = "config.yml"
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", action="store", default=config_default)
     options = parser.parse_args()
-    config = read_config(options.config)
+    config = read_config(os.path.abspath(options.config))
 
     generate_site(config)
