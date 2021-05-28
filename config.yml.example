@@ -1,4 +1,6 @@
-music_dir: "~/Music/Recorders"
+music_dir: "~/Music/Recordings"
+title_required: True
+album_required: True
 title: "My Music"
 description: "<small>Welcome to my music page.</small>"
 base_url: "https://example.com/music"

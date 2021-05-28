@@ -36,13 +36,15 @@ def get_metadata(config):
     metadata = {path: TinyTag.get(path, image=True) for path in paths}
     songs = []
     for path, tags in metadata.items():
-        if tags.album is None:
+        if config.title_required and not tags.title:
+            continue
+        elif config.album_required and tags.album is None:
             continue
         src = os.path.basename(path)
         date = [int(x) for x in src.split("_", 1)[1].split(".", 1)[0].split("_")]
         duration = int(tags.duration)
         mins, secs = duration // 60, duration % 60
-        album_slug = tags.album.lower().replace(" ", "-")
+        album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
         song = {
             "path": path,
             "src": src,
@@ -56,6 +58,8 @@ def get_metadata(config):
         songs.append(song)
         if not tags.title:
             print("NOTE: No title for", path)
+        if not tags.album:
+            print("NOTE: No album for", path)
 
     n = len(songs)
     print(f"Found {n} songs ...")
