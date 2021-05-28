@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import csv
 import datetime
 import glob
 import io
@@ -32,6 +33,58 @@ def read_config(config_path):
 
 
 def get_metadata(config):
+    if hasattr(config, "metadata_csv"):
+        songs = get_metadata_from_csv(config)
+    else:
+        songs = get_metadata_from_music_dir(config)
+    return songs
+
+
+def get_metadata_from_csv(config):
+    music_dir = config.music_dir
+    csv_path = config.metadata_csv
+    with open(csv_path) as f:
+        reader = csv.DictReader(f)
+        reader.fieldnames = [f.lower() for f in reader.fieldnames]
+        # FIXME: Validate all required columns are present
+        metadata = {
+            os.path.join(config.music_dir, row["filename"]): Config(**row) for row in reader
+        }
+    songs = []
+
+    for path, tags in metadata.items():
+        if not os.path.exists(path):
+            continue
+        if config.title_required and not tags.title:
+            continue
+        elif config.album_required and not tags.album:
+            continue
+        elif config.date_required and not date:
+            continue
+
+        duration = int(float(tags.duration or 0))
+        mins, secs = duration // 60, duration % 60
+        album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
+        song = {
+            "path": path,
+            "src": tags.filename,
+            "title": tags.title or tags.filename,
+            "album": tags.album,
+            "creation_time": datetime.datetime.strptime(tags.date, "%Y-%m-%d")
+            if tags.date
+            else datetime.datetime.now(),
+            "duration": f"{mins}:{secs:02d}",
+            "image": None,
+            "album_slug": album_slug,
+        }
+        songs.append(song)
+
+    n = len(songs)
+    print(f"Found {n} songs ...")
+    return sorted(songs, key=lambda s: s["creation_time"], reverse=True)
+
+
+def get_metadata_from_music_dir(config):
     music_dir = config.music_dir
     paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
     metadata = {path: TinyTag.get(path, image=True) for path in paths}
