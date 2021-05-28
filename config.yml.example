@@ -1,6 +1,8 @@
 music_dir: "~/Music/Recordings"
 title_required: True
 album_required: True
+date_required: True
+date_regex: '(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})'
 title: "My Music"
 description: "<small>Welcome to my music page.</small>"
 base_url: "https://example.com/music"

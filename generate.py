@@ -4,6 +4,7 @@ import glob
 import io
 import json
 import os
+import re
 import shutil
 import subprocess
 
@@ -35,13 +36,19 @@ def get_metadata(config):
     paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
     metadata = {path: TinyTag.get(path, image=True) for path in paths}
     songs = []
+    date_re = re.compile(config.date_regex)
     for path, tags in metadata.items():
         if config.title_required and not tags.title:
             continue
         elif config.album_required and tags.album is None:
             continue
+
         src = os.path.basename(path)
-        date = [int(x) for x in src.split("_", 1)[1].split(".", 1)[0].split("_")]
+        match = date_re.search(path)
+        date = {key: int(value) for key, value in match.groupdict().items()} if match else None
+        if config.date_required and not date:
+            continue
+
         duration = int(tags.duration)
         mins, secs = duration // 60, duration % 60
         album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
@@ -50,7 +57,7 @@ def get_metadata(config):
             "src": src,
             "title": tags.title,
             "album": tags.album,
-            "creation_time": datetime.datetime(*date),
+            "creation_time": datetime.datetime(**date) if date else datetime.datetime.now(),
             "duration": f"{mins}:{secs:02d}",
             "image": tags.get_image(),
             "album_slug": album_slug,
