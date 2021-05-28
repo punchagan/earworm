@@ -18,8 +18,10 @@ const setSource = index => {
   songElements[index].classList.add("current");
 };
 
+const getCurrentSongIndex = (songs) => songs.findIndex(it => it.title === player.config.title);
+
 const playSong = index => {
-  const current = songs.findIndex(it => it.title === player.config.title);
+  const current = getCurrentSongIndex(songs);
   if (current === index && player.playing) {
     player.pause();
   } else {
@@ -31,8 +33,7 @@ const playSong = index => {
 };
 
 const handlePlayingState = e => {
-  console.log(e, 111);
-  const current = songs.findIndex(it => it.title === player.config.title);
+  const current = getCurrentSongIndex(songs);
   const songElements = document.querySelectorAll(".song");
   songElements.forEach(it => it.classList.remove("playing"));
   if (e.type === "play") {
@@ -58,7 +59,7 @@ const handleLoopState = event => {
       player.play();
       break;
     case 2:
-      const current = songs.findIndex(it => it.title === player.config.title);
+      const current = getCurrentSongIndex(songs);
       const next = (current + 1) % songs.length;
       playSong(next);
       break;
