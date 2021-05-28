@@ -132,3 +132,4 @@ dmypy.json
 /out/
 # env vars configured using direnv
 /.envrc
+/*.yml

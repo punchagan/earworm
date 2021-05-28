@@ -1,0 +1,4 @@
+music_dir: "~/Music/Recorders"
+title: "My Music"
+description: "<small>Welcome to my music page.</small>"
+base_url: "https://example.com/music"

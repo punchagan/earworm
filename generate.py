@@ -11,6 +11,7 @@ import dateutil.parser
 import jinja2
 from PIL import Image
 from tinytag import TinyTag
+import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR = os.path.join(HERE, "out")
@@ -132,20 +133,20 @@ def generate_site(music_dir, title, description, base_url):
     print(f"Site generated!")
 
 
+def read_config(config_path):
+    with open(config_path) as f:
+        config = yaml.load(f, Loader=yaml.FullLoader)
+    config["music_dir"] = os.path.realpath(os.path.expanduser(config["music_dir"]))
+    return config
+
+
 if __name__ == "__main__":
     import argparse
 
+    config_default = os.path.join(HERE, "config.yml")
     parser = argparse.ArgumentParser()
-    parser.add_argument("path", action="store")
-    parser.add_argument("--title", action="store", default=os.getenv("HTML_TITLE"))
-    parser.add_argument(
-        "--description", action="store", default=os.getenv("HTML_DESCRIPTION")
-    )
-    parser.add_argument("--base-url", action="store", default=os.getenv("BASE_URL"))
-
+    parser.add_argument("--config", action="store", default=config_default)
     options = parser.parse_args()
-    music_dir = os.path.abspath(os.path.expanduser(options.path))
-    title = options.title or os.path.basename(music_dir)
-    description = options.description
+    config = read_config(options.config)
 
-    generate_site(music_dir, title, description, options.base_url)
+    generate_site(**config)
