@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-EXPORT_DIR="out"
+EXPORT_DIR="output"
 
 pushd $(dirname $0)
 

@@ -39,7 +39,7 @@ def read_config(config_path):
     )
     config["metadata_csv"] = metadata_csv
 
-    out_dir = os.path.join(config_dir, "out")
+    out_dir = os.path.join(config_dir, config.get("out_dir", "output"))
     config["out_dir"] = out_dir
 
     return Config(**config)
@@ -154,6 +154,7 @@ def generate_index(songs, config):
     )
     with open(os.path.join(config.out_dir, "index.html"), "w") as f:
         f.write(output)
+    return f.name
 
 
 def copy_media(songs):
@@ -218,8 +219,8 @@ def generate_site(config):
     if cover_images and config.base_url:
         create_og_image(cover_images[0])
         create_favicon(cover_images[0])
-    generate_index(songs, config)
-    print(f"Site generated!")
+    index_path = generate_index(songs, config)
+    print(f"Site generated in {index_path}!")
 
 
 if __name__ == "__main__":
