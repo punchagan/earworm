@@ -1,4 +1,4 @@
-const setSource = index => {
+const setSource = (index) => {
   const song = songs[index];
   const { title, src } = song;
   const source = {
@@ -7,20 +7,20 @@ const setSource = index => {
     sources: [
       {
         src,
-        type: "audio/mp3"
-      }
-    ]
+        type: "audio/mp3",
+      },
+    ],
   };
   player.source = source;
 
   const songElements = document.querySelectorAll(".song");
-  songElements.forEach(it => it.classList.remove("current"));
+  songElements.forEach((it) => it.classList.remove("current"));
   songElements[index].classList.add("current");
 };
 
-const getCurrentSongIndex = (songs) => songs.findIndex(it => it.src === player.config.title);
+const getCurrentSongIndex = (songs) => songs.findIndex((it) => it.src === player.config.title);
 
-const playSong = index => {
+const playSong = (index) => {
   const current = getCurrentSongIndex(songs);
   if (current === index && player.playing) {
     player.pause();
@@ -32,10 +32,10 @@ const playSong = index => {
   }
 };
 
-const handlePlayingState = e => {
+const handlePlayingState = (e) => {
   const current = getCurrentSongIndex(songs);
   const songElements = document.querySelectorAll(".song");
-  songElements.forEach(it => it.classList.remove("playing"));
+  songElements.forEach((it) => it.classList.remove("playing"));
   if (e.type === "play") {
     songElements[current].classList.add("playing");
   }
@@ -45,14 +45,14 @@ let loopState = 0;
 const loopText = {
   0: "Off",
   1: "Song",
-  2: "All"
+  2: "All",
 };
 const changeLoopState = (n = 1) => {
   loopState = (loopState + n) % 3;
   document.querySelector(".loopcontrol .state").textContent = loopText[loopState];
 };
 
-const handleLoopState = event => {
+const handleLoopState = (event) => {
   switch (loopState) {
     case 1:
       player.currentTime = 0;
@@ -71,7 +71,7 @@ const handleLoopState = event => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const player = new Plyr("#player", {
-    controls: ["rewind", "play", "fast-forward", "progress", "current-time", "duration"]
+    controls: ["rewind", "play", "fast-forward", "progress", "current-time", "duration"],
   });
   window.player = player;
   player.on("ended", handleLoopState);
