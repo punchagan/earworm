@@ -55,7 +55,7 @@ def get_metadata(config):
         song = {
             "path": path,
             "src": src,
-            "title": tags.title,
+            "title": tags.title or src,
             "album": tags.album,
             "creation_time": datetime.datetime(**date) if date else datetime.datetime.now(),
             "duration": f"{mins}:{secs:02d}",
