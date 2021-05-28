@@ -47,8 +47,8 @@ const loopText = {
   1: "Song",
   2: "All"
 };
-const changeLoopState = () => {
-  loopState = (loopState + 1) % 3;
+const changeLoopState = (n = 1) => {
+  loopState = (loopState + n) % 3;
   document.querySelector(".loopcontrol .state").textContent = loopText[loopState];
 };
 
@@ -79,5 +79,5 @@ document.addEventListener("DOMContentLoaded", () => {
   player.on("pause", handlePlayingState);
   player.on("ended", handlePlayingState);
   setSource(0);
-  changeLoopState();
+  changeLoopState(2);
 });
