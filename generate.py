@@ -22,9 +22,18 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = "template.html"
 
 
+@dataclass
 class Config:
-    def __init__(self, **config):
-        self.__dict__.update(**config)
+    music_dir: str
+    metadata_csv: str = ""
+    title_required: bool = False
+    album_required: bool = False
+    date_required: bool = False
+    date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
+    out_dir: str = "./public"
+    title: str = "My Music"
+    description: str = "<small>Welcome to my music page.</small>"
+    base_url: str = ""
 
 
 @dataclass
