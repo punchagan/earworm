@@ -3,11 +3,19 @@ A simple html/js/CSS page to play music from a local directory
 
 ## Setup
 
-Install the requirements specified in requirements.txt
+Install the requirements specified in `requirements.txt`.
+
+Use your favorite tool to create a venv and install the requirements into it.
 
 ```sh
+python3 -m venv .earworm-venv
+
+source .earworm-venv/bin/activate
+
 pip install -r requirements.txt
 ```
+
+*NOTE*: The code has not been tested with Python2 and it probably won't work.
 
 ## Usage
 
