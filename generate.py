@@ -94,7 +94,7 @@ def get_metadata_from_csv(config):
             continue
         elif config.album_required and not tags.album:
             continue
-        elif config.date_required and not date:
+        elif config.date_required and not tags.date:
             continue
 
         duration = int(float(tags.duration or 0))
