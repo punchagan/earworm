@@ -8,10 +8,12 @@ import os
 import re
 import shutil
 import subprocess
+from urllib import parse
 
 import dateutil.parser
 import jinja2
 from PIL import Image
+import requests
 from tinytag import TinyTag
 import yaml
 
@@ -24,6 +26,23 @@ class Config:
         self.__dict__.update(**config)
 
 
+def is_url(text):
+    return bool(parse.urlparse(text).scheme)
+
+
+def download_file(url, download_dir):
+    with requests.get(url, stream=True) as r:
+        header = r.headers["Content-Disposition"]
+        name = re.search('filename="(.*)"', header).group(1)
+        filename = os.path.join(download_dir, name)
+        print(f"Downloading {name} ...")
+        r.raise_for_status()
+        with open(filename, "wb") as f:
+            for chunk in r.iter_content(chunk_size=8192):
+                f.write(chunk)
+    return filename
+
+
 def read_config(config_path):
     with open(config_path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
@@ -34,9 +53,12 @@ def read_config(config_path):
     config["music_dir"] = os.path.join(config_dir, os.path.expanduser(music_dir))
 
     metadata_csv = config.get("metadata_csv")
-    metadata_csv = (
-        os.path.join(config_dir, os.path.expanduser(metadata_csv)) if metadata_csv else None
-    )
+    if is_url(metadata_csv):
+        metadata_csv = download_file(metadata_csv, config_dir)
+    else:
+        metadata_csv = (
+            os.path.join(config_dir, os.path.expanduser(metadata_csv)) if metadata_csv else None
+        )
     config["metadata_csv"] = metadata_csv
 
     out_dir = os.path.join(config_dir, config.get("out_dir", "output"))
