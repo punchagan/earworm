@@ -6,27 +6,43 @@ A simple html/js/CSS page to play music from a local directory
 Install the requirements specified in requirements.txt
 
 ```sh
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Usage
 
-1. Run `./generate.py /path/to/dir/containing/music` to generate a
-   directory called `out` with an `index.html`, `music/` directory
-   with all the music files that have a non-empty album ID3 tag, and a
-   `covers/` directory with the cover images for the albums.
+This tool can generate a simple HTML page from a directory of music files. The
+tool can read metadata from files directly (currently only supports MP3 files
+and ID3 tags). But, if you have files which are not MP3, you can use a CSV file
+with the metadata.
 
-2. You can specify the `<title>` of the page by using the `--title`
-   option on `generate.py`. When no `--title` is specified, the folder
-   name of the music directory is used as the title.
+The CSV file **must** have the following columns `filename` and `title`, and
+any additional ones you may want.
 
-3. If the `--base-url` parameter is specified, an `og:image` tag is
-   added to the page, using the latest song's cover image.
+1. To get started create a copy of the example config file:
+
+```sh
+cp config.yml.example config.yml
+```
+
+1. Change the value of `music_dir` to the directory where you have your music
+   files. If you wish to use a CSV file for the metadata, add a `metadata_csv`
+   entry to the config.
+
+   ```yaml
+   metadata_csv: "/path/to/metadata.csv"
+   ```
+
+1. Run `./generate.py` to generate a directory called `output` with an
+   `index.html`, `music/` directory with all the music files that have "valid
+   metadata", and a `covers/` directory with the cover images for the albums.
+
+2. You can specify the `<title>` of the page by using the `title` config var
+
+3. If the `base_url` parameter is specified, an `og:image` tag is added to the
+   page, using the latest song's cover image.
 
 2. Open the `index.html` in your browser to view the playlist locally.
-
-3. Modify and use the `deploy.sh` script to push the entire `out/`
-   directory to a server from where the page is served.
 
 ## Dev Setup
 

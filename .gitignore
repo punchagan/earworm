@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 # Output directory
-/out/
+/output/
 # env vars configured using direnv
 /.envrc
 /*.yml
