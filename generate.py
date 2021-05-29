@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import csv
+from dataclasses import dataclass
 import datetime
 import glob
 import io
@@ -24,6 +25,19 @@ TEMPLATE_FILE = "template.html"
 class Config:
     def __init__(self, **config):
         self.__dict__.update(**config)
+
+
+@dataclass
+class Row:
+    filename: str
+    title: str
+    date: str = None
+    duration: str = None
+    album: str = None
+    artist: str = None
+    composer: str = None
+    lyricist: str = None
+    instrument: str = None
 
 
 def is_url(text):
@@ -82,9 +96,7 @@ def get_metadata_from_csv(config):
         reader = csv.DictReader(f)
         reader.fieldnames = [f.lower() for f in reader.fieldnames]
         # FIXME: Validate all required columns are present
-        metadata = {
-            os.path.join(config.music_dir, row["filename"]): Config(**row) for row in reader
-        }
+        metadata = {os.path.join(config.music_dir, row["filename"]): Row(**row) for row in reader}
     songs = []
 
     for path, tags in metadata.items():
