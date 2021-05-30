@@ -98,7 +98,7 @@ def get_metadata_from_music_dir(config, song_list=True):
             pass
 
         if path not in metadata or not metadata[path].duration:
-            md = ffprobe_metadata(path)
+            md = ffprobe_metadata(path) if config.use_ffprobe else {"filename": path}
             md = {key: value for key, value in md.items() if key in row_keys}
             metadata[path] = Row(**md)
 

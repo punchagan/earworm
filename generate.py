@@ -33,6 +33,7 @@ class Config:
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
     config_dir: str = ""
+    use_ffprobe: bool = True
 
 
 def read_config(config_path):
