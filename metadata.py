@@ -91,7 +91,7 @@ def metadata_to_song_list(metadata, config):
         album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
         song = {
             "path": path,
-            "src": src,
+            "filename": src,
             "title": tags.title or src,
             "artist": tags.artist,
             "album": tags.album,

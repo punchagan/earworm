@@ -68,7 +68,7 @@ def generate_index(songs, config):
     env = jinja2.Environment(loader=loader)
     env.filters["render"] = render_str_template
     template = env.get_template(TEMPLATE_FILE)
-    metadata = [{"src": f'music/{s["src"]}', "title": s["title"]} for s in songs]
+    metadata = [{"src": f'music/{s["filename"]}', "title": s["title"]} for s in songs]
     output = template.render(
         config=config,
         songs=songs,
@@ -86,7 +86,7 @@ def copy_media(songs):
     music_dir = os.path.join(config.out_dir, "music")
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
-        shutil.copyfile(song["path"], os.path.join(music_dir, song["src"]))
+        shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))
 
 
 def create_covers(songs):
