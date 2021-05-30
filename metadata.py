@@ -56,16 +56,39 @@ def get_metadata_from_csv(config):
         reader.fieldnames = [f.lower() for f in reader.fieldnames]
         # FIXME: Validate all required columns are present
         metadata = {os.path.join(config.music_dir, row["filename"]): Row(**row) for row in reader}
+    return metadata_to_song_list(metadata, config)
+
+
+def get_metadata_from_music_dir(config):
+    music_dir = config.music_dir
+    paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
+    metadata = {path: TinyTag.get(path, image=True) for path in paths}
+    return metadata_to_song_list(metadata, config)
+
+
+def metadata_to_song_list(metadata, config):
     songs = []
 
+    date_re = re.compile(config.date_regex)
     for path, tags in metadata.items():
+        src = os.path.basename(path)
+
         if not os.path.exists(path):
             continue
         if config.title_required and not tags.title:
             continue
         elif config.album_required and not tags.album:
             continue
-        elif config.date_required and not tags.date:
+
+        if isinstance(tags, Row):
+            date = tags.date
+        else:
+            # FIXME: Move this to get_metadata_from_music_dir?
+            match = date_re.search(path)
+            date = {key: int(value) for key, value in match.groupdict().items()} if match else None
+            date = "{year}-{month}-{day}".format(**date) if date else None
+
+        if config.date_required and not date:
             continue
 
         duration = int(float(tags.duration or 0))
@@ -73,62 +96,20 @@ def get_metadata_from_csv(config):
         album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
         song = {
             "path": path,
-            "src": tags.filename,
-            "title": tags.title or tags.filename,
-            "artist": tags.artist,
-            "album": tags.album,
-            "creation_time": datetime.datetime.strptime(tags.date, "%Y-%m-%d")
-            if tags.date
-            else datetime.datetime.now(),
-            "duration": f"{mins}:{secs:02d}",
-            "image": None,
-            "album_slug": album_slug,
-        }
-        songs.append(song)
-
-    n = len(songs)
-    print(f"Found {n} songs ...")
-    return sorted(songs, key=lambda s: s["creation_time"], reverse=True)
-
-
-def get_metadata_from_music_dir(config):
-    music_dir = config.music_dir
-    paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
-    metadata = {path: TinyTag.get(path, image=True) for path in paths}
-    songs = []
-    date_re = re.compile(config.date_regex)
-    for path, tags in metadata.items():
-        if config.title_required and not tags.title:
-            continue
-        elif config.album_required and tags.album is None:
-            continue
-
-        src = os.path.basename(path)
-        match = date_re.search(path)
-        date = {key: int(value) for key, value in match.groupdict().items()} if match else None
-        if config.date_required and not date:
-            continue
-
-        duration = int(tags.duration)
-        mins, secs = duration // 60, duration % 60
-        album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
-        song = {
-            "path": path,
             "src": src,
             "title": tags.title or src,
+            "artist": tags.artist,
             "album": tags.album,
-            "creation_time": datetime.datetime(**date) if date else datetime.datetime.now(),
+            # FIXME: Avoid multiple back and forth conversions
+            "creation_time": datetime.datetime.strptime(date, "%Y-%m-%d")
+            if date
+            else datetime.datetime.now(),
             "duration": f"{mins}:{secs:02d}",
-            "image": tags.get_image(),
+            "image": tags.get_image() if isinstance(tags, TinyTag) else None,
             "album_slug": album_slug,
         }
         songs.append(song)
-        if not tags.title:
-            print("NOTE: No title for", path)
-        if not tags.album:
-            print("NOTE: No album for", path)
 
     n = len(songs)
     print(f"Found {n} songs ...")
-
     return sorted(songs, key=lambda s: s["creation_time"], reverse=True)
