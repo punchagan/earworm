@@ -95,10 +95,7 @@ def metadata_to_song_list(metadata, config):
             "title": tags.title or src,
             "artist": tags.artist,
             "album": tags.album,
-            # FIXME: Avoid multiple back and forth conversions
-            "creation_time": datetime.datetime.strptime(tags.date, "%Y-%m-%d")
-            if tags.date
-            else datetime.datetime.now(),
+            "creation_time": tags.date or "",
             "duration": f"{mins}:{secs:02d}",
             "image": tags.get_image() if isinstance(tags, TinyTag) else None,
             "album_slug": album_slug,
