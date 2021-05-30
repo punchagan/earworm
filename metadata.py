@@ -75,7 +75,7 @@ def metadata_to_song_list(metadata, config):
 
         if not os.path.exists(path):
             continue
-        if config.title_required and not tags.title:
+        elif config.title_required and not tags.title:
             continue
         elif config.album_required and not tags.album:
             continue
