@@ -32,6 +32,7 @@ class Config:
     date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
     out_dir: str = "./public"
     title: str = "My Music"
+    song_description: str = "{{song.album}} ({{song.creation_time.strftime('%Y-%m-%d')}})"
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
 
@@ -125,6 +126,7 @@ def get_metadata_from_csv(config):
             "path": path,
             "src": tags.filename,
             "title": tags.title or tags.filename,
+            "artist": tags.artist,
             "album": tags.album,
             "creation_time": datetime.datetime.strptime(tags.date, "%Y-%m-%d")
             if tags.date
@@ -183,12 +185,19 @@ def get_metadata_from_music_dir(config):
     return sorted(songs, key=lambda s: s["creation_time"], reverse=True)
 
 
+def render_str_template(text, **data):
+    template = jinja2.Environment(loader=jinja2.BaseLoader).from_string(text)
+    return template.render(**data)
+
+
 def generate_index(songs, config):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
+    env.filters["render"] = render_str_template
     template = env.get_template(TEMPLATE_FILE)
     metadata = [{"src": f'music/{s["src"]}', "title": s["title"]} for s in songs]
     output = template.render(
+        config=config,
         songs=songs,
         metadata=json.dumps(metadata),
         title=config.title,

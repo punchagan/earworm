@@ -58,7 +58,7 @@
               {{song.title}}
             </span>
             <small class="song-album">
-              {{song.album}} ({{song.creation_time.strftime('%Y-%m-%d')}})
+              {{ config.song_description | render(song=song) | safe }}
             </small>
           </span>
           <small class="song-duration">
