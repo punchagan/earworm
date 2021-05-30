@@ -41,6 +41,10 @@ cp config.yml.example config.yml
    metadata_csv: "/path/to/metadata.csv"
    ```
 
+1. You can generate a template for the `metadata.csv` from your `music_dir` by
+   running `./generate.py` with the `--update-csv` flag. Once the CSV file is
+   generated, add a `metadata_csv` entry pointing to this file to your config.
+
 1. Run `./generate.py` to generate a directory called `output` with an
    `index.html`, `music/` directory with all the music files that have "valid
    metadata", and a `covers/` directory with the cover images for the albums.
