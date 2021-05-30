@@ -32,6 +32,7 @@ class Config:
     song_description: str = "{{song.album}} ({{song.date}})"
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
+    config_dir: str = ""
 
 
 def read_config(config_path):
@@ -39,6 +40,7 @@ def read_config(config_path):
         config = yaml.load(f, Loader=yaml.FullLoader)
 
     config_dir = os.path.dirname(config_path)
+    config["config_dir"] = config_dir
 
     music_dir = config["music_dir"]
     config["music_dir"] = os.path.join(config_dir, os.path.expanduser(music_dir))

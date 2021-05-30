@@ -148,8 +148,7 @@ def metadata_to_song_list(metadata, config):
 
 def create_or_update_metadata_csv(config):
     if not config.metadata_csv:
-        print("No metadata_csv found in config")
-        return
+        config.metadata_csv = os.path.join(config.config_dir, "metadata.csv")
 
     if os.path.exists(config.metadata_csv):
         rows = {r["filename"]: r for r in read_metadata_csv(config)}
@@ -177,4 +176,5 @@ def create_or_update_metadata_csv(config):
         writer.writeheader()
         for name, row in rows.items():
             writer.writerow(row)
+
     print(f"Wrote updated CSV to {f.name}")
