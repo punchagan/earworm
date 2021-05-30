@@ -55,7 +55,6 @@ def read_metadata_csv(config):
     with open(config.metadata_csv) as f:
         reader = csv.DictReader(f)
         reader.fieldnames = [f.lower() for f in reader.fieldnames]
-        # FIXME: Validate all required columns are present
         return [row for row in reader]
 
 
