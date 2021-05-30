@@ -48,14 +48,18 @@ def get_metadata(config):
     return songs
 
 
-def get_metadata_from_csv(config):
-    music_dir = config.music_dir
-    csv_path = config.metadata_csv
-    with open(csv_path) as f:
+def read_metadata_csv(config):
+    with open(config.metadata_csv) as f:
         reader = csv.DictReader(f)
         reader.fieldnames = [f.lower() for f in reader.fieldnames]
         # FIXME: Validate all required columns are present
-        metadata = {os.path.join(config.music_dir, row["filename"]): Row(**row) for row in reader}
+        return [row for row in reader]
+
+
+def get_metadata_from_csv(config):
+    music_dir = config.music_dir
+    rows = read_metadata_csv(config)
+    metadata = {os.path.join(config.music_dir, row["filename"]): Row(**row) for row in rows}
     return metadata_to_song_list(metadata, config)
 
 
