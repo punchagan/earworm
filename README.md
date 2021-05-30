@@ -29,9 +29,10 @@ any additional ones you may want.
 
 1. To get started create a copy of the example config file:
 
-```sh
-cp config.yml.example config.yml
-```
+
+   ```sh
+   cp config.yml.example config.yml
+   ```
 
 1. Change the value of `music_dir` to the directory where you have your music
    files. If you wish to use a CSV file for the metadata, add a `metadata_csv`
