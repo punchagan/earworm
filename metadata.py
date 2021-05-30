@@ -63,13 +63,17 @@ def get_metadata_from_music_dir(config):
     music_dir = config.music_dir
     paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
     metadata = {path: TinyTag.get(path, image=True) for path in paths}
+    date_re = re.compile(config.date_regex)
+    for path, tags in metadata.items():
+        match = date_re.search(path)
+        tags.date = "{year}-{month}-{day}".format(**match.groupdict()) if match else None
+
     return metadata_to_song_list(metadata, config)
 
 
 def metadata_to_song_list(metadata, config):
     songs = []
 
-    date_re = re.compile(config.date_regex)
     for path, tags in metadata.items():
         src = os.path.basename(path)
 
@@ -79,16 +83,7 @@ def metadata_to_song_list(metadata, config):
             continue
         elif config.album_required and not tags.album:
             continue
-
-        if isinstance(tags, Row):
-            date = tags.date
-        else:
-            # FIXME: Move this to get_metadata_from_music_dir?
-            match = date_re.search(path)
-            date = {key: int(value) for key, value in match.groupdict().items()} if match else None
-            date = "{year}-{month}-{day}".format(**date) if date else None
-
-        if config.date_required and not date:
+        elif config.date_required and not tags.date:
             continue
 
         duration = int(float(tags.duration or 0))
@@ -101,8 +96,8 @@ def metadata_to_song_list(metadata, config):
             "artist": tags.artist,
             "album": tags.album,
             # FIXME: Avoid multiple back and forth conversions
-            "creation_time": datetime.datetime.strptime(date, "%Y-%m-%d")
-            if date
+            "creation_time": datetime.datetime.strptime(tags.date, "%Y-%m-%d")
+            if tags.date
             else datetime.datetime.now(),
             "duration": f"{mins}:{secs:02d}",
             "image": tags.get_image() if isinstance(tags, TinyTag) else None,
