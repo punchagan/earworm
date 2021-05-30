@@ -1,7 +1,8 @@
 import csv
 import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 import glob
+import io
 import os
 import re
 from urllib import parse
@@ -13,14 +14,14 @@ from tinytag import TinyTag
 @dataclass
 class Row:
     filename: str
-    title: str
-    date: str = None
-    duration: str = None
+    title: str = None
     album: str = None
     artist: str = None
     composer: str = None
     lyricist: str = None
     instrument: str = None
+    date: str = None
+    duration: str = None
 
 
 def is_url(text):
@@ -63,7 +64,7 @@ def get_metadata_from_csv(config):
     return metadata_to_song_list(metadata, config)
 
 
-def get_metadata_from_music_dir(config):
+def get_metadata_from_music_dir(config, song_list=True):
     music_dir = config.music_dir
     paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
     metadata = {path: TinyTag.get(path, image=True) for path in paths}
@@ -72,7 +73,7 @@ def get_metadata_from_music_dir(config):
         match = date_re.search(path)
         tags.date = "{year}-{month}-{day}".format(**match.groupdict()) if match else None
 
-    return metadata_to_song_list(metadata, config)
+    return metadata_to_song_list(metadata, config) if song_list else metadata
 
 
 def metadata_to_song_list(metadata, config):
@@ -109,3 +110,37 @@ def metadata_to_song_list(metadata, config):
     n = len(songs)
     print(f"Found {n} songs ...")
     return sorted(songs, key=lambda s: s["date"], reverse=True)
+
+
+def create_or_update_metadata_csv(config):
+    if not config.metadata_csv:
+        print("No metadata_csv found in config")
+        return
+
+    if os.path.exists(config.metadata_csv):
+        rows = {r["filename"]: r for r in read_metadata_csv(config)}
+
+    else:
+        rows = {}
+
+    file_metadata = get_metadata_from_music_dir(config, song_list=False)
+    for path, metadata in file_metadata.items():
+        filename = os.path.basename(path)
+        if filename in rows:
+            old_metadata = rows[filename]
+            for key, value in old_metadata.items():
+                new_value = metadata.__dict__.get(key)
+                if not value and new_value:
+                    old_metadata[key] = new_value
+        else:
+            metadata = {key: value for key, value in metadata.__dict__.items() if hasattr(Row, key)}
+            metadata["filename"] = filename
+            rows[filename] = metadata
+
+    fieldnames = [f.name for f in fields(Row)]
+    with open(config.metadata_csv, "w") as f:
+        writer = csv.DictWriter(f, fieldnames)
+        writer.writeheader()
+        for name, row in rows.items():
+            writer.writerow(row)
+    print(f"Wrote updated CSV to {f.name}")

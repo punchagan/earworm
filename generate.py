@@ -12,7 +12,7 @@ import jinja2
 from PIL import Image
 import yaml
 
-from metadata import download_file, Row, is_url, get_metadata
+from metadata import download_file, is_url, get_metadata, create_or_update_metadata_csv
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -154,7 +154,11 @@ if __name__ == "__main__":
     config_default = "config.yml"
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", action="store", default=config_default)
+    parser.add_argument("--update-csv", action="store_true", default=False)
+
     options = parser.parse_args()
     config = read_config(os.path.abspath(options.config))
-
-    generate_site(config)
+    if options.update_csv:
+        create_or_update_metadata_csv(config)
+    else:
+        generate_site(config)
