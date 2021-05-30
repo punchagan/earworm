@@ -29,7 +29,7 @@ class Config:
     date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
     out_dir: str = "./public"
     title: str = "My Music"
-    song_description: str = "{{song.album}} ({{song.creation_time}})"
+    song_description: str = "{{song.album}} ({{song.date}})"
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
 

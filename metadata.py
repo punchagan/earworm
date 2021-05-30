@@ -95,7 +95,7 @@ def metadata_to_song_list(metadata, config):
             "title": tags.title or src,
             "artist": tags.artist,
             "album": tags.album,
-            "creation_time": tags.date or "",
+            "date": tags.date or "",
             "duration": f"{mins}:{secs:02d}",
             "image": tags.get_image() if isinstance(tags, TinyTag) else None,
             "album_slug": album_slug,
@@ -104,4 +104,4 @@ def metadata_to_song_list(metadata, config):
 
     n = len(songs)
     print(f"Found {n} songs ...")
-    return sorted(songs, key=lambda s: s["creation_time"], reverse=True)
+    return sorted(songs, key=lambda s: s["date"], reverse=True)
