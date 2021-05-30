@@ -3,12 +3,14 @@ import datetime
 from dataclasses import dataclass, fields
 import glob
 import io
+import json
 import os
 import re
+import subprocess
 from urllib import parse
 
 import requests
-from tinytag import TinyTag
+from tinytag import TinyTag, TinyTagException
 
 
 @dataclass
@@ -64,10 +66,42 @@ def get_metadata_from_csv(config):
     return metadata_to_song_list(metadata, config)
 
 
+def ffprobe_metadata(path):
+    command = [
+        "ffprobe",
+        "-v",
+        "quiet",
+        "-print_format",
+        "json",
+        "-show_format",
+        path,
+    ]
+    try:
+        output = json.loads(subprocess.check_output(command))
+    except FileNotFoundError as e:
+        fn = e.filename
+        print(f"Install {fn} to get duration, other metatdata for non-mp3 files.")
+        output = {"format": {"filename": os.path.basename(path)}}
+
+    return output["format"]
+
+
 def get_metadata_from_music_dir(config, song_list=True):
     music_dir = config.music_dir
-    paths = glob.glob(f"{music_dir}/**/*.mp3", recursive=True)
-    metadata = {path: TinyTag.get(path, image=True) for path in paths}
+    paths = glob.glob(f"{music_dir}/**/*", recursive=True)
+    metadata = {}
+    row_keys = {f.name for f in fields(Row)}
+    for path in paths:
+        try:
+            metadata[path] = TinyTag.get(path, image=True)
+        except TinyTagException as e:
+            pass
+
+        if path not in metadata or not metadata[path].duration:
+            md = ffprobe_metadata(path)
+            md = {key: value for key, value in md.items() if key in row_keys}
+            metadata[path] = Row(**md)
+
     date_re = re.compile(config.date_regex)
     for path, tags in metadata.items():
         match = date_re.search(path)
