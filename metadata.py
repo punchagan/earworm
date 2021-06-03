@@ -104,7 +104,8 @@ def get_metadata_from_music_dir(config, song_list=True):
     date_re = re.compile(config.date_regex)
     for path, tags in metadata.items():
         match = date_re.search(path)
-        tags.date = "{year}-{month}-{day}".format(**match.groupdict()) if match else None
+        date = "{year}-{month}-{day}".format(**match.groupdict()) if match else None
+        tags.date = date if date not in config.ignored_dates else None
 
     return metadata_to_song_list(metadata, config) if song_list else metadata
 

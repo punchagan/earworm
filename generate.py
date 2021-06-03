@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import datetime
 import io
 import json
@@ -27,6 +27,7 @@ class Config:
     album_required: bool = False
     date_required: bool = False
     date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
+    ignored_dates: set = field(default_factory=set)
     out_dir: str = "./public"
     title: str = "My Music"
     song_description: str = "{{song.album}} ({{song.date}})"
