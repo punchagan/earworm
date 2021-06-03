@@ -88,6 +88,12 @@ nav {
     flex: 2;
     opacity: 0.8;
 }
+.song-info-link {
+    margin: 0.7em;
+    padding: 0.6em;
+    border: 1px lightblue solid;
+    opacity: 0.5;
+}
 .song-date {
     flex: 2;
     opacity: 0.5;

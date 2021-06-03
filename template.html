@@ -63,6 +63,9 @@
           </span>
           <small class="song-duration">
             {{song.duration}}
+            {% if song.metadata_link %}
+              <a class="song-info-link" href="{{song.metadata_link}}" target="_blank">ℹ</a>
+            {% endif %}
           </small>
         </li>
         {% endfor %}

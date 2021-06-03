@@ -23,6 +23,7 @@ TEMPLATE_FILE = "template.html"
 class Config:
     music_dir: str
     metadata_csv: str = ""
+    _metadata_url: str = ""
     title_required: bool = False
     album_required: bool = False
     date_required: bool = False
@@ -49,6 +50,7 @@ def read_config(config_path):
 
     metadata_csv = config.get("metadata_csv")
     if is_url(metadata_csv):
+        config["_metadata_url"] = metadata_csv
         metadata_csv = download_file(metadata_csv, config_dir)
     else:
         metadata_csv = (

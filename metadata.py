@@ -30,6 +30,18 @@ def is_url(text):
     return bool(parse.urlparse(text).scheme)
 
 
+def google_sheet_cell_link(url, row_num, column="A"):
+    parsed_url = parse.urlparse(url)
+    if not (bool(parsed_url.scheme) and parsed_url.netloc == "docs.google.com"):
+        return None
+    qs = parse.parse_qs(parsed_url.query)
+    if not ("id" in qs and "gid" in qs):
+        return None
+
+    url = "https://docs.google.com/spreadsheets/d/{id[0]}/edit#gid={gid[0]}&range={column}{row_num}"
+    return url.format(row_num=row_num, column=column, **qs)
+
+
 def download_file(url, download_dir):
     with requests.get(url, stream=True) as r:
         header = r.headers["Content-Disposition"]
@@ -113,7 +125,7 @@ def get_metadata_from_music_dir(config, song_list=True):
 def metadata_to_song_list(metadata, config):
     songs = []
 
-    for path, tags in metadata.items():
+    for num_row, (path, tags) in enumerate(metadata.items(), start=2):
         src = os.path.basename(path)
 
         if not os.path.exists(path):
@@ -128,6 +140,7 @@ def metadata_to_song_list(metadata, config):
         duration = int(float(tags.duration or 0))
         mins, secs = duration // 60, duration % 60
         album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
+        metadata_link = google_sheet_cell_link(config._metadata_url, num_row)
         song = {
             "path": path,
             "filename": src,
@@ -138,6 +151,7 @@ def metadata_to_song_list(metadata, config):
             "duration": f"{mins}:{secs:02d}",
             "image": tags.get_image() if isinstance(tags, TinyTag) else None,
             "album_slug": album_slug,
+            "metadata_link": metadata_link,
         }
         songs.append(song)
 
