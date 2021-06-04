@@ -31,7 +31,7 @@ class Config:
     ignored_dates: set = field(default_factory=set)
     out_dir: str = "./public"
     title: str = "My Music"
-    song_description: str = "{{song.album}} ({{song.date}})"
+    song_description: str = "${song.album} (${song.date})"
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
     config_dir: str = ""
@@ -74,11 +74,11 @@ def generate_index(songs, config):
     env = jinja2.Environment(loader=loader)
     env.filters["render"] = render_str_template
     template = env.get_template(TEMPLATE_FILE)
-    metadata = [{"src": f'music/{s["filename"]}', "title": s["title"]} for s in songs]
+    metadata = [dict(src=f'music/{s["filename"]}', **s) for s in songs]
     output = template.render(
         config=config,
         songs=songs,
-        metadata=json.dumps(metadata),
+        metadata=json.dumps(metadata, default=lambda o: None),
         title=config.title,
         base_url=config.base_url,
         description=config.description,
@@ -105,6 +105,7 @@ def create_covers(songs):
         # NOTE: We assume all the songs in an album to have the same
         # cover image.
         image_path = os.path.join(covers_dir, f'{song["album_slug"]}.jpg')
+        song["image"] = os.path.relpath(image_path, start=config.out_dir)
         if os.path.exists(image_path):
             continue
         img = resize_image(song["image"])

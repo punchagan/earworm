@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.4/plyr.css" />
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
     {% if base_url %}
       <link rel="icon"
             type="image/x-icon"
@@ -24,7 +24,6 @@
       type="font/woff2"
       href="https://cdn.plyr.io/static/fonts/gordita-bold.woff2"
     />
-    <script src="https://cdn.plyr.io/3.6.4/plyr.js"></script>
     <style>
       {% include 'main.css' %}
     </style>
@@ -35,49 +34,14 @@
   </head>
 
   <body>
-    <div class="player">
-      <audio id="player"></audio>
-      <span class="loopcontrol" onClick="changeLoopState()">
-        &#10227;
-        <span class="state"></span>
-      </span>
-    </div>
-    <div id="container">
-      <p>{{description}}</p>
-      <ul class="songlist">
-        {% for song in songs %}
-        <li class="song">
-          <span class="song-controls">
-            <button class="play-button" onClick="playSong({{loop.index0}})"></button>
-          </span>
-          <span class="song-cover-art"
-                style="background-image: url('./covers/{{song.album_slug}}.jpg');">
-          </span>
-          <span class="song-description">
-            <span class="song-title">
-              {{song.title}}
-            </span>
-            <small class="song-album">
-              {{ config.song_description | render(song=song) | safe }}
-            </small>
-          </span>
-          <small class="song-duration">
-            {{song.duration}}
-            {% if song.metadata_link %}
-              <a class="song-info-link" href="{{song.metadata_link}}" target="_blank">ℹ</a>
-            {% endif %}
-          </small>
-        </li>
-        {% endfor %}
-      </ul>
-      <small>This page was generated using
-        <a href="https://github.com/punchagan/earworm" target="_blank">earworm</a>
-      </small>
-    </div>
-
+    <div id="app"></div>
     <script type="text/javascript">
       const songs = {{metadata}};
-      {% include 'main.js' %}
+      const songDescription = '{{config.song_description}}';
+      const pageDescription = '{{config.description}}';
+    </script>
+    <script type="module">
+      {% include 'main.mjs' %}
     </script>
   </body>
 </html>
