@@ -163,7 +163,9 @@ const App = ({ library }) => {
     // add/remove from the queue and to see actual queue.
     const q = [...library];
     if (shuffle) {
-      q.sort(() => Math.random() - 0.5);
+      for (let i = 0; i < 12; i++) {
+        q.sort(() => Math.random() - 0.5);
+      }
     }
     setQueue(q);
   }, [shuffle]);
