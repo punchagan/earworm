@@ -60,7 +60,7 @@ const App = ({ library }) => {
   }, []);
 
   // Current Song State
-  const selectedSong = location.hash.substring(1) || library?.[0]?.src;
+  const selectedSong = decodeURI(location.hash.substring(1)) || library?.[0]?.src;
   const [currentSong, setCurrentSong] = useState(selectedSong);
   const songElement = useRef();
 
@@ -115,7 +115,7 @@ const App = ({ library }) => {
     // If already playing, continue to play
     playing ? player.play() : player.pause();
     location.hash = currentSong;
-    showSong(songElement.current);
+    songElement.current && showSong(songElement.current);
   }, [currentSong]);
 
   useEffect(() => {
