@@ -19,7 +19,9 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   const onClick = () => playPause(song.src);
   const description = eval("`" + songDescription + "`");
   const metadataLink = song.metadata_link
-    ? html`<a class="song-info-link" href="${song.metadata_link}" target="_blank"> ℹ </a>`
+    ? html`<a class="song-info-link" href="${song.metadata_link}" target="_blank">
+        <span class="material-icons">report_problem</span>
+      </a>`
     : undefined;
   return html`<li ref=${elem} class="song ${extraClassLabel}" key=${song.src}>
     <span class="song-controls">
@@ -33,7 +35,8 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
       <span class="song-title"> ${song.title} </span>
       <small class="song-album"> ${description} </small>
     </span>
-    <small class="song-duration"> ${song.duration} ${metadataLink} </small>
+    <small class="song-duration"> ${song.duration}</small>
+    ${metadataLink}
   </li>`;
 };
 

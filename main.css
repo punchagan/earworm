@@ -85,14 +85,15 @@ nav {
     margin: 0.25em 0;
 }
 .song-duration {
-    flex: 2;
+    flex: 1;
     opacity: 0.8;
 }
 .song-info-link {
     margin: 0.7em;
-    padding: 0.6em;
-    border: 1px lightblue solid;
+    padding: 0em;
     opacity: 0.5;
+    flex: 1;
+    color: gray;
 }
 .song-date {
     flex: 2;
