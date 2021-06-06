@@ -125,7 +125,7 @@ const App = ({ library }) => {
   // Player Setup
   const plyrRef = useCallback((node) => {
     if (node !== null) {
-      const controls = ["progress", "current-time", "duration"];
+      const controls = ["current-time", "progress", "duration", "volume"];
       const plyr = new Plyr(node, { controls });
       plyrRef.current = plyr;
     }

@@ -158,8 +158,13 @@ nav {
     .song-date {
         display: none;
     }
-    .repeat-control {
-        flex-direction: column;
+    .player {
+        display: grid;
+    }
+    .player-controls {
+        max-width: 12.5em;
+        margin: 0.5em auto 0;
+        background: none !important;
     }
 }
 .material-icons {
