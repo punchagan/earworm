@@ -149,10 +149,6 @@ nav {
     background: black;
     text-align: center;
 }
-.repeat-control .state {
-    font-size: 0.6em;
-    width: 3em;
-}
 @media (max-width: 768px) {
     body {
         margin: 0;
