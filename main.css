@@ -143,7 +143,7 @@ nav {
     width: 100%;
     margin-left: 0.5em;
 }
-.loopcontrol {
+.repeat-control {
     flex: 0;
     margin: 0 0.5em;
     border: solid var(--plyr-color-main) 1px;
@@ -157,7 +157,7 @@ nav {
     background: black;
     text-align: center;
 }
-.loopcontrol .state {
+.repeat-control .state {
     font-size: 0.6em;
     width: 3em;
 }
@@ -172,7 +172,7 @@ nav {
     .song-date {
         display: none;
     }
-    .loopcontrol {
+    .repeat-control {
         flex-direction: column;
     }
 }

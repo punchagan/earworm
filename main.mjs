@@ -44,7 +44,7 @@ const Player = ({ plyrRef, repeatIndex, cycleRepeat }) => {
   return html`
     <div class="player">
       <audio ref=${plyrRef} id="player" style=${hideStyle}></audio>
-      <span class="loopcontrol" onClick=${cycleRepeat}>
+      <span class="repeat-control" onClick=${cycleRepeat}>
         <span class="material-icons">${repeatIcons[repeatIndex]}</span>
       </span>
     </div>
