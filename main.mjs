@@ -65,7 +65,7 @@ const App = ({ library }) => {
   const plyrRef = useCallback((node) => {
     if (node !== null) {
       const plyr = new Plyr(node, {
-        controls: ["rewind", "play", "fast-forward", "progress", "current-time", "duration"],
+        controls: ["play", "progress", "current-time", "duration"],
       });
       plyrRef.current = plyr;
     }
