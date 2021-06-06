@@ -123,7 +123,7 @@ nav {
     display: flex;
 }
 .current .play-button {
-   background: black;
+   background: var(--plyr-color-main);
    color: white;
 }
 .player {
