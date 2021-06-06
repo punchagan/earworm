@@ -146,20 +146,6 @@ nav {
     padding: 2px !important;
     border-radius: 8px !important;
 }
-.control-btn {
-    flex: 0;
-    margin: 0 0.5em;
-    border: solid var(--plyr-color-main) 1px;
-    padding: 0.5em;
-    text-decoration: none;
-    border-radius: 0.25em;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    color: black;
-    background: white;
-    text-align: center;
-}
 @media (max-width: 768px) {
     body {
         margin: 0;
