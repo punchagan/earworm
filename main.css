@@ -94,6 +94,7 @@ nav {
     opacity: 0.5;
     flex: 1;
     color: gray;
+    text-decoration: none;
 }
 .song-date {
     flex: 2;
@@ -173,4 +174,8 @@ nav {
     .repeat-control {
         flex-direction: column;
     }
+}
+.material-icons {
+    display: flex;
+    align-content: center;
 }
