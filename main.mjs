@@ -46,13 +46,26 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   </li>`;
 };
 
-const Player = ({ plyrRef, repeatIndex, cycleRepeat, shuffle, toggleShuffle }) => {
+const Player = (props) => {
+  const {
+    plyrRef,
+    repeatIndex,
+    cycleRepeat,
+    shuffle,
+    toggleShuffle,
+    playing,
+    togglePlaying,
+  } = props;
   const repeatIcons = ["repeat", "repeat_one_on", "repeat_on"];
   const repeatTitles = ["off", "one", "all"];
 
   const shuffleIndex = Number(shuffle);
   const shuffleIcons = ["shuffle", "shuffle_on"];
   const shuffleTitles = ["off", "on"];
+
+  const playIndex = Number(playing);
+  const playIcons = ["play_arrow", "pause"];
+  const playTitles = ["Play", "Pause"];
 
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
@@ -61,6 +74,13 @@ const Player = ({ plyrRef, repeatIndex, cycleRepeat, shuffle, toggleShuffle }) =
     <div class="player">
       <div class="plyr--audio ">
         <div class="player-controls plyr__controls">
+          <span
+            class="plyr__controls__item plyr__control"
+            title=${playTitles[playIndex]}
+            onClick=${togglePlaying}
+          >
+            <span class="material-icons">${playIcons[playIndex]}</span>
+          </span>
           <span
             class="plyr__controls__item plyr__control"
             title="Repeat ${repeatTitles[repeatIndex]}"
@@ -89,9 +109,8 @@ const App = ({ library }) => {
   // Player Setup
   const plyrRef = useCallback((node) => {
     if (node !== null) {
-      const plyr = new Plyr(node, {
-        controls: ["play", "progress", "current-time", "duration"],
-      });
+      const controls = ["progress", "current-time", "duration"];
+      const plyr = new Plyr(node, { controls });
       plyrRef.current = plyr;
     }
   }, []);
@@ -103,6 +122,9 @@ const App = ({ library }) => {
 
   // Player State
   const [playing, setPlaying] = useState(false);
+  const togglePlaying = () => {
+    setPlaying(!playing);
+  };
 
   // Toggle Play/Pause State. Can change both playing and curentSong
   const playPause = (src) => {
@@ -226,6 +248,8 @@ const App = ({ library }) => {
       repeatIndex=${repeatIndex}
       shuffle=${shuffle}
       toggleShuffle=${toggleShuffle}
+      playing=${playing}
+      togglePlaying=${togglePlaying}
     />
     <div id="container">
       <p>${description}</p>
