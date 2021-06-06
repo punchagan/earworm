@@ -23,11 +23,17 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
         <span class="material-icons">report_problem</span>
       </a>`
     : undefined;
+  const playIcon = playing
+    ? isCurrent
+      ? "pause"
+      : "play_arrow"
+    : isCurrent
+    ? "not_started"
+    : "play_arrow";
   return html`<li ref=${elem} class="song ${extraClassLabel}" key=${song.src}>
     <span class="song-controls">
       <button class="play-button" onClick=${onClick}>
-        <span class="material-icons play">play_arrow</span>
-        <span class="material-icons pause">pause</span>
+        <span class="material-icons">${playIcon}</span>
       </button>
     </span>
     <span class="song-cover-art" style="background-image: url(${song.image});"></span>

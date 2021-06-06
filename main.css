@@ -121,15 +121,6 @@ nav {
     color: white;
     display: flex;
 }
-.play-button .pause {
-    display: none;
-}
-.playing .play{
-    display: none;
-}
-.playing .pause{
-    display: block;
-}
 .player {
     display: flex;
     align-items: center;
