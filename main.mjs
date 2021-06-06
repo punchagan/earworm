@@ -111,7 +111,7 @@ const App = ({ library }) => {
 
   useEffect(() => {
     const source = {
-      title: currentSong,
+      title: library.findIndex((it) => it.src === currentSong)?.title,
       type: "audio",
       sources: [{ src: currentSong, type: "audio/mp3" }],
     };
