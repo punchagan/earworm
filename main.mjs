@@ -55,6 +55,7 @@ const Player = (props) => {
     toggleShuffle,
     playing,
     togglePlaying,
+    playNext,
   } = props;
   const repeatIcons = ["repeat", "repeat_one", "repeat"];
   const repeatTitles = ["off", "one", "all"];
@@ -77,10 +78,24 @@ const Player = (props) => {
         <div class="player-controls plyr__controls">
           <span
             class="plyr__controls__item plyr__control"
+            title="Play Previous"
+            onClick=${() => playNext(true)}
+          >
+            <span class="material-icons">skip_previous</span>
+          </span>
+          <span
+            class="plyr__controls__item plyr__control"
             title=${playTitles[playIndex]}
             onClick=${togglePlaying}
           >
             <span class="material-icons">${playIcons[playIndex]}</span>
+          </span>
+          <span
+            class="plyr__controls__item plyr__control"
+            title="Play Next"
+            onClick=${() => playNext()}
+          >
+            <span class="material-icons">skip_next</span>
           </span>
           <span
             class="plyr__controls__item plyr__control"
@@ -149,7 +164,6 @@ const App = ({ library }) => {
     const q = [...library];
     if (shuffle) {
       q.sort(() => Math.random() - 0.5);
-      console.log(q);
     }
     setQueue(q);
   }, [shuffle]);
@@ -198,6 +212,15 @@ const App = ({ library }) => {
     }
   };
 
+  const playNext = (backwards = false) => {
+    const n = queue.length;
+    const change = backwards ? -1 : 1;
+    const songIndex = queue.findIndex((it) => it.src === currentSong);
+    const nextIndex = (songIndex + change + n) % n;
+    setCurrentSong(queue[nextIndex].src);
+    setPlaying(true);
+  };
+
   // NOTE: songEnded is used kind of like an event to mirror the plyr
   // songEnded event.  But, it is a state variable, which smells. This is to
   // avoid having stale values "closed" by the function attached as an event
@@ -211,11 +234,7 @@ const App = ({ library }) => {
     if (repeatIndex === 1) {
       setPlaying(true);
     } else if (repeatIndex === 2) {
-      const n = queue.length;
-      const songIndex = queue.findIndex((it) => it.src === currentSong);
-      const nextIndex = (songIndex + 1) % n;
-      setCurrentSong(queue[nextIndex].src);
-      setPlaying(true);
+      playNext();
     } else {
       console.log(`Repeat state is ${repeatIndex}`);
     }
@@ -251,6 +270,7 @@ const App = ({ library }) => {
       toggleShuffle=${toggleShuffle}
       playing=${playing}
       togglePlaying=${togglePlaying}
+      playNext=${playNext}
     />
     <div id="container">
       <p>${description}</p>
