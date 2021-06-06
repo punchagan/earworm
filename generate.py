@@ -100,7 +100,8 @@ def create_covers(songs):
     os.makedirs(covers_dir, exist_ok=True)
     cover_images = []
     for song in songs:
-        if song["image"] is None:
+        image = song.get("image")
+        if image is None:
             continue
         # NOTE: We assume all the songs in an album to have the same
         # cover image.
@@ -108,7 +109,7 @@ def create_covers(songs):
         song["image"] = os.path.relpath(image_path, start=config.out_dir)
         if os.path.exists(image_path):
             continue
-        img = resize_image(song["image"])
+        img = resize_image(image)
         img.save(image_path, quality=95, optimize=True)
         cover_images.append(image_path)
     return cover_images
