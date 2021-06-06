@@ -99,12 +99,6 @@ const App = ({ library }) => {
     const newIndex = (repeatIndex + 1) % n;
     setRepeatIndex(newIndex);
   };
-  useEffect(() => {
-    const player = plyrRef.current;
-    if (player) {
-      player.repeatIndex = repeatIndex;
-    }
-  }, [repeatIndex]);
 
   const showSong = (element) => {
     const rect = element.getBoundingClientRect();
@@ -137,27 +131,33 @@ const App = ({ library }) => {
   const setPlayingState = (e) => {
     if (!plyrRef.current.seeking) {
       setPlaying(e.type === "play");
+      setSongEnded(false);
     }
   };
 
-  const maybePlayNext = useCallback(() => {
-    const {
-      repeatIndex,
-      config: { title: currentSrc },
-    } = plyrRef.current;
-
+  // NOTE: songEnded is used kind of like an event to mirror the plyr
+  // songEnded event.  But, it is a state variable, which smells. This is to
+  // avoid having stale values "closed" by the function attached as an event
+  // listener on the player (for ended event).
+  const [songEnded, setSongEnded] = useState(false);
+  const chooseNext = useEffect(() => {
+    if (!songEnded) {
+      return;
+    }
+    console.log("Choosing next song...");
     if (repeatIndex === 1) {
       setPlaying(true);
     } else if (repeatIndex === 2) {
       const n = library.length;
-      const songIndex = library.findIndex((it) => it.src === currentSrc);
+      const songIndex = library.findIndex((it) => it.src === currentSong);
       const nextIndex = (songIndex + 1) % n;
       setCurrentSong(library[nextIndex].src);
       setPlaying(true);
     } else {
       console.log(`Repeat state is ${repeatIndex}`);
     }
-  }, [repeatIndex]);
+  }, [songEnded]);
+  const maybePlayNext = () => setSongEnded(true);
 
   useEffect(() => {
     const player = plyrRef.current;
