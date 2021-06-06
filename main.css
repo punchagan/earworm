@@ -138,6 +138,12 @@ nav {
 .plyr {
     width: 100%;
     margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+.player-controls {
+    margin-left: 0.5em;
+    padding: 2px !important;
+    border-radius: 8px !important;
 }
 .control-btn {
     flex: 0;

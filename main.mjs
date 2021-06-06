@@ -59,16 +59,24 @@ const Player = ({ plyrRef, repeatIndex, cycleRepeat, shuffle, toggleShuffle }) =
 
   return html`
     <div class="player">
-      <span class="control-btn" title="Repeat ${repeatTitles[repeatIndex]}" onClick=${cycleRepeat}>
-        <span class="material-icons">${repeatIcons[repeatIndex]}</span>
-      </span>
-      <span
-        class="control-btn"
-        title="Shuffle ${shuffleTitles[shuffleIndex]}"
-        onClick=${toggleShuffle}
-      >
-        <span class="material-icons">${shuffleIcons[shuffleIndex]}</span>
-      </span>
+      <div class="plyr--audio ">
+        <div class="player-controls plyr__controls">
+          <span
+            class="plyr__controls__item plyr__control"
+            title="Repeat ${repeatTitles[repeatIndex]}"
+            onClick=${cycleRepeat}
+          >
+            <span class="material-icons">${repeatIcons[repeatIndex]}</span>
+          </span>
+          <span
+            class="plyr__controls__item plyr__control"
+            title="Shuffle ${shuffleTitles[shuffleIndex]}"
+            onClick=${toggleShuffle}
+          >
+            <span class="material-icons">${shuffleIcons[shuffleIndex]}</span>
+          </span>
+        </div>
+      </div>
       <audio ref=${plyrRef} id="player" style=${hideStyle}></audio>
     </div>
   `;
