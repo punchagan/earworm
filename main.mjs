@@ -46,14 +46,18 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   </li>`;
 };
 
-const Player = ({ plyrRef, repeatIndex, cycleRepeat }) => {
+const Player = ({ plyrRef, repeatIndex, cycleRepeat, shuffle, toggleShuffle }) => {
   const repeatIcons = ["repeat", "repeat_one_on", "repeat_on"];
+  const shuffleIcons = ["shuffle", "shuffle_on"];
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
   return html`
     <div class="player">
-      <span class="repeat-control" onClick=${cycleRepeat}>
+      <span class="control-btn" onClick=${cycleRepeat}>
         <span class="material-icons">${repeatIcons[repeatIndex]}</span>
+      </span>
+      <span class="control-btn" onClick=${toggleShuffle}>
+        <span class="material-icons">${shuffleIcons[Number(shuffle)]}</span>
       </span>
       <audio ref=${plyrRef} id="player" style=${hideStyle}></audio>
     </div>
@@ -61,6 +65,9 @@ const Player = ({ plyrRef, repeatIndex, cycleRepeat }) => {
 };
 
 const App = ({ library }) => {
+  // Setup Queue
+  const [queue, setQueue] = useState([...library]);
+
   // Player Setup
   const plyrRef = useCallback((node) => {
     if (node !== null) {
@@ -72,7 +79,7 @@ const App = ({ library }) => {
   }, []);
 
   // Current Song State
-  const selectedSong = decodeURI(location.hash.substring(1)) || library?.[0]?.src;
+  const selectedSong = decodeURI(location.hash.substring(1)) || queue?.[0]?.src;
   const [currentSong, setCurrentSong] = useState(selectedSong);
   const songElement = useRef();
 
@@ -90,6 +97,21 @@ const App = ({ library }) => {
       console.log("No src set");
     }
   };
+
+  // Shuffle State
+  const [shuffle, setShuffle] = useState(false);
+  const toggleShuffle = () => setShuffle(!shuffle);
+  useEffect(() => {
+    // NOTE: Simple implementation of shuffle, assuming the queue contains
+    // the full library. This needs to change when we have a way to
+    // add/remove from the queue and to see actual queue.
+    const q = [...library];
+    if (shuffle) {
+      q.sort(() => Math.random() - 0.5);
+      console.log(q);
+    }
+    setQueue(q);
+  }, [shuffle]);
 
   // Repeat State
   const repeatStates = ["Off", "Song", "All"];
@@ -148,10 +170,10 @@ const App = ({ library }) => {
     if (repeatIndex === 1) {
       setPlaying(true);
     } else if (repeatIndex === 2) {
-      const n = library.length;
-      const songIndex = library.findIndex((it) => it.src === currentSong);
+      const n = queue.length;
+      const songIndex = queue.findIndex((it) => it.src === currentSong);
       const nextIndex = (songIndex + 1) % n;
-      setCurrentSong(library[nextIndex].src);
+      setCurrentSong(queue[nextIndex].src);
       setPlaying(true);
     } else {
       console.log(`Repeat state is ${repeatIndex}`);
@@ -180,7 +202,13 @@ const App = ({ library }) => {
   const description = eval("html`" + pageDescription + "`");
 
   return html`<div>
-    <${Player} plyrRef=${plyrRef} cycleRepeat=${cycleRepeat} repeatIndex=${repeatIndex} />
+    <${Player}
+      plyrRef=${plyrRef}
+      cycleRepeat=${cycleRepeat}
+      repeatIndex=${repeatIndex}
+      shuffle=${shuffle}
+      toggleShuffle=${toggleShuffle}
+    />
     <div id="container">
       <p>${description}</p>
       <ul class="songlist">
