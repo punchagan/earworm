@@ -48,16 +48,26 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
 
 const Player = ({ plyrRef, repeatIndex, cycleRepeat, shuffle, toggleShuffle }) => {
   const repeatIcons = ["repeat", "repeat_one_on", "repeat_on"];
+  const repeatTitles = ["off", "one", "all"];
+
+  const shuffleIndex = Number(shuffle);
   const shuffleIcons = ["shuffle", "shuffle_on"];
+  const shuffleTitles = ["off", "on"];
+
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
+
   return html`
     <div class="player">
-      <span class="control-btn" onClick=${cycleRepeat}>
+      <span class="control-btn" title="Repeat ${repeatTitles[repeatIndex]}" onClick=${cycleRepeat}>
         <span class="material-icons">${repeatIcons[repeatIndex]}</span>
       </span>
-      <span class="control-btn" onClick=${toggleShuffle}>
-        <span class="material-icons">${shuffleIcons[Number(shuffle)]}</span>
+      <span
+        class="control-btn"
+        title="Shuffle ${shuffleTitles[shuffleIndex]}"
+        onClick=${toggleShuffle}
+      >
+        <span class="material-icons">${shuffleIcons[shuffleIndex]}</span>
       </span>
       <audio ref=${plyrRef} id="player" style=${hideStyle}></audio>
     </div>
