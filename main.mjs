@@ -37,15 +37,15 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   </li>`;
 };
 
-const Player = ({ plyrRef, repeat, cycleRepeat }) => {
+const Player = ({ plyrRef, repeatIndex, cycleRepeat }) => {
+  const repeatIcons = ["repeat", "repeat_one_on", "repeat_on"];
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
   return html`
     <div class="player">
       <audio ref=${plyrRef} id="player" style=${hideStyle}></audio>
       <span class="loopcontrol" onClick=${cycleRepeat}>
-        ⟳
-        <span class="state">${repeat}</span>
+        <span class="material-icons">${repeatIcons[repeatIndex]}</span>
       </span>
     </div>
   `;
@@ -84,19 +84,18 @@ const App = ({ library }) => {
 
   // Repeat State
   const repeatStates = ["Off", "Song", "All"];
-  const [repeat, setRepeat] = useState(repeatStates[2]);
+  const [repeatIndex, setRepeatIndex] = useState(2);
   const cycleRepeat = () => {
     const n = repeatStates.length;
-    const repeatIndex = repeatStates.indexOf(repeat);
     const newIndex = (repeatIndex + 1) % n;
-    setRepeat(repeatStates[newIndex]);
+    setRepeatIndex(newIndex);
   };
   useEffect(() => {
     const player = plyrRef.current;
     if (player) {
-      player.repeat = repeat;
+      player.repeatIndex = repeatIndex;
     }
-  }, [repeat]);
+  }, [repeatIndex]);
 
   const showSong = (element) => {
     const rect = element.getBoundingClientRect();
@@ -134,22 +133,22 @@ const App = ({ library }) => {
 
   const maybePlayNext = useCallback(() => {
     const {
-      repeat,
+      repeatIndex,
       config: { title: currentSrc },
     } = plyrRef.current;
 
-    if (repeat === "Song") {
+    if (repeatIndex === 1) {
       setPlaying(true);
-    } else if (repeat === "All") {
+    } else if (repeatIndex === 2) {
       const n = library.length;
       const songIndex = library.findIndex((it) => it.src === currentSrc);
       const nextIndex = (songIndex + 1) % n;
       setCurrentSong(library[nextIndex].src);
       setPlaying(true);
     } else {
-      console.log(`Repeat state is ${repeat}`);
+      console.log(`Repeat state is ${repeatIndex}`);
     }
-  }, [repeat]);
+  }, [repeatIndex]);
 
   useEffect(() => {
     const player = plyrRef.current;
@@ -172,7 +171,7 @@ const App = ({ library }) => {
   const description = eval("html`" + pageDescription + "`");
 
   return html`<div>
-    <${Player} plyrRef=${plyrRef} cycleRepeat=${cycleRepeat} repeat=${repeat} />
+    <${Player} plyrRef=${plyrRef} cycleRepeat=${cycleRepeat} repeatIndex=${repeatIndex} />
     <div id="container">
       <p>${description}</p>
       <ul class="songlist">
