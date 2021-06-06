@@ -135,6 +135,7 @@ nav {
     background: #eee;
     border: 1px solid #ccc;
     z-index: 1000;
+    box-shadow: 0 -5px 5px rgba(0,0,0,.1);
 }
 .plyr {
     width: 100%;
