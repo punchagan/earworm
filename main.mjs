@@ -56,12 +56,13 @@ const Player = (props) => {
     playing,
     togglePlaying,
   } = props;
-  const repeatIcons = ["repeat", "repeat_one_on", "repeat_on"];
+  const repeatIcons = ["repeat", "repeat_one", "repeat"];
   const repeatTitles = ["off", "one", "all"];
+  const repeatClass = repeatIndex > 0 ? "btn-on" : "";
 
   const shuffleIndex = Number(shuffle);
-  const shuffleIcons = ["shuffle", "shuffle_on"];
   const shuffleTitles = ["off", "on"];
+  const shuffleClass = shuffle ? "btn-on" : "";
 
   const playIndex = Number(playing);
   const playIcons = ["play_arrow", "pause"];
@@ -83,17 +84,17 @@ const Player = (props) => {
           </span>
           <span
             class="plyr__controls__item plyr__control"
-            title="Repeat ${repeatTitles[repeatIndex]}"
+            title="Repeating ${repeatTitles[repeatIndex]}"
             onClick=${cycleRepeat}
           >
-            <span class="material-icons">${repeatIcons[repeatIndex]}</span>
+            <span class="material-icons ${repeatClass}">${repeatIcons[repeatIndex]}</span>
           </span>
           <span
             class="plyr__controls__item plyr__control"
-            title="Shuffle ${shuffleTitles[shuffleIndex]}"
+            title="Shuffling ${shuffleTitles[shuffleIndex]}"
             onClick=${toggleShuffle}
           >
-            <span class="material-icons">${shuffleIcons[shuffleIndex]}</span>
+            <span class="material-icons ${shuffleClass}">shuffle</span>
           </span>
         </div>
       </div>
