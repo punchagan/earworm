@@ -176,7 +176,7 @@ const App = ({ library }) => {
 
   // Repeat State
   const repeatStates = ["Off", "Song", "All"];
-  const [repeatIndex, setRepeatIndex] = useState(2);
+  const [repeatIndex, setRepeatIndex] = useState(validHash ? 0 : 2);
   const cycleRepeat = () => {
     const n = repeatStates.length;
     const newIndex = (repeatIndex + 1) % n;
