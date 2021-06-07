@@ -131,13 +131,17 @@ const App = ({ library }) => {
     }
   }, []);
 
+  const findSongIndex = (songList, src) => songList.findIndex((it) => it.src === src);
+
   // Current Song State
-  const selectedSong = decodeURI(location.hash.substring(1)) || queue?.[0]?.src;
+  const hash = decodeURI(location.hash.substring(1));
+  const validHash = findSongIndex(library, hash) > -1;
+  const selectedSong = validHash ? hash : queue?.[0]?.src;
   const [currentSong, setCurrentSong] = useState(selectedSong);
   const songElement = useRef();
 
   // Player State
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(validHash);
   const togglePlaying = () => {
     setPlaying(!playing);
   };
@@ -190,7 +194,7 @@ const App = ({ library }) => {
 
   useEffect(() => {
     const source = {
-      title: library.findIndex((it) => it.src === currentSong)?.title,
+      title: library[findSongIndex(library, currentSong)]?.title,
       type: "audio",
       sources: [{ src: currentSong, type: "audio/mp3" }],
     };
@@ -217,7 +221,7 @@ const App = ({ library }) => {
   const playNext = (backwards = false) => {
     const n = queue.length;
     const change = backwards ? -1 : 1;
-    const songIndex = queue.findIndex((it) => it.src === currentSong);
+    const songIndex = findSongIndex(queue, currentSong);
     const nextIndex = (songIndex + change + n) % n;
     setCurrentSong(queue[nextIndex].src);
     setPlaying(true);
