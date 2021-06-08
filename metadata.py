@@ -93,8 +93,10 @@ def ffprobe_metadata(path):
         fn = e.filename
         print(f"Install {fn} to get duration, other metatdata for non-mp3 files.")
         output = {"format": {"filename": os.path.basename(path)}}
+    except subprocess.CalledProcessError:
+        output = {}
 
-    return output["format"]
+    return output.get("format")
 
 
 def get_metadata_from_music_dir(config, song_list=True):
@@ -110,13 +112,15 @@ def get_metadata_from_music_dir(config, song_list=True):
 
         if path not in metadata or not metadata[path].duration:
             md = ffprobe_metadata(path) if config.use_ffprobe else {"filename": path}
+            if not md:
+                continue
             md = {key: value for key, value in md.items() if key in row_keys}
             metadata[path] = Row(**md)
 
     date_re = re.compile(config.date_regex)
     for path, tags in metadata.items():
         match = date_re.search(path)
-        date = "{year}-{month}-{day}".format(**match.groupdict()) if match else None
+        date = "{year}-{month}-{day}".format(**match.groupdict()) if match else ""
         tags.date = date if date not in config.ignored_dates else None
 
     return metadata_to_song_list(metadata, config) if song_list else metadata
