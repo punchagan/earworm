@@ -12,6 +12,8 @@ from urllib import parse
 import requests
 from tinytag import TinyTag, TinyTagException
 
+UNSUPPORTED_FORMATS = ".amr"  # Not played by FF or Chrome. See issue #10
+
 
 @dataclass
 class Row:
@@ -60,6 +62,13 @@ def get_metadata(config):
         songs = get_metadata_from_csv(config)
     else:
         songs = get_metadata_from_music_dir(config)
+
+    excluded_songs = {song["path"] for song in songs if song["path"].endswith(UNSUPPORTED_FORMATS)}
+    filtered_songs = [song for song in songs if song["path"] not in excluded_songs]
+    if excluded_songs:
+        print("\n\033[91mWARNING: The following files have unsupported formats:\n    ", end="")
+        print("\n    ".join(excluded_songs))
+        print("\033[00m")
     return songs
 
 
