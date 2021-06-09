@@ -193,17 +193,18 @@ const App = ({ library }) => {
   };
 
   useEffect(() => {
+    const song = library[findSongIndex(library, currentSong)];
     const source = {
-      title: library[findSongIndex(library, currentSong)]?.title,
+      title: song.title,
       type: "audio",
       sources: [{ src: currentSong, type: "audio/mp3" }],
     };
     const player = plyrRef.current;
     player.source = source;
-    // If already playing, continue to play
     playing ? player.play() : player.pause();
     location.hash = currentSong;
     songElement.current && showSong(songElement.current);
+    document.title = `${song.title} — ${song.artist} — ${pageTitle}`;
   }, [currentSong]);
 
   useEffect(() => {
