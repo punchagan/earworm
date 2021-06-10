@@ -20,7 +20,7 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   const description = eval("`" + songDescription + "`");
   const metadataLink = song.metadata_link
     ? html`<a class="song-info-link" href="${song.metadata_link}" target="_blank">
-        <span class="material-icons">rule</span>
+        <span title="Edit song info" class="material-icons">rule</span>
       </a>`
     : undefined;
   const playIcon = playing
