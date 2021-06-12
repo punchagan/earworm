@@ -18,14 +18,14 @@ UNSUPPORTED_FORMATS = ".amr"  # Not played by FF or Chrome. See issue #10
 @dataclass
 class Row:
     filename: str
-    title: str = None
-    album: str = None
-    artist: str = None
-    composer: str = None
-    lyricist: str = None
-    instrument: str = None
-    date: str = None
-    duration: str = None
+    title: str = ""
+    album: str = ""
+    artist: str = ""
+    composer: str = ""
+    lyricist: str = ""
+    instrument: str = ""
+    date: str = ""
+    duration: str = ""
 
 
 def is_url(text):
