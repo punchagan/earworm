@@ -64,15 +64,9 @@ def read_config(config_path):
     return Config(**config)
 
 
-def render_str_template(text, **data):
-    template = jinja2.Environment(loader=jinja2.BaseLoader).from_string(text)
-    return template.render(**data)
-
-
 def generate_index(songs, config):
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
-    env.filters["render"] = render_str_template
     template = env.get_template(TEMPLATE_FILE)
     metadata = [dict(src=f'music/{s["filename"]}', **s) for s in songs]
     output = template.render(
