@@ -1,44 +1,23 @@
 #!/usr/bin/env python
-from dataclasses import dataclass, field
-import datetime
 import io
 import json
 import os
 import shutil
-import subprocess
+from typing import List, Dict
 
 import dateutil.parser
 import jinja2
 from PIL import Image
 import yaml
 
-from metadata import download_file, is_url, get_metadata, create_or_update_metadata_csv
+from metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
 
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = "template.html"
 
 
-@dataclass
-class Config:
-    music_dir: str
-    metadata_csv: str = ""
-    _metadata_url: str = ""
-    title_required: bool = False
-    album_required: bool = False
-    date_required: bool = False
-    date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
-    ignored_dates: set = field(default_factory=set)
-    out_dir: str = "./public"
-    title: str = "My Music"
-    song_description: str = "${song.album} (${song.date})"
-    description: str = "<small>Welcome to my music page.</small>"
-    base_url: str = ""
-    config_dir: str = ""
-    use_ffprobe: bool = True
-
-
-def read_config(config_path):
+def read_config(config_path: str) -> Config:
     with open(config_path) as f:
         config = yaml.load(f, Loader=yaml.FullLoader)
 
@@ -64,7 +43,7 @@ def read_config(config_path):
     return Config(**config)
 
 
-def generate_index(songs, config):
+def generate_index(songs: List[Dict], config: Config) -> str:
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader)
     template = env.get_template(TEMPLATE_FILE)
@@ -82,14 +61,14 @@ def generate_index(songs, config):
     return f.name
 
 
-def copy_media(songs):
+def copy_media(songs: List[Dict]) -> None:
     music_dir = os.path.join(config.out_dir, "music")
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
         shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))
 
 
-def create_covers(songs):
+def create_covers(songs: List[Dict]) -> List[str]:
     covers_dir = os.path.join(config.out_dir, "covers")
     os.makedirs(covers_dir, exist_ok=True)
     cover_images = []
@@ -109,7 +88,7 @@ def create_covers(songs):
     return cover_images
 
 
-def resize_image(data, size=(300, 300)):
+def resize_image(data: bytes, size=(300, 300)) -> Image:
     img = Image.open(io.BytesIO(data))
     w, h = img.size
     l = max(w, h)
@@ -121,13 +100,13 @@ def resize_image(data, size=(300, 300)):
     return square.resize(size)
 
 
-def create_og_image(path):
+def create_og_image(path: str) -> None:
     image_dir = os.path.dirname(path)
     og_path = os.path.join(image_dir, "og-image.jpg")
     shutil.copyfile(path, og_path)
 
 
-def create_favicon(path):
+def create_favicon(path: str) -> None:
     favicon_path = os.path.join(config.out_dir, "favicon.ico")
     with open(path, "rb") as f:
         data = f.read()
@@ -135,7 +114,7 @@ def create_favicon(path):
     img.save(favicon_path, quality=95, optimize=True)
 
 
-def generate_site(config):
+def generate_site(config: Config) -> None:
     print(f"Generating site from {config.music_dir} ...")
     songs = get_metadata(config)
 

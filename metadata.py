@@ -1,18 +1,37 @@
 import csv
-import datetime
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, field, fields
 import glob
 import io
 import json
 import os
 import re
 import subprocess
+from typing import Dict, List, Optional, Union
 from urllib import parse
 
 import requests
 from tinytag import TinyTag, TinyTagException
 
 UNSUPPORTED_FORMATS = (".amr",)  # Not played by FF or Chrome. See issue #10
+
+
+@dataclass
+class Config:
+    music_dir: str
+    metadata_csv: str = ""
+    _metadata_url: str = ""
+    title_required: bool = False
+    album_required: bool = False
+    date_required: bool = False
+    date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
+    ignored_dates: set = field(default_factory=set)
+    out_dir: str = "./public"
+    title: str = "My Music"
+    song_description: str = "${song.album} (${song.date})"
+    description: str = "<small>Welcome to my music page.</small>"
+    base_url: str = ""
+    config_dir: str = ""
+    use_ffprobe: bool = True
 
 
 @dataclass
@@ -28,11 +47,11 @@ class Row:
     duration: str = ""
 
 
-def is_url(text):
+def is_url(text: str) -> bool:
     return bool(parse.urlparse(text).scheme)
 
 
-def google_sheet_cell_link(url, row_num, column="A"):
+def google_sheet_cell_link(url: str, row_num: int, column: str = "A") -> Optional[str]:
     parsed_url = parse.urlparse(url)
     if not (bool(parsed_url.scheme) and parsed_url.netloc == "docs.google.com"):
         return None
@@ -44,10 +63,11 @@ def google_sheet_cell_link(url, row_num, column="A"):
     return url.format(row_num=row_num, column=column, **qs)
 
 
-def download_file(url, download_dir):
+def download_file(url: str, download_dir: str) -> str:
     with requests.get(url, stream=True) as r:
         header = r.headers["Content-Disposition"]
-        name = re.search('filename="(.*)"', header).group(1)
+        match = re.search('filename="(.*)"', header)
+        name = match.group(1) if match else "metadata.csv"
         filename = os.path.join(download_dir, name)
         print(f"Downloading {name} ...")
         r.raise_for_status()
@@ -57,11 +77,11 @@ def download_file(url, download_dir):
     return filename
 
 
-def get_metadata(config):
+def get_metadata(config: Config) -> List[Dict]:
     if config.metadata_csv:
-        songs = get_metadata_from_csv(config)
+        songs = get_song_list_from_csv(config)
     else:
-        songs = get_metadata_from_music_dir(config)
+        songs = get_song_list_from_music_dir(config)
 
     excluded_songs = {song["path"] for song in songs if song["path"].endswith(UNSUPPORTED_FORMATS)}
     filtered_songs = [song for song in songs if song["path"] not in excluded_songs]
@@ -72,21 +92,21 @@ def get_metadata(config):
     return songs
 
 
-def read_metadata_csv(config):
+def read_metadata_csv(config: Config) -> List[Dict]:
     with open(config.metadata_csv) as f:
         reader = csv.DictReader(f)
-        reader.fieldnames = [f.lower() for f in reader.fieldnames]
+        reader.fieldnames = [f.lower() for f in reader.fieldnames] if reader.fieldnames else None
         return [row for row in reader]
 
 
-def get_metadata_from_csv(config):
+def get_song_list_from_csv(config: Config) -> List[Dict]:
     music_dir = config.music_dir
     rows = read_metadata_csv(config)
     metadata = {os.path.join(config.music_dir, row["filename"]): Row(**row) for row in rows}
     return metadata_to_song_list(metadata, config)
 
 
-def ffprobe_metadata(path):
+def ffprobe_metadata(path: str) -> Dict:
     command = [
         "ffprobe",
         "-v",
@@ -108,7 +128,7 @@ def ffprobe_metadata(path):
     return output.get("format")
 
 
-def get_metadata_from_music_dir(config, song_list=True):
+def get_metadata_from_music_dir(config, song_list: bool = True) -> Dict[str, Union[Row, TinyTag]]:
     music_dir = config.music_dir
     paths = glob.glob(f"{music_dir}/**/*", recursive=True)
     metadata = {}
@@ -132,10 +152,15 @@ def get_metadata_from_music_dir(config, song_list=True):
         date = "{year}-{month}-{day}".format(**match.groupdict()) if match else ""
         tags.date = date if date not in config.ignored_dates else None
 
-    return metadata_to_song_list(metadata, config) if song_list else metadata
+    return metadata
 
 
-def metadata_to_song_list(metadata, config):
+def get_song_list_from_music_dir(config: Config) -> List[Dict]:
+    metadata = get_metadata_from_music_dir(config)
+    return metadata_to_song_list(metadata, config)
+
+
+def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict]:
     songs = []
 
     for num_row, (path, tags) in enumerate(metadata.items(), start=2):
@@ -173,7 +198,7 @@ def metadata_to_song_list(metadata, config):
     return sorted(songs, key=lambda s: s["date"], reverse=True)
 
 
-def create_or_update_metadata_csv(config):
+def create_or_update_metadata_csv(config: Config) -> None:
     if not config.metadata_csv:
         config.metadata_csv = os.path.join(config.config_dir, "metadata.csv")
 
@@ -193,9 +218,11 @@ def create_or_update_metadata_csv(config):
                 if not value and new_value:
                     old_metadata[key] = new_value
         else:
-            metadata = {key: value for key, value in metadata.__dict__.items() if hasattr(Row, key)}
-            metadata["filename"] = filename
-            rows[filename] = metadata
+            new_metadata = {
+                key: value for key, value in metadata.__dict__.items() if hasattr(Row, key)
+            }
+            new_metadata["filename"] = filename
+            rows[filename] = new_metadata
 
     fieldnames = [f.name for f in fields(Row)]
     with open(config.metadata_csv, "w") as f:
