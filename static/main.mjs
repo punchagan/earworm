@@ -180,7 +180,7 @@ const App = ({ library }) => {
       playNext=${playNext}
     />
     <div id="container">
-      <${Header} description=${description} title=${pageTitle} />
+      <${Header} description=${description} title=${pageTitle} queue=${queue} />
       <ul class="songlist">
         ${playlist}
       </ul>

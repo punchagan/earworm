@@ -52,6 +52,13 @@ nav {
     margin: 0px auto 0px;
     padding-bottom: 100px;
 }
+.heading {
+    text-align: left;
+}
+.heading span {
+    font-size: 0.8em;
+    font-weight: 600;
+}
 .plyr audio {
     display: none;
 }
@@ -61,7 +68,7 @@ nav {
     display: flex;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0,0,0,.1);
-    margin: 15px;
+    margin: 15px 0px;
     background-color: #eee;
 }
 .current {
@@ -165,6 +172,9 @@ nav {
         max-width: 12.5em;
         margin: 0.5em auto 0;
         background: none !important;
+    }
+    .heading {
+        padding-left: 1em;
     }
 }
 .material-icons {
