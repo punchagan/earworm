@@ -25,9 +25,7 @@
       type="font/woff2"
       href="https://cdn.plyr.io/static/fonts/gordita-bold.woff2"
     />
-    <style>
-      {% include 'main.css' %}
-    </style>
+    <link rel="stylesheet" href="static/main.css" />
     <title>{{title}}</title>
     {% if base_url %}
       <meta property="og:image" itemprop="image" content="{{base_url}}/covers/og-image.jpg">
@@ -42,8 +40,6 @@
       const pageTitle = {{config.title | tojson}};
       const pageDescription = {{config.description | tojson }};
     </script>
-    <script type="module">
-      {% include 'main.mjs' %}
-    </script>
+    <script type="module" src="static/main.mjs"></script>
   </body>
 </html>

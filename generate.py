@@ -68,6 +68,12 @@ def copy_media(songs: List[Dict]) -> None:
         shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))
 
 
+def copy_assets() -> None:
+    static_dir = os.path.join(HERE, "static")
+    static_out_dir = os.path.join(config.out_dir, "static")
+    shutil.copytree(static_dir, static_out_dir, dirs_exist_ok=True)
+
+
 def create_covers(songs: List[Dict]) -> List[str]:
     covers_dir = os.path.join(config.out_dir, "covers")
     os.makedirs(covers_dir, exist_ok=True)
@@ -120,6 +126,7 @@ def generate_site(config: Config) -> None:
 
     os.makedirs(config.out_dir, exist_ok=True)
 
+    copy_assets()
     copy_media(songs)
     cover_images = create_covers(songs)
     if cover_images and config.base_url:
