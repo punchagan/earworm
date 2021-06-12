@@ -12,6 +12,7 @@ import {
 import Plyr from "https://cdn.skypack.dev/pin/plyr@v3.6.8-UdIeSiyxM89uOBn4h5ie/mode=imports,min/optimized/plyr.js";
 import htm from "https://cdn.skypack.dev/pin/htm@v3.0.4-XTYwGtlZuRXP2GLXT2TZ/mode=imports,min/optimized/htm.js";
 
+import Header from "./header.mjs";
 import Player from "./player.mjs";
 import Song from "./song.mjs";
 
@@ -179,7 +180,7 @@ const App = ({ library }) => {
       playNext=${playNext}
     />
     <div id="container">
-      <p>${description}</p>
+      <${Header} description=${description} title=${pageTitle} />
       <ul class="songlist">
         ${playlist}
       </ul>
