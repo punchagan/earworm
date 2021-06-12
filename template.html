@@ -37,10 +37,10 @@
   <body>
     <div id="app"></div>
     <script type="text/javascript">
-      const songs = {{metadata}};
-      const songDescription = '{{config.song_description}}';
-      const pageTitle = '{{config.title}}';
-      const pageDescription = '{{config.description}}';
+      const songs = {{metadata | tojson}};
+      const songDescription = {{config.song_description | tojson}};
+      const pageTitle = {{config.title | tojson}};
+      const pageDescription = {{config.description | tojson }};
     </script>
     <script type="module">
       {% include 'main.mjs' %}

@@ -51,7 +51,7 @@ def generate_index(songs: List[Dict], config: Config) -> str:
     output = template.render(
         config=config,
         songs=songs,
-        metadata=json.dumps(metadata, default=lambda o: None),
+        metadata=metadata,
         title=config.title,
         base_url=config.base_url,
         description=config.description,
