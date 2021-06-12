@@ -12,7 +12,7 @@ from urllib import parse
 import requests
 from tinytag import TinyTag, TinyTagException
 
-UNSUPPORTED_FORMATS = ".amr"  # Not played by FF or Chrome. See issue #10
+UNSUPPORTED_FORMATS = (".amr",)  # Not played by FF or Chrome. See issue #10
 
 
 @dataclass
