@@ -176,7 +176,6 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
             continue
 
         duration = int(float(tags.duration or 0))
-        mins, secs = duration // 60, duration % 60
         album_slug = tags.album.lower().replace(" ", "-") if tags.album else ""
         metadata_link = google_sheet_cell_link(config._metadata_url, num_row)
         song = {
@@ -186,7 +185,7 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
             "artist": tags.artist,
             "album": tags.album,
             "date": tags.date or "",
-            "duration": f"{mins}:{secs:02d}",
+            "duration": duration,
             "image": tags.get_image() if isinstance(tags, TinyTag) else None,
             "album_slug": album_slug,
             "metadata_link": metadata_link,

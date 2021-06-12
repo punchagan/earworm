@@ -3,6 +3,12 @@ import htm from "https://cdn.skypack.dev/pin/htm@v3.0.4-XTYwGtlZuRXP2GLXT2TZ/mod
 
 const html = htm.bind(h);
 
+const getDurationFormatted = (duration) => {
+  const minutes = String(Math.floor(duration / 60)).padStart(2, "0");
+  const seconds = String(duration % 60).padStart(2, "0");
+  return `${minutes}:${seconds}`;
+};
+
 const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   const extraClassLabel = isCurrent ? (playing ? "current playing" : "current") : "";
   const onClick = () => playPause(song.src);
@@ -19,6 +25,7 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
     : isCurrent
     ? "not_started"
     : "play_arrow";
+  const duration = getDurationFormatted(song.duration);
   return html`<li ref=${elem} class="song ${extraClassLabel}" key=${song.src}>
     <span class="song-controls">
       <button class="play-button" onClick=${onClick}>
@@ -30,7 +37,7 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
       <span class="song-title"> ${song.title} </span>
       <small class="song-album"> ${description} </small>
     </span>
-    <small class="song-duration"> ${song.duration}</small>
+    <small class="song-duration"> ${duration}</small>
     ${metadataLink}
   </li>`;
 };
