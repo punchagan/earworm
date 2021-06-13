@@ -10,7 +10,7 @@ const Header = ({ title, description, queue }) => {
   const duration = hours > 0 ? `${hours} hours, ${minutes} minutes` : `${minutes} minutes`;
   return html`<header class="heading">
     <h1>${title}</h1>
-    <p>${description}</p>
+    <p dangerouslySetInnerHTML=${{ __html: description }} />
     <span>${queue.length} songs</span><span> · </span><span>${duration}</span>
   </header>`;
 };

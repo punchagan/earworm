@@ -165,8 +165,6 @@ const App = ({ library }) => {
       />`
   );
 
-  const description = eval("html`" + pageDescription + "`");
-
   return html`<div>
     <${Player}
       plyrRef=${plyrRef}
@@ -179,7 +177,7 @@ const App = ({ library }) => {
       playNext=${playNext}
     />
     <div id="container">
-      <${Header} description=${description} title=${pageTitle} queue=${queue} />
+      <${Header} description=${pageDescription} title=${pageTitle} queue=${queue} />
       <ul class="songlist">
         ${playlist}
       </ul>
