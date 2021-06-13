@@ -55,7 +55,7 @@ def generate_index(songs: List[Dict], config: Config) -> str:
     # FIXME: Allow running without rollup installed. Need the js to be served
     # off a CDN. Rawgit? The easier way would be to have the file committed to
     # the repo, but doesn't sound like a very great idea.
-    all_js = webassets.Bundle("main.mjs", filters="rollup", output="bundle.js")
+    all_js = webassets.Bundle("main.mjs", filters="rollup", output="bundle.js", depends="*.mjs")
     all_css = webassets.Bundle("main.css", output="bundle.css")
     assets_env.register("all_js", all_js)
     assets_env.register("all_css", all_css)
