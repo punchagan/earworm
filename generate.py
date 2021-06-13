@@ -8,10 +8,13 @@ from typing import List, Dict
 import dateutil.parser
 import jinja2
 from PIL import Image
+import webassets
+from webassets.ext.jinja2 import AssetsExtension
+from webassets.filter import register_filter
+from webassets_rollup import Rollup
 import yaml
 
 from metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
-
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = "template.html"
@@ -44,8 +47,23 @@ def read_config(config_path: str) -> Config:
 
 
 def generate_index(songs: List[Dict], config: Config) -> str:
+    register_filter(Rollup)
+
+    static_dir = os.path.join(HERE, "static")
+    output_dir = os.path.join(config.out_dir, "static")
+    assets_env = webassets.Environment(directory=output_dir, url="/static", load_path=[static_dir])
+    # FIXME: Allow running without rollup installed. Need the js to be served
+    # off a CDN. Rawgit? The easier way would be to have the file committed to
+    # the repo, but doesn't sound like a very great idea.
+    all_js = webassets.Bundle("main.mjs", filters="rollup", output="bundle.js")
+    all_css = webassets.Bundle("main.css", output="bundle.css")
+    assets_env.register("all_js", all_js)
+    assets_env.register("all_css", all_css)
+
     loader = jinja2.FileSystemLoader(searchpath=HERE)
-    env = jinja2.Environment(loader=loader)
+    env = jinja2.Environment(loader=loader, extensions=[AssetsExtension])
+    env.assets_environment = assets_env
+
     template = env.get_template(TEMPLATE_FILE)
     metadata = [dict(src=f'music/{s["filename"]}', **s) for s in songs]
     output = template.render(
@@ -66,12 +84,6 @@ def copy_media(songs: List[Dict]) -> None:
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
         shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))
-
-
-def copy_assets() -> None:
-    static_dir = os.path.join(HERE, "static")
-    static_out_dir = os.path.join(config.out_dir, "static")
-    shutil.copytree(static_dir, static_out_dir, dirs_exist_ok=True)
 
 
 def create_covers(songs: List[Dict]) -> List[str]:
@@ -126,7 +138,6 @@ def generate_site(config: Config) -> None:
 
     os.makedirs(config.out_dir, exist_ok=True)
 
-    copy_assets()
     copy_media(songs)
     cover_images = create_covers(songs)
     if cover_images and config.base_url:

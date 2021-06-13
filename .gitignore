@@ -133,3 +133,4 @@ dmypy.json
 # env vars configured using direnv
 /.envrc
 /*.yml
+/node_modules/
