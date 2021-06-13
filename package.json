@@ -7,7 +7,6 @@
     "@rollup/plugin-node-resolve": "^13.0.0"
   },
   "dependencies": {
-    "htm": "^3.0.4",
     "preact": "^10.5.13"
   }
 }
