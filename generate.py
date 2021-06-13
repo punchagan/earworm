@@ -59,7 +59,7 @@ def generate_index(songs: List[Dict], config: Config) -> str:
     all_css = webassets.Bundle("main.css", output="bundle.css")
     assets_env.register("all_js", all_js)
     assets_env.register("all_css", all_css)
-    assets_env.config["rollup_extra_args"] = ["-c", "rollup.config.js"]
+    assets_env.config["rollup_extra_args"] = ["-c", os.path.join(HERE, "rollup.config.js")]
 
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader, extensions=[AssetsExtension])
@@ -137,6 +137,10 @@ def generate_site(config: Config) -> None:
     print(f"Generating site from {config.music_dir} ...")
     songs = get_metadata(config)
 
+    # FIXME: This is ugly and probably should go away, when we are able to use
+    # a pre-built bundle file?  See the other FIXME about serving pre-built
+    # bundle off a CDN.
+    os.chdir(HERE)
     os.makedirs(config.out_dir, exist_ok=True)
 
     copy_media(songs)
