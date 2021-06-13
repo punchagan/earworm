@@ -1,15 +1,7 @@
-import {
-  h,
-  render,
-} from "https://cdn.skypack.dev/pin/preact@v10.5.13-wi6UEiTTWqqBsSGgZ7I8/mode=imports,min/optimized/preact.js";
-import {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-} from "https://cdn.skypack.dev/pin/preact@v10.5.13-wi6UEiTTWqqBsSGgZ7I8/mode=imports,min/optimized/preact/hooks.js";
+import { h, render } from "preact";
+import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import Plyr from "https://cdn.skypack.dev/pin/plyr@v3.6.8-UdIeSiyxM89uOBn4h5ie/mode=imports,min/optimized/plyr.js";
-import htm from "https://cdn.skypack.dev/pin/htm@v3.0.4-XTYwGtlZuRXP2GLXT2TZ/mode=imports,min/optimized/htm.js";
+import htm from "htm";
 
 import Header from "./header.mjs";
 import Player from "./player.mjs";
