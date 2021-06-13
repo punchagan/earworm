@@ -51,7 +51,7 @@ def generate_index(songs: List[Dict], config: Config) -> str:
 
     static_dir = os.path.join(HERE, "static")
     output_dir = os.path.join(config.out_dir, "static")
-    assets_env = webassets.Environment(directory=output_dir, url="/static", load_path=[static_dir])
+    assets_env = webassets.Environment(directory=output_dir, url="./static", load_path=[static_dir])
     # FIXME: Allow running without rollup installed. Need the js to be served
     # off a CDN. Rawgit? The easier way would be to have the file committed to
     # the repo, but doesn't sound like a very great idea.
