@@ -1,6 +1,5 @@
 import {
   h,
-  Component,
   render,
 } from "https://cdn.skypack.dev/pin/preact@v10.5.13-wi6UEiTTWqqBsSGgZ7I8/mode=imports,min/optimized/preact.js";
 import {
