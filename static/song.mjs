@@ -1,7 +1,4 @@
 import { h } from "preact";
-import htm from "htm";
-
-const html = htm.bind(h);
 
 // From https://stackoverflow.com/a/41015840
 String.prototype.interpolate = function (params) {
@@ -20,11 +17,13 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   const extraClassLabel = isCurrent ? (playing ? "current playing" : "current") : "";
   const onClick = () => playPause(song.src);
   const description = songDescription.interpolate({ song: song });
-  const metadataLink = song.metadata_link
-    ? html`<a class="song-info-link" href="${song.metadata_link}" target="_blank">
-        <span title="Edit song info" class="material-icons">rule</span>
-      </a>`
-    : undefined;
+  const metadataLink = song.metadata_link ? (
+    <a class="song-info-link" href="{song.metadata_link}" target="_blank">
+      <span title="Edit song info" class="material-icons">
+        rule
+      </span>
+    </a>
+  ) : undefined;
   const playIcon = playing
     ? isCurrent
       ? "pause"
@@ -33,20 +32,22 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
     ? "not_started"
     : "play_arrow";
   const duration = getDurationFormatted(song.duration);
-  return html`<li ref=${elem} class="song ${extraClassLabel}" key=${song.src}>
-    <span class="song-controls">
-      <button class="play-button" onClick=${onClick}>
-        <span class="material-icons">${playIcon}</span>
-      </button>
-    </span>
-    <span class="song-cover-art" style="background-image: url(${song.image});"></span>
-    <span class="song-description">
-      <span class="song-title"> ${song.title} </span>
-      <small class="song-album" dangerouslySetInnerHTML=${{ __html: description }} />
-    </span>
-    <small class="song-duration"> ${duration}</small>
-    ${metadataLink}
-  </li>`;
+  return (
+    <li ref={elem} class={`song ${extraClassLabel}`} key={song.src}>
+      <span class="song-controls">
+        <button class="play-button" onClick={onClick}>
+          <span class="material-icons">{playIcon}</span>
+        </button>
+      </span>
+      <span class="song-cover-art" style={`background-image: url(${song.image});`}></span>
+      <span class="song-description">
+        <span class="song-title"> {song.title} </span>
+        <small class="song-album" dangerouslySetInnerHTML={{ __html: description }} />
+      </span>
+      <small class="song-duration">{duration}</small>
+      {metadataLink}
+    </li>
+  );
 };
 
 export default Song;

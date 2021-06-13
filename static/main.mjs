@@ -1,13 +1,10 @@
 import { h, render } from "preact";
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
 import Plyr from "https://cdn.skypack.dev/pin/plyr@v3.6.8-UdIeSiyxM89uOBn4h5ie/mode=imports,min/optimized/plyr.js";
-import htm from "htm";
 
 import Header from "./header.mjs";
 import Player from "./player.mjs";
 import Song from "./song.mjs";
-
-const html = htm.bind(h);
 
 const App = ({ library }) => {
   // Setup Queue
@@ -146,39 +143,40 @@ const App = ({ library }) => {
     player.on("ended", maybePlayNext);
   }, []);
 
-  const playlist = library.map(
-    (s) =>
-      html`<${Song}
-        song=${s}
-        elem=${currentSong === s.src ? songElement : undefined}
-        isCurrent=${currentSong === s.src}
-        playPause=${playPause}
-        playing=${playing}
-      />`
-  );
-
-  return html`<div>
-    <${Player}
-      plyrRef=${plyrRef}
-      cycleRepeat=${cycleRepeat}
-      repeatIndex=${repeatIndex}
-      shuffle=${shuffle}
-      toggleShuffle=${toggleShuffle}
-      playing=${playing}
-      togglePlaying=${togglePlaying}
-      playNext=${playNext}
+  const playlist = library.map((s) => (
+    <Song
+      song={s}
+      elem={currentSong === s.src ? songElement : undefined}
+      isCurrent={currentSong === s.src}
+      playPause={playPause}
+      playing={playing}
     />
-    <div id="container">
-      <${Header} description=${pageDescription} title=${pageTitle} queue=${queue} />
-      <ul class="songlist">
-        ${playlist}
-      </ul>
-      <small
-        >This page was generated using ${" "}
-        <a href="https://github.com/punchagan/earworm" target="_blank">earworm</a>
-      </small>
+  ));
+
+  return (
+    <div>
+      <Player
+        plyrRef={plyrRef}
+        cycleRepeat={cycleRepeat}
+        repeatIndex={repeatIndex}
+        shuffle={shuffle}
+        toggleShuffle={toggleShuffle}
+        playing={playing}
+        togglePlaying={togglePlaying}
+        playNext={playNext}
+      />
+      <div id="container">
+        <Header description={pageDescription} title={pageTitle} queue={queue} />
+        <ul class="songlist">{playlist}</ul>
+        <small>
+          This page was generated using ${" "}
+          <a href="https://github.com/punchagan/earworm" target="_blank">
+            earworm
+          </a>
+        </small>
+      </div>
     </div>
-  </div>`;
+  );
 };
 
-render(html`<${App} library=${songs} />`, document.querySelector("#app"));
+render(<App library={songs} />, document.querySelector("#app"));

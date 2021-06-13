@@ -1,7 +1,4 @@
 import { h } from "preact";
-import htm from "htm";
-
-const html = htm.bind(h);
 
 const Player = (props) => {
   const {
@@ -29,50 +26,50 @@ const Player = (props) => {
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
 
-  return html`
+  return (
     <div class="player">
       <div class="plyr--audio ">
         <div class="player-controls plyr__controls">
           <span
             class="plyr__controls__item plyr__control"
             title="Play Previous"
-            onClick=${() => playNext(true)}
+            onClick={() => playNext(true)}
           >
             <span class="material-icons">skip_previous</span>
           </span>
           <span
             class="plyr__controls__item plyr__control"
-            title=${playTitles[playIndex]}
-            onClick=${togglePlaying}
+            title={playTitles[playIndex]}
+            onClick={togglePlaying}
           >
-            <span class="material-icons">${playIcons[playIndex]}</span>
+            <span class="material-icons">{playIcons[playIndex]}</span>
           </span>
           <span
             class="plyr__controls__item plyr__control"
             title="Play Next"
-            onClick=${() => playNext()}
+            onClick={() => playNext()}
           >
             <span class="material-icons">skip_next</span>
           </span>
           <span
             class="plyr__controls__item plyr__control"
-            title="Repeating ${repeatTitles[repeatIndex]}"
-            onClick=${cycleRepeat}
+            title={`Repeating ${repeatTitles[repeatIndex]}`}
+            onClick={cycleRepeat}
           >
-            <span class="material-icons ${repeatClass}">${repeatIcons[repeatIndex]}</span>
+            <span class={`material-icons ${repeatClass}`}>{repeatIcons[repeatIndex]}</span>
           </span>
           <span
             class="plyr__controls__item plyr__control"
-            title="Shuffling ${shuffleTitles[shuffleIndex]}"
-            onClick=${toggleShuffle}
+            title={`Shuffling ${shuffleTitles[shuffleIndex]}`}
+            onClick={toggleShuffle}
           >
-            <span class="material-icons ${shuffleClass}">shuffle</span>
+            <span class={`material-icons ${shuffleClass}`}>shuffle</span>
           </span>
         </div>
       </div>
-      <audio ref=${plyrRef} id="player" style=${hideStyle}></audio>
+      <audio ref={plyrRef} id="player" style={hideStyle}></audio>
     </div>
-  `;
+  );
 };
 
 export default Player;
