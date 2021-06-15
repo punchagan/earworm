@@ -1,4 +1,7 @@
 import React from "react";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import PauseIcon from "@material-ui/icons/Pause";
+import ReportProblemIcon from "@material-ui/icons/ReportProblem";
 
 // From https://stackoverflow.com/a/41015840
 String.prototype.interpolate = function (params) {
@@ -18,25 +21,32 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   const onClick = () => playPause(song.src);
   const description = songDescription.interpolate({ song: song });
   const metadataLink = song.metadata_link ? (
-    <a className="song-info-link" href="{song.metadata_link}" target="_blank">
-      <span title="Edit song info" className="material-icons">
-        rule
-      </span>
+    <a
+      title="Edit song info"
+      className="song-info-link"
+      href="{song.metadata_link}"
+      target="_blank"
+    >
+      <ReportProblemIcon />
     </a>
   ) : undefined;
-  const playIcon = playing
-    ? isCurrent
-      ? "pause"
-      : "play_arrow"
-    : isCurrent
-    ? "not_started"
-    : "play_arrow";
+  const playIcon = playing ? (
+    isCurrent ? (
+      <PauseIcon />
+    ) : (
+      <PlayArrowIcon />
+    )
+  ) : isCurrent ? (
+    <PlayArrowIcon />
+  ) : (
+    <PlayArrowIcon />
+  );
   const duration = getDurationFormatted(song.duration);
   return (
     <li ref={elem} className={`song ${extraClassLabel}`} key={song.src}>
       <span className="song-controls">
         <button className="play-button" onClick={onClick}>
-          <span className="material-icons">{playIcon}</span>
+          {playIcon}
         </button>
       </span>
       <span className="song-cover-art" style={{ backgroundImage: `url(${song.image})` }}></span>

@@ -177,10 +177,6 @@ nav {
         padding-left: 1em;
     }
 }
-.material-icons {
-    display: flex;
-    align-content: center;
-}
 .btn-on {
     color: white;
     background: var(--plyr-color-main);
