@@ -1,6 +1,6 @@
 import { h, render } from "preact";
 import { useState, useEffect, useRef, useCallback } from "preact/hooks";
-import Plyr from "https://cdn.skypack.dev/pin/plyr@v3.6.8-UdIeSiyxM89uOBn4h5ie/mode=imports,min/optimized/plyr.js";
+import Plyr from "plyr";
 
 import Header from "./header.mjs";
 import Player from "./player.mjs";

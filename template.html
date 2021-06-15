@@ -43,7 +43,7 @@
       const pageDescription = {{config.description | tojson }};
     </script>
     {% assets "all_js" %}
-      <script type="module" src="{{ ASSET_URL }}"></script>
+      <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
   </body>
 </html>
