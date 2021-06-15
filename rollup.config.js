@@ -13,7 +13,6 @@ export default {
     }),
     babel({
       presets: ["@babel/preset-react"],
-      plugins: [["@babel/transform-react-jsx", { pragma: "h" }]],
     }),
     resolve(),
   ],

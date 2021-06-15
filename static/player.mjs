@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 
 const Player = (props) => {
   const {
@@ -27,43 +27,43 @@ const Player = (props) => {
   const hideStyle = { display: "none" };
 
   return (
-    <div class="player">
-      <div class="plyr--audio ">
-        <div class="player-controls plyr__controls">
+    <div className="player">
+      <div className="plyr--audio ">
+        <div className="player-controls plyr__controls">
           <span
-            class="plyr__controls__item plyr__control"
+            className="plyr__controls__item plyr__control"
             title="Play Previous"
             onClick={() => playNext(true)}
           >
-            <span class="material-icons">skip_previous</span>
+            <span className="material-icons">skip_previous</span>
           </span>
           <span
-            class="plyr__controls__item plyr__control"
+            className="plyr__controls__item plyr__control"
             title={playTitles[playIndex]}
             onClick={togglePlaying}
           >
-            <span class="material-icons">{playIcons[playIndex]}</span>
+            <span className="material-icons">{playIcons[playIndex]}</span>
           </span>
           <span
-            class="plyr__controls__item plyr__control"
+            className="plyr__controls__item plyr__control"
             title="Play Next"
             onClick={() => playNext()}
           >
-            <span class="material-icons">skip_next</span>
+            <span className="material-icons">skip_next</span>
           </span>
           <span
-            class="plyr__controls__item plyr__control"
+            className="plyr__controls__item plyr__control"
             title={`Repeating ${repeatTitles[repeatIndex]}`}
             onClick={cycleRepeat}
           >
-            <span class={`material-icons ${repeatClass}`}>{repeatIcons[repeatIndex]}</span>
+            <span className={`material-icons ${repeatClass}`}>{repeatIcons[repeatIndex]}</span>
           </span>
           <span
-            class="plyr__controls__item plyr__control"
+            className="plyr__controls__item plyr__control"
             title={`Shuffling ${shuffleTitles[shuffleIndex]}`}
             onClick={toggleShuffle}
           >
-            <span class={`material-icons ${shuffleClass}`}>shuffle</span>
+            <span className={`material-icons ${shuffleClass}`}>shuffle</span>
           </span>
         </div>
       </div>

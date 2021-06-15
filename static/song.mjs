@@ -1,4 +1,4 @@
-import { h } from "preact";
+import React from "react";
 
 // From https://stackoverflow.com/a/41015840
 String.prototype.interpolate = function (params) {
@@ -18,8 +18,8 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
   const onClick = () => playPause(song.src);
   const description = songDescription.interpolate({ song: song });
   const metadataLink = song.metadata_link ? (
-    <a class="song-info-link" href="{song.metadata_link}" target="_blank">
-      <span title="Edit song info" class="material-icons">
+    <a className="song-info-link" href="{song.metadata_link}" target="_blank">
+      <span title="Edit song info" className="material-icons">
         rule
       </span>
     </a>
@@ -33,18 +33,18 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
     : "play_arrow";
   const duration = getDurationFormatted(song.duration);
   return (
-    <li ref={elem} class={`song ${extraClassLabel}`} key={song.src}>
-      <span class="song-controls">
-        <button class="play-button" onClick={onClick}>
-          <span class="material-icons">{playIcon}</span>
+    <li ref={elem} className={`song ${extraClassLabel}`} key={song.src}>
+      <span className="song-controls">
+        <button className="play-button" onClick={onClick}>
+          <span className="material-icons">{playIcon}</span>
         </button>
       </span>
-      <span class="song-cover-art" style={`background-image: url(${song.image});`}></span>
-      <span class="song-description">
-        <span class="song-title"> {song.title} </span>
-        <small class="song-album" dangerouslySetInnerHTML={{ __html: description }} />
+      <span className="song-cover-art" style={{ backgroundImage: `url(${song.image})` }}></span>
+      <span className="song-description">
+        <span className="song-title"> {song.title} </span>
+        <small className="song-album" dangerouslySetInnerHTML={{ __html: description }} />
       </span>
-      <small class="song-duration">{duration}</small>
+      <small className="song-duration">{duration}</small>
       {metadataLink}
     </li>
   );

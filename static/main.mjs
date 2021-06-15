@@ -1,5 +1,5 @@
-import { h, render } from "preact";
-import { useState, useEffect, useRef, useCallback } from "preact/hooks";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { render } from "react-dom";
 import Plyr from "plyr";
 
 import Header from "./header.mjs";
@@ -167,7 +167,7 @@ const App = ({ library }) => {
       />
       <div id="container">
         <Header description={pageDescription} title={pageTitle} queue={queue} />
-        <ul class="songlist">{playlist}</ul>
+        <ul className="songlist">{playlist}</ul>
         <small>
           This page was generated using ${" "}
           <a href="https://github.com/punchagan/earworm" target="_blank">
