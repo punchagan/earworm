@@ -1,11 +1,14 @@
 import React from "react";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import copy from "copy-to-clipboard";
+// Icons
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
 import ReportProblemIcon from "@material-ui/icons/ReportProblem";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 
 // From https://stackoverflow.com/a/41015840
 String.prototype.interpolate = function (params) {
@@ -20,7 +23,7 @@ const getDurationFormatted = (duration) => {
   return `${minutes}:${seconds}`;
 };
 
-const ActionMenu = ({ metadataLink }) => {
+const ActionMenu = ({ metadataLink, hash }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
 
@@ -30,6 +33,15 @@ const ActionMenu = ({ metadataLink }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+    setCopied(false);
+  };
+
+  const [copied, setCopied] = React.useState(false);
+  const copyLink = () => {
+    let url = new URL(document.location);
+    url.hash = hash;
+    copy(url);
+    setCopied(true);
   };
 
   return (
@@ -44,12 +56,22 @@ const ActionMenu = ({ metadataLink }) => {
       </IconButton>
 
       <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-        <a title="Fix metadata" href={metadataLink} target="_blank" rel="noopener noreferrer">
+        <a
+          title="Fix metadata"
+          href={metadataLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
           <MenuItem disabled={!Boolean(metadataLink)}>
             <ReportProblemIcon />
             Fix metadata
           </MenuItem>
         </a>
+        <MenuItem onClick={copyLink}>
+          <FileCopyIcon />
+          {copied ? "Copied!" : "Copy URL"}
+        </MenuItem>
       </Menu>
     </div>
   );
@@ -84,7 +106,7 @@ const Song = ({ song, isCurrent, playing, playPause, elem }) => {
         <small className="song-album" dangerouslySetInnerHTML={{ __html: description }} />
       </span>
       <small className="song-duration">{duration}</small>
-      <ActionMenu metadataLink={song.metadata_link} />
+      <ActionMenu metadataLink={song.metadata_link} hash={song.src} />
     </li>
   );
 };
