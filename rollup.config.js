@@ -12,6 +12,7 @@ export default {
       ],
     }),
     babel({
+      babelHelpers: "bundled",
       presets: ["@babel/preset-react"],
     }),
     resolve(),
