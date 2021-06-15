@@ -56,6 +56,10 @@ const ActionMenu = ({ metadataLink, hash }) => {
       </IconButton>
 
       <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
+        <MenuItem onClick={copyLink}>
+          <FileCopyIcon />
+          {copied ? "Copied!" : "Copy URL"}
+        </MenuItem>
         <a
           title="Fix metadata"
           href={metadataLink}
@@ -68,10 +72,6 @@ const ActionMenu = ({ metadataLink, hash }) => {
             Fix metadata
           </MenuItem>
         </a>
-        <MenuItem onClick={copyLink}>
-          <FileCopyIcon />
-          {copied ? "Copied!" : "Copy URL"}
-        </MenuItem>
       </Menu>
     </div>
   );
