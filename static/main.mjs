@@ -170,7 +170,7 @@ const App = ({ library }) => {
         <ul className="songlist">{playlist}</ul>
         <small>
           This page was generated using ${" "}
-          <a href="https://github.com/punchagan/earworm" target="_blank">
+          <a href="https://github.com/punchagan/earworm" rel="noopener noreferrer" target="_blank">
             earworm
           </a>
         </small>
