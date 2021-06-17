@@ -2,6 +2,9 @@ import React from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import copy from "copy-to-clipboard";
+import Popover from "@material-ui/core/Popover";
+import { makeStyles } from "@material-ui/core/styles";
+
 // Icons
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import PauseIcon from "@material-ui/icons/Pause";
@@ -23,9 +26,20 @@ const getDurationFormatted = (duration) => {
   return `${minutes}:${seconds}`;
 };
 
+const useStyles = makeStyles((theme) => ({
+  copiedText: {
+    padding: theme.spacing(2),
+    margin: 0,
+    background: "var(--plyr-color-main)",
+    color: "white",
+  },
+}));
+
 const ActionMenu = ({ metadataLink, hash }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
+  const classes = useStyles();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -33,6 +47,9 @@ const ActionMenu = ({ metadataLink, hash }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const hidePopover = () => {
     setCopied(false);
   };
 
@@ -42,6 +59,8 @@ const ActionMenu = ({ metadataLink, hash }) => {
     url.hash = hash;
     copy(url);
     setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+    handleClose();
   };
 
   return (
@@ -57,8 +76,7 @@ const ActionMenu = ({ metadataLink, hash }) => {
 
       <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
         <MenuItem onClick={copyLink}>
-          <FileCopyIcon />
-          {copied ? "Copied!" : "Copy URL"}
+          <FileCopyIcon /> Copy Link
         </MenuItem>
         <a
           title="Fix metadata"
@@ -73,6 +91,18 @@ const ActionMenu = ({ metadataLink, hash }) => {
           </MenuItem>
         </a>
       </Menu>
+      <Popover
+        open={copied}
+        onClose={hidePopover}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: window.innerHeight - 80, left: window.innerWidth / 2 }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+      >
+        <p className={classes.copiedText}>Link copied to clipboard</p>
+      </Popover>
     </div>
   );
 };
