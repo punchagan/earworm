@@ -78,18 +78,20 @@ const ActionMenu = ({ metadataLink, hash }) => {
         <MenuItem onClick={copyLink}>
           <FileCopyIcon /> Copy Link
         </MenuItem>
-        <a
-          title="Fix metadata"
-          href={metadataLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ textDecoration: "none", color: "inherit" }}
-        >
-          <MenuItem disabled={!Boolean(metadataLink)}>
-            <ReportProblemIcon />
-            Fix metadata
-          </MenuItem>
-        </a>
+        {Boolean(metadataLink) && (
+          <a
+            title="Fix metadata"
+            href={metadataLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <MenuItem>
+              <ReportProblemIcon />
+              Fix metadata
+            </MenuItem>
+          </a>
+        )}
       </Menu>
       <Popover
         open={copied}
