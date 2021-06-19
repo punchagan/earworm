@@ -7,3 +7,5 @@ export const AppStore = new Store({
   repeatIndex: 2,
   queue: [],
 });
+
+export const findSongIndex = (songList, src) => songList.findIndex((it) => it.src === src);

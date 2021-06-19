@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
@@ -6,15 +6,26 @@ import PauseIcon from "@material-ui/icons/Pause";
 import RepeatIcon from "@material-ui/icons/Repeat";
 import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
+import Plyr from "plyr";
 
-import { AppStore } from "./app-store.mjs";
+import { AppStore, findSongIndex } from "./app-store.mjs";
 
-const Player = ({ plyrRef, playNext }) => {
+const Player = () => {
+  // Player Setup
+  const plyrRef = useCallback((node) => {
+    if (node !== null) {
+      const controls = ["current-time", "progress", "duration", "volume"];
+      const plyr = new Plyr(node, { controls });
+      plyrRef.current = plyr;
+    }
+  }, []);
+
   const playing = AppStore.useState((s) => s.playing);
-  const togglePlaying = () =>
+  const setPlaying = (p) =>
     AppStore.update((s) => {
-      s.playing = !s.playing;
+      s.playing = p;
     });
+  const togglePlaying = () => setPlaying(!playing);
   useEffect(() => {
     const player = plyrRef.current;
     playing ? player.play() : player.pause();
@@ -70,6 +81,53 @@ const Player = ({ plyrRef, playNext }) => {
   const playIndex = Number(playing);
   const playIcons = [<PlayArrowIcon />, <PauseIcon />];
   const playTitles = ["Play", "Pause"];
+
+  // NOTE: songEnded is used kind of like an event to mirror the plyr
+  // songEnded event.  But, it is a state variable, which smells. This is to
+  // avoid having stale values "closed" by the function attached as an event
+  // listener on the player (for ended event).
+  const [songEnded, setSongEnded] = useState(false);
+  const setPlayingState = (e) => {
+    if (!plyrRef.current.seeking) {
+      setPlaying(e.type === "play");
+      setSongEnded(false);
+    }
+  };
+  const maybePlayNext = () => setSongEnded(true);
+  const queue = AppStore.useState((s) => s.queue);
+  const setCurrentSong = (song) =>
+    AppStore.update((s) => {
+      s.currentSong = song;
+    });
+  const playNext = (backwards = false) => {
+    const n = queue.length;
+    const change = backwards ? -1 : 1;
+    const songIndex = findSongIndex(queue, currentSong?.src);
+    const nextIndex = (songIndex + change + n) % n;
+    setCurrentSong(queue[nextIndex]);
+    setPlaying(true);
+  };
+
+  useEffect(() => {
+    const player = plyrRef.current;
+    player.on("play", setPlayingState);
+    player.on("pause", setPlayingState);
+    player.on("ended", maybePlayNext);
+  }, []);
+
+  useEffect(() => {
+    if (!songEnded) {
+      return;
+    }
+    console.log("Choosing next song...");
+    if (repeatIndex === 1) {
+      setPlaying(true);
+    } else if (repeatIndex === 2) {
+      playNext();
+    } else {
+      console.log(`Repeat state is ${repeatIndex}`);
+    }
+  }, [songEnded]);
 
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
