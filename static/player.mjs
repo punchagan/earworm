@@ -15,6 +15,10 @@ const Player = ({ plyrRef, playNext }) => {
     AppStore.update((s) => {
       s.playing = !s.playing;
     });
+  React.useEffect(() => {
+    const player = plyrRef.current;
+    playing ? player.play() : player.pause();
+  }, [playing]);
 
   // Shuffle State
   const shuffle = AppStore.useState((s) => s.shuffle);
@@ -53,11 +57,6 @@ const Player = ({ plyrRef, playNext }) => {
   const playIndex = Number(playing);
   const playIcons = [<PlayArrowIcon />, <PauseIcon />];
   const playTitles = ["Play", "Pause"];
-
-  React.useEffect(() => {
-    const player = plyrRef.current;
-    playing ? player.play() : player.pause();
-  }, [playing]);
 
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };

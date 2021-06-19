@@ -86,6 +86,8 @@ const App = ({ library }) => {
     if (!song) {
       return;
     }
+
+    // Set Player Source
     const source = {
       title: song.title,
       type: "audio",
@@ -94,6 +96,8 @@ const App = ({ library }) => {
     const player = plyrRef.current;
     player.source = source;
     playing ? player.play() : player.pause();
+
+    // Update page properties
     location.hash = currentSong;
     songElement.current && showSong(songElement.current);
     document.title = `${song.title} — ${song.artist} — ${pageTitle}`;
