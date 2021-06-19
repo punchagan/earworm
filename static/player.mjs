@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
@@ -15,7 +15,7 @@ const Player = ({ plyrRef, playNext }) => {
     AppStore.update((s) => {
       s.playing = !s.playing;
     });
-  React.useEffect(() => {
+  useEffect(() => {
     const player = plyrRef.current;
     playing ? player.play() : player.pause();
   }, [playing]);

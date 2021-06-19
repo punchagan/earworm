@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import copy from "copy-to-clipboard";
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ActionMenu = ({ metadataLink, hash }) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const classes = useStyles();
@@ -55,7 +55,7 @@ const ActionMenu = ({ metadataLink, hash }) => {
     setCopied(false);
   };
 
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
   const copyLink = () => {
     let url = new URL(document.location);
     url.hash = hash;
