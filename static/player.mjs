@@ -34,6 +34,11 @@ const Player = (props) => {
   const playIcons = [<PlayArrowIcon />, <PauseIcon />];
   const playTitles = ["Play", "Pause"];
 
+  React.useEffect(() => {
+    const player = plyrRef.current;
+    playing ? player.play() : player.pause();
+  }, [playing]);
+
   // FIXME: Ugly hack to hide newly created audio element
   const hideStyle = { display: "none" };
 

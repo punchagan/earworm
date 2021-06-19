@@ -6,6 +6,17 @@ import Header from "./header.mjs";
 import Playlist from "./playlist.mjs";
 import Player from "./player.mjs";
 
+const showSong = (element) => {
+  const rect = element.getBoundingClientRect();
+  const inView =
+    rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+  if (!inView) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
+
+const findSongIndex = (songList, src) => songList.findIndex((it) => it.src === src);
+
 const App = ({ library }) => {
   // Setup Queue
   const [queue, setQueue] = useState([...library]);
@@ -18,8 +29,6 @@ const App = ({ library }) => {
       plyrRef.current = plyr;
     }
   }, []);
-
-  const findSongIndex = (songList, src) => songList.findIndex((it) => it.src === src);
 
   // Current Song State
   const hash = decodeURI(location.hash.substring(1));
@@ -71,15 +80,6 @@ const App = ({ library }) => {
     setRepeatIndex(newIndex);
   };
 
-  const showSong = (element) => {
-    const rect = element.getBoundingClientRect();
-    const inView =
-      rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
-    if (!inView) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
   useEffect(() => {
     const song = library[findSongIndex(library, currentSong)];
     const source = {
@@ -94,11 +94,6 @@ const App = ({ library }) => {
     songElement.current && showSong(songElement.current);
     document.title = `${song.title} — ${song.artist} — ${pageTitle}`;
   }, [currentSong]);
-
-  useEffect(() => {
-    const player = plyrRef.current;
-    playing ? player.play() : player.pause();
-  }, [playing]);
 
   const setPlayingState = (e) => {
     if (!plyrRef.current.seeking) {
@@ -121,7 +116,8 @@ const App = ({ library }) => {
   // avoid having stale values "closed" by the function attached as an event
   // listener on the player (for ended event).
   const [songEnded, setSongEnded] = useState(false);
-  const chooseNext = useEffect(() => {
+  const maybePlayNext = () => setSongEnded(true);
+  useEffect(() => {
     if (!songEnded) {
       return;
     }
@@ -134,7 +130,6 @@ const App = ({ library }) => {
       console.log(`Repeat state is ${repeatIndex}`);
     }
   }, [songEnded]);
-  const maybePlayNext = () => setSongEnded(true);
 
   useEffect(() => {
     const player = plyrRef.current;
