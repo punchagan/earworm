@@ -1,8 +1,10 @@
 import React from "react";
 
+import { AppStore } from "./app-store.mjs";
 import Song from "./song.mjs";
 
-const Playlist = ({ library, playing, playPause, currentSong, songElement }) => {
+const Playlist = ({ library, playPause, currentSong, songElement }) => {
+  const playing = AppStore.useState((s) => s.playing);
   return (
     <ul className="songlist">
       {library.map((s) => (
@@ -11,7 +13,6 @@ const Playlist = ({ library, playing, playPause, currentSong, songElement }) => 
           elem={currentSong === s.src ? songElement : undefined}
           isCurrent={currentSong === s.src}
           playPause={playPause}
-          playing={playing}
         />
       ))}
     </ul>

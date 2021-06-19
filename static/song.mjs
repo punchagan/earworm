@@ -13,6 +13,8 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 
+import { AppStore } from "./app-store.mjs";
+
 // From https://stackoverflow.com/a/41015840
 String.prototype.interpolate = function (params) {
   const names = Object.keys(params);
@@ -109,7 +111,8 @@ const ActionMenu = ({ metadataLink, hash }) => {
   );
 };
 
-const Song = ({ song, isCurrent, playing, playPause, elem }) => {
+const Song = ({ song, isCurrent, playPause, elem }) => {
+  const playing = AppStore.useState((s) => s.playing);
   const extraClassLabel = isCurrent ? (playing ? "current playing" : "current") : "";
   const onClick = () => playPause(song.src);
   const description = songDescription.interpolate({ song: song });

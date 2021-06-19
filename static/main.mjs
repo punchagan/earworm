@@ -5,6 +5,7 @@ import Plyr from "plyr";
 import Header from "./header.mjs";
 import Playlist from "./playlist.mjs";
 import Player from "./player.mjs";
+import { AppStore } from "./app-store.mjs";
 
 const showSong = (element) => {
   const rect = element.getBoundingClientRect();
@@ -38,10 +39,12 @@ const App = ({ library }) => {
   const songElement = useRef();
 
   // Player State
-  const [playing, setPlaying] = useState(validHash);
-  const togglePlaying = () => {
-    setPlaying(!playing);
-  };
+  const playing = AppStore.useState((s) => s.playing);
+  const setPlaying = (playing) =>
+    AppStore.update((s) => {
+      s.playing = playing;
+    });
+  useEffect(() => setPlaying(validHash), []);
 
   // Toggle Play/Pause State. Can change both playing and curentSong
   const playPause = (src) => {
@@ -146,15 +149,12 @@ const App = ({ library }) => {
         repeatIndex={repeatIndex}
         shuffle={shuffle}
         toggleShuffle={toggleShuffle}
-        playing={playing}
-        togglePlaying={togglePlaying}
         playNext={playNext}
       />
       <div id="container">
         <Header description={pageDescription} title={pageTitle} queue={queue} />
         <Playlist
           library={library}
-          playing={playing}
           playPause={playPause}
           currentSong={currentSong}
           songElement={songElement}

@@ -7,17 +7,16 @@ import RepeatIcon from "@material-ui/icons/Repeat";
 import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 
+import { AppStore } from "./app-store.mjs";
+
 const Player = (props) => {
-  const {
-    plyrRef,
-    repeatIndex,
-    cycleRepeat,
-    shuffle,
-    toggleShuffle,
-    playing,
-    togglePlaying,
-    playNext,
-  } = props;
+  const { plyrRef, repeatIndex, cycleRepeat, shuffle, toggleShuffle, playNext } = props;
+  const playing = AppStore.useState((s) => s.playing);
+  const togglePlaying = () =>
+    AppStore.update((s) => {
+      s.playing = !s.playing;
+    });
+
   const repeatTitles = ["off", "one", "all"];
   const repeatClass = repeatIndex > 0 ? "btn-on" : "";
   const repeatIcons = [
