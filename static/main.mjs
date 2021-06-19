@@ -24,7 +24,6 @@ const showSong = (element) => {
 
 const App = ({ library }) => {
   // Setup Queue
-  const queue = AppStore.useState((s) => s.queue);
   useEffect(() => {
     setQueue(library);
   }, []);
@@ -57,7 +56,7 @@ const App = ({ library }) => {
     <div>
       <Player />
       <div id="container">
-        <Header description={pageDescription} title={pageTitle} queue={queue} />
+        <Header description={pageDescription} title={pageTitle} />
         <Playlist library={library} songElement={songElement} />
         <small>
           This page was generated using ${" "}

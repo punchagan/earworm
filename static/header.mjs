@@ -1,6 +1,9 @@
 import React from "react";
 
-const Header = ({ title, description, queue }) => {
+import { AppStore } from "./app-store.mjs";
+
+const Header = ({ title, description }) => {
+  const queue = AppStore.useState((s) => s.queue);
   const totalMinutes = Math.floor(queue.reduce((acc, it) => acc + it.duration, 0) / 60);
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
