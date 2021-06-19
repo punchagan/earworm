@@ -5,4 +5,5 @@ export const AppStore = new Store({
   currentSong: null,
   shuffle: false,
   repeatIndex: 2,
+  queue: [],
 });

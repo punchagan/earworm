@@ -20,7 +20,15 @@ const findSongIndex = (songList, src) => songList.findIndex((it) => it.src === s
 
 const App = ({ library }) => {
   // Setup Queue
-  const [queue, setQueue] = useState([...library]);
+  const queue = AppStore.useState((s) => s.queue);
+  const setQueue = (q) => {
+    AppStore.update((s) => {
+      s.queue = q;
+    });
+  };
+  useEffect(() => {
+    setQueue(library);
+  }, []);
 
   // Player Setup
   const plyrRef = useCallback((node) => {
@@ -45,21 +53,6 @@ const App = ({ library }) => {
     AppStore.update((s) => {
       s.playing = playing;
     });
-
-  // Shuffle state
-  const shuffle = AppStore.useState((s) => s.shuffle);
-  useEffect(() => {
-    // NOTE: Simple implementation of shuffle, assuming the queue contains
-    // the full library. This needs to change when we have a way to
-    // add/remove from the queue and to see actual queue.
-    const q = [...library];
-    if (shuffle) {
-      for (let i = 0; i < 12; i++) {
-        q.sort(() => Math.random() - 0.5);
-      }
-    }
-    setQueue(q);
-  }, [shuffle]);
 
   // Repeat State
   const repeatIndex = AppStore.useState((s) => s.repeatIndex);
