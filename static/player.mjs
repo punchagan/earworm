@@ -20,6 +20,19 @@ const Player = ({ plyrRef, playNext }) => {
     playing ? player.play() : player.pause();
   }, [playing]);
 
+  const currentSong = AppStore.useState((s) => s.currentSong);
+  useEffect(() => {
+    // Set Player Source
+    const source = {
+      title: currentSong?.title,
+      type: "audio",
+      sources: [{ src: currentSong?.src, type: "audio/mp3" }],
+    };
+    const player = plyrRef.current;
+    player.source = source;
+    playing ? player.play() : player.pause();
+  }, [currentSong?.src]);
+
   // Shuffle State
   const shuffle = AppStore.useState((s) => s.shuffle);
   const toggleShuffle = () => {

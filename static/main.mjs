@@ -78,17 +78,6 @@ const App = ({ library }) => {
     if (!currentSong) {
       return;
     }
-
-    // Set Player Source
-    const source = {
-      title: currentSong.title,
-      type: "audio",
-      sources: [{ src: currentSong.src, type: "audio/mp3" }],
-    };
-    const player = plyrRef.current;
-    player.source = source;
-    playing ? player.play() : player.pause();
-
     // Update page properties
     location.hash = currentSong.src;
     songElement.current && showSong(songElement.current);
