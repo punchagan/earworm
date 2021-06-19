@@ -1,14 +1,9 @@
 import React, { useEffect } from "react";
 
-import { AppStore } from "./app-store.mjs";
+import { AppStore, setQueue } from "./app-store.mjs";
 import Song from "./song.mjs";
 
 const Playlist = ({ library, songElement }) => {
-  const setQueue = (q) => {
-    AppStore.update((s) => {
-      s.queue = q;
-    });
-  };
   // Shuffle state
   const shuffle = AppStore.useState((s) => s.shuffle);
   useEffect(() => {

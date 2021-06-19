@@ -8,7 +8,13 @@ import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import Plyr from "plyr";
 
-import { AppStore, findSongIndex } from "./app-store.mjs";
+import {
+  AppStore,
+  findSongIndex,
+  setCurrentSong,
+  setPlaying,
+  setRepeatIndex,
+} from "./app-store.mjs";
 
 const Player = () => {
   // Player Setup
@@ -21,10 +27,6 @@ const Player = () => {
   }, []);
 
   const playing = AppStore.useState((s) => s.playing);
-  const setPlaying = (p) =>
-    AppStore.update((s) => {
-      s.playing = p;
-    });
   const togglePlaying = () => setPlaying(!playing);
   useEffect(() => {
     const player = plyrRef.current;
@@ -55,11 +57,6 @@ const Player = () => {
   // Repeat State
   const repeatStates = ["Off", "Song", "All"];
   const repeatIndex = AppStore.useState((s) => s.repeatIndex);
-  const setRepeatIndex = (idx) => {
-    AppStore.update((s) => {
-      s.repeatIndex = idx;
-    });
-  };
   const cycleRepeat = () => {
     const n = repeatStates.length;
     const newIndex = (repeatIndex + 1) % n;
@@ -95,10 +92,6 @@ const Player = () => {
   };
   const maybePlayNext = () => setSongEnded(true);
   const queue = AppStore.useState((s) => s.queue);
-  const setCurrentSong = (song) =>
-    AppStore.update((s) => {
-      s.currentSong = song;
-    });
   const playNext = (backwards = false) => {
     const n = queue.length;
     const change = backwards ? -1 : 1;
