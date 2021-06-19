@@ -26,12 +26,43 @@ const Player = () => {
     }
   }, []);
 
+  // Play/Pause
   const playing = AppStore.useState((s) => s.playing);
   const togglePlaying = () => setPlaying(!playing);
   useEffect(() => {
     const player = plyrRef.current;
     playing ? player.play() : player.pause();
   }, [playing]);
+  const playIndex = Number(playing);
+  const playIcons = [<PlayArrowIcon />, <PauseIcon />];
+  const playTitles = ["Play", "Pause"];
+
+  // Shuffle State
+  const shuffle = AppStore.useState((s) => s.shuffle);
+  const toggleShuffle = () => {
+    AppStore.update((s) => {
+      s.shuffle = !s.shuffle;
+    });
+  };
+  const shuffleIndex = Number(shuffle);
+  const shuffleTitles = ["off", "on"];
+  const shuffleClass = shuffle ? "btn-on" : "";
+
+  // Repeat State
+  const repeatStates = ["Off", "Song", "All"];
+  const repeatIndex = AppStore.useState((s) => s.repeatIndex);
+  const cycleRepeat = () => {
+    const n = repeatStates.length;
+    const newIndex = (repeatIndex + 1) % n;
+    setRepeatIndex(newIndex);
+  };
+  const repeatTitles = ["off", "one", "all"];
+  const repeatClass = repeatIndex > 0 ? "btn-on" : "";
+  const repeatIcons = [
+    <RepeatIcon className={repeatClass} />,
+    <RepeatOneIcon className={repeatClass} />,
+    <RepeatIcon className={repeatClass} />,
+  ];
 
   const currentSong = AppStore.useState((s) => s.currentSong);
   useEffect(() => {
@@ -45,39 +76,6 @@ const Player = () => {
     player.source = source;
     playing ? player.play() : player.pause();
   }, [currentSong?.src]);
-
-  // Shuffle State
-  const shuffle = AppStore.useState((s) => s.shuffle);
-  const toggleShuffle = () => {
-    AppStore.update((s) => {
-      s.shuffle = !s.shuffle;
-    });
-  };
-
-  // Repeat State
-  const repeatStates = ["Off", "Song", "All"];
-  const repeatIndex = AppStore.useState((s) => s.repeatIndex);
-  const cycleRepeat = () => {
-    const n = repeatStates.length;
-    const newIndex = (repeatIndex + 1) % n;
-    setRepeatIndex(newIndex);
-  };
-
-  const repeatTitles = ["off", "one", "all"];
-  const repeatClass = repeatIndex > 0 ? "btn-on" : "";
-  const repeatIcons = [
-    <RepeatIcon className={repeatClass} />,
-    <RepeatOneIcon className={repeatClass} />,
-    <RepeatIcon className={repeatClass} />,
-  ];
-
-  const shuffleIndex = Number(shuffle);
-  const shuffleTitles = ["off", "on"];
-  const shuffleClass = shuffle ? "btn-on" : "";
-
-  const playIndex = Number(playing);
-  const playIcons = [<PlayArrowIcon />, <PauseIcon />];
-  const playTitles = ["Play", "Pause"];
 
   // NOTE: songEnded is used kind of like an event to mirror the plyr
   // songEnded event.  But, it is a state variable, which smells. This is to
