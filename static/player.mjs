@@ -9,8 +9,7 @@ import ShuffleIcon from "@material-ui/icons/Shuffle";
 
 import { AppStore } from "./app-store.mjs";
 
-const Player = (props) => {
-  const { plyrRef, repeatIndex, cycleRepeat, playNext } = props;
+const Player = ({ plyrRef, playNext }) => {
   const playing = AppStore.useState((s) => s.playing);
   const togglePlaying = () =>
     AppStore.update((s) => {
@@ -23,6 +22,20 @@ const Player = (props) => {
     AppStore.update((s) => {
       s.shuffle = !s.shuffle;
     });
+  };
+
+  // Repeat State
+  const repeatStates = ["Off", "Song", "All"];
+  const repeatIndex = AppStore.useState((s) => s.repeatIndex);
+  const setRepeatIndex = (idx) => {
+    AppStore.update((s) => {
+      s.repeatIndex = idx;
+    });
+  };
+  const cycleRepeat = () => {
+    const n = repeatStates.length;
+    const newIndex = (repeatIndex + 1) % n;
+    setRepeatIndex(newIndex);
   };
 
   const repeatTitles = ["off", "one", "all"];

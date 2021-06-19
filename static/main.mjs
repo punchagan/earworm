@@ -46,17 +46,6 @@ const App = ({ library }) => {
       s.playing = playing;
     });
 
-  // Process song hash
-  const hash = decodeURI(location.hash.substring(1));
-  const validHash = findSongIndex(library, hash) > -1;
-  const selectedSong = validHash ? hash : queue?.[0]?.src;
-  useEffect(() => {
-    if (validHash) {
-      setCurrentSong(selectedSong);
-      setPlaying(true);
-    }
-  }, []);
-
   // Shuffle state
   const shuffle = AppStore.useState((s) => s.shuffle);
   useEffect(() => {
@@ -73,13 +62,23 @@ const App = ({ library }) => {
   }, [shuffle]);
 
   // Repeat State
-  const repeatStates = ["Off", "Song", "All"];
-  const [repeatIndex, setRepeatIndex] = useState(validHash ? 0 : 2);
-  const cycleRepeat = () => {
-    const n = repeatStates.length;
-    const newIndex = (repeatIndex + 1) % n;
-    setRepeatIndex(newIndex);
+  const repeatIndex = AppStore.useState((s) => s.repeatIndex);
+  const setRepeatIndex = (idx) => {
+    AppStore.update((s) => {
+      s.repeatIndex = idx;
+    });
   };
+
+  // Update state if valid hash in URL
+  const hash = decodeURI(location.hash.substring(1));
+  const validHash = findSongIndex(library, hash) > -1;
+  useEffect(() => {
+    if (validHash) {
+      setCurrentSong(hash);
+      setPlaying(true);
+      setRepeatIndex(0);
+    }
+  }, []);
 
   useEffect(() => {
     const song = library[findSongIndex(library, currentSong)];
@@ -145,12 +144,7 @@ const App = ({ library }) => {
 
   return (
     <div>
-      <Player
-        plyrRef={plyrRef}
-        cycleRepeat={cycleRepeat}
-        repeatIndex={repeatIndex}
-        playNext={playNext}
-      />
+      <Player plyrRef={plyrRef} playNext={playNext} />
       <div id="container">
         <Header description={pageDescription} title={pageTitle} queue={queue} />
         <Playlist library={library} songElement={songElement} />

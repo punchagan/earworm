@@ -4,4 +4,5 @@ export const AppStore = new Store({
   playing: false,
   currentSong: null,
   shuffle: false,
+  repeatIndex: 2,
 });
