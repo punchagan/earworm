@@ -42,9 +42,9 @@ const App = ({ library }) => {
   // Current Song State
   const songElement = useRef();
   const currentSong = AppStore.useState((s) => s.currentSong);
-  const setCurrentSong = (src) =>
+  const setCurrentSong = (song) =>
     AppStore.update((s) => {
-      s.currentSong = src;
+      s.currentSong = song;
     });
 
   // Player State
@@ -67,34 +67,33 @@ const App = ({ library }) => {
   const validHash = findSongIndex(library, hash) > -1;
   useEffect(() => {
     if (validHash) {
-      setCurrentSong(hash);
+      const song = library[findSongIndex(library, hash)];
+      setCurrentSong(song);
       setPlaying(true);
       setRepeatIndex(0);
     }
   }, []);
 
   useEffect(() => {
-    const song = queue[findSongIndex(queue, currentSong)];
-
-    if (!song) {
+    if (!currentSong) {
       return;
     }
 
     // Set Player Source
     const source = {
-      title: song.title,
+      title: currentSong.title,
       type: "audio",
-      sources: [{ src: currentSong, type: "audio/mp3" }],
+      sources: [{ src: currentSong.src, type: "audio/mp3" }],
     };
     const player = plyrRef.current;
     player.source = source;
     playing ? player.play() : player.pause();
 
     // Update page properties
-    location.hash = currentSong;
+    location.hash = currentSong.src;
     songElement.current && showSong(songElement.current);
-    document.title = `${song.title} — ${song.artist} — ${pageTitle}`;
-  }, [currentSong]);
+    document.title = `${currentSong.title} — ${currentSong.artist} — ${pageTitle}`;
+  }, [currentSong?.src]);
 
   const setPlayingState = (e) => {
     if (!plyrRef.current.seeking) {
@@ -106,9 +105,9 @@ const App = ({ library }) => {
   const playNext = (backwards = false) => {
     const n = queue.length;
     const change = backwards ? -1 : 1;
-    const songIndex = findSongIndex(queue, currentSong);
+    const songIndex = findSongIndex(queue, currentSong?.src);
     const nextIndex = (songIndex + change + n) % n;
-    setCurrentSong(queue[nextIndex].src);
+    setCurrentSong(queue[nextIndex]);
     setPlaying(true);
   };
 

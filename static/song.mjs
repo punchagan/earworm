@@ -114,20 +114,19 @@ const ActionMenu = ({ metadataLink, hash }) => {
 const Song = ({ song, songElement }) => {
   const playing = AppStore.useState((s) => s.playing);
   const currentSong = AppStore.useState((s) => s.currentSong);
-  const elem = currentSong === song.src ? songElement : undefined;
-  const isCurrent = currentSong === song.src;
+  const elem = currentSong?.src === song.src ? songElement : undefined;
+  const isCurrent = currentSong?.src === song.src;
   const extraClassLabel = isCurrent ? (playing ? "current playing" : "current") : "";
 
   const playPause = () => {
-    const { src } = song;
-    if (src === currentSong) {
+    if (song.src === currentSong?.src) {
       AppStore.update((s) => {
         s.playing = !s.playing;
       });
-    } else if (src) {
+    } else if (song.src) {
       AppStore.update((s) => {
         s.playing = true;
-        s.currentSong = src;
+        s.currentSong = song;
       });
     } else {
       console.log("No src set");
