@@ -32,11 +32,12 @@ const App = ({ library }) => {
   }, []);
 
   // Current Song State
-  const hash = decodeURI(location.hash.substring(1));
-  const validHash = findSongIndex(library, hash) > -1;
-  const selectedSong = validHash ? hash : queue?.[0]?.src;
-  const [currentSong, setCurrentSong] = useState(selectedSong);
   const songElement = useRef();
+  const currentSong = AppStore.useState((s) => s.currentSong);
+  const setCurrentSong = (src) =>
+    AppStore.update((s) => {
+      s.currentSong = src;
+    });
 
   // Player State
   const playing = AppStore.useState((s) => s.playing);
@@ -44,19 +45,17 @@ const App = ({ library }) => {
     AppStore.update((s) => {
       s.playing = playing;
     });
-  useEffect(() => setPlaying(validHash), []);
 
-  // Toggle Play/Pause State. Can change both playing and curentSong
-  const playPause = (src) => {
-    if (src === currentSong) {
-      setPlaying(!playing);
-    } else if (src) {
-      setCurrentSong(src);
+  // Process song hash
+  const hash = decodeURI(location.hash.substring(1));
+  const validHash = findSongIndex(library, hash) > -1;
+  const selectedSong = validHash ? hash : queue?.[0]?.src;
+  useEffect(() => {
+    if (validHash) {
+      setCurrentSong(selectedSong);
       setPlaying(true);
-    } else {
-      console.log("No src set");
     }
-  };
+  }, []);
 
   // Shuffle State
   const [shuffle, setShuffle] = useState(false);
@@ -85,6 +84,10 @@ const App = ({ library }) => {
 
   useEffect(() => {
     const song = library[findSongIndex(library, currentSong)];
+
+    if (!song) {
+      return;
+    }
     const source = {
       title: song.title,
       type: "audio",
@@ -153,12 +156,7 @@ const App = ({ library }) => {
       />
       <div id="container">
         <Header description={pageDescription} title={pageTitle} queue={queue} />
-        <Playlist
-          library={library}
-          playPause={playPause}
-          currentSong={currentSong}
-          songElement={songElement}
-        />
+        <Playlist library={library} songElement={songElement} />
         <small>
           This page was generated using ${" "}
           <a href="https://github.com/punchagan/earworm" rel="noopener noreferrer" target="_blank">

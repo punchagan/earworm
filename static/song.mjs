@@ -111,10 +111,29 @@ const ActionMenu = ({ metadataLink, hash }) => {
   );
 };
 
-const Song = ({ song, isCurrent, playPause, elem }) => {
+const Song = ({ song, songElement }) => {
   const playing = AppStore.useState((s) => s.playing);
+  const currentSong = AppStore.useState((s) => s.currentSong);
+  const elem = currentSong === song.src ? songElement : undefined;
+  const isCurrent = currentSong === song.src;
   const extraClassLabel = isCurrent ? (playing ? "current playing" : "current") : "";
-  const onClick = () => playPause(song.src);
+
+  const playPause = () => {
+    const { src } = song;
+    if (src === currentSong) {
+      AppStore.update((s) => {
+        s.playing = !s.playing;
+      });
+    } else if (src) {
+      AppStore.update((s) => {
+        s.playing = true;
+        s.currentSong = src;
+      });
+    } else {
+      console.log("No src set");
+    }
+  };
+
   const description = songDescription.interpolate({ song: song });
   const playIcon = playing ? (
     isCurrent ? (
@@ -131,7 +150,7 @@ const Song = ({ song, isCurrent, playPause, elem }) => {
   return (
     <li ref={elem} className={`song ${extraClassLabel}`} key={song.src}>
       <span className="song-controls">
-        <button className="play-button" onClick={onClick}>
+        <button className="play-button" onClick={playPause}>
           {playIcon}
         </button>
       </span>
