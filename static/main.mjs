@@ -3,8 +3,8 @@ import { render } from "react-dom";
 import Plyr from "plyr";
 
 import Header from "./header.mjs";
+import Playlist from "./playlist.mjs";
 import Player from "./player.mjs";
-import Song from "./song.mjs";
 
 const App = ({ library }) => {
   // Setup Queue
@@ -143,16 +143,6 @@ const App = ({ library }) => {
     player.on("ended", maybePlayNext);
   }, []);
 
-  const playlist = library.map((s) => (
-    <Song
-      song={s}
-      elem={currentSong === s.src ? songElement : undefined}
-      isCurrent={currentSong === s.src}
-      playPause={playPause}
-      playing={playing}
-    />
-  ));
-
   return (
     <div>
       <Player
@@ -167,7 +157,13 @@ const App = ({ library }) => {
       />
       <div id="container">
         <Header description={pageDescription} title={pageTitle} queue={queue} />
-        <ul className="songlist">{playlist}</ul>
+        <Playlist
+          library={library}
+          playing={playing}
+          playPause={playPause}
+          currentSong={currentSong}
+          songElement={songElement}
+        />
         <small>
           This page was generated using ${" "}
           <a href="https://github.com/punchagan/earworm" rel="noopener noreferrer" target="_blank">
