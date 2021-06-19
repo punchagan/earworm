@@ -57,9 +57,8 @@ const App = ({ library }) => {
     }
   }, []);
 
-  // Shuffle State
-  const [shuffle, setShuffle] = useState(false);
-  const toggleShuffle = () => setShuffle(!shuffle);
+  // Shuffle state
+  const shuffle = AppStore.useState((s) => s.shuffle);
   useEffect(() => {
     // NOTE: Simple implementation of shuffle, assuming the queue contains
     // the full library. This needs to change when we have a way to
@@ -150,8 +149,6 @@ const App = ({ library }) => {
         plyrRef={plyrRef}
         cycleRepeat={cycleRepeat}
         repeatIndex={repeatIndex}
-        shuffle={shuffle}
-        toggleShuffle={toggleShuffle}
         playNext={playNext}
       />
       <div id="container">
