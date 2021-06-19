@@ -81,7 +81,7 @@ const App = ({ library }) => {
   }, []);
 
   useEffect(() => {
-    const song = library[findSongIndex(library, currentSong)];
+    const song = queue[findSongIndex(queue, currentSong)];
 
     if (!song) {
       return;
