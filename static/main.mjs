@@ -64,10 +64,10 @@ const App = ({ library }) => {
 
   // Update state if valid hash in URL
   const hash = decodeURI(location.hash.substring(1));
-  const validHash = findSongIndex(library, hash) > -1;
+  const songIndex = findSongIndex(library, hash);
   useEffect(() => {
-    if (validHash) {
-      const song = library[findSongIndex(library, hash)];
+    if (songIndex > -1) {
+      const song = library[songIndex];
       setCurrentSong(song);
       setPlaying(true);
       setRepeatIndex(0);
