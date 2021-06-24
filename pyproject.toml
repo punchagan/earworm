@@ -3,6 +3,7 @@ name = "earworm"
 version = "0.1.0"
 description = "Create a simple web page to listen to audio files in a directory"
 authors = ["Puneeth Chaganti <punchagan@muse-amuse.in>"]
+include = ["earworm/static/bundle.js"]
 
 [tool.poetry.dependencies]
 python = "^3.9"

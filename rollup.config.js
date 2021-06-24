@@ -7,7 +7,7 @@ import replace from "@rollup/plugin-replace";
 export default {
   input: "js/main.mjs",
   output: {
-    file: "static/bundle.js",
+    file: "earworm/static/bundle.js",
   },
   plugins: [
     alias({
