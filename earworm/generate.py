@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import argparse
 import io
 import json
 import os
@@ -12,7 +13,7 @@ import webassets
 from webassets.ext.jinja2 import AssetsExtension
 import yaml
 
-from metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
+from .metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_FILE = "template.html"
@@ -72,14 +73,14 @@ def generate_index(songs: List[Dict], config: Config) -> str:
     return f.name
 
 
-def copy_media(songs: List[Dict]) -> None:
+def copy_media(config: Config, songs: List[Dict]) -> None:
     music_dir = os.path.join(config.out_dir, "music")
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
         shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))
 
 
-def create_covers(songs: List[Dict]) -> List[str]:
+def create_covers(config: Config, songs: List[Dict]) -> List[str]:
     covers_dir = os.path.join(config.out_dir, "covers")
     os.makedirs(covers_dir, exist_ok=True)
     cover_images = []
@@ -111,13 +112,13 @@ def resize_image(data: bytes, size=(300, 300)) -> Image:
     return square.resize(size)
 
 
-def create_og_image(path: str) -> None:
+def create_og_image(config: Config, path: str) -> None:
     image_dir = os.path.dirname(path)
     og_path = os.path.join(image_dir, "og-image.jpg")
     shutil.copyfile(path, og_path)
 
 
-def create_favicon(path: str) -> None:
+def create_favicon(config: Config, path: str) -> None:
     favicon_path = os.path.join(config.out_dir, "favicon.ico")
     with open(path, "rb") as f:
         data = f.read()
@@ -131,18 +132,16 @@ def generate_site(config: Config) -> None:
 
     os.makedirs(config.out_dir, exist_ok=True)
 
-    copy_media(songs)
-    cover_images = create_covers(songs)
+    copy_media(config, songs)
+    cover_images = create_covers(config, songs)
     if cover_images and config.base_url:
-        create_og_image(cover_images[0])
-        create_favicon(cover_images[0])
+        create_og_image(config, cover_images[0])
+        create_favicon(config, cover_images[0])
     index_path = generate_index(songs, config)
     print(f"Site generated in {index_path}!")
 
 
-if __name__ == "__main__":
-    import argparse
-
+def main() -> None:
     config_default = "config.yml"
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", action="store", default=config_default)
@@ -154,3 +153,7 @@ if __name__ == "__main__":
         create_or_update_metadata_csv(config)
     else:
         generate_site(config)
+
+
+if __name__ == "__main__":
+    main()
