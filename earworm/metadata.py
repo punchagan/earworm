@@ -19,7 +19,6 @@ UNSUPPORTED_FORMATS = (".amr",)  # Not played by FF or Chrome. See issue #10
 class Config:
     music_dir: str
     metadata_csv: str = ""
-    _metadata_url: str = ""
     title_required: bool = False
     album_required: bool = False
     date_required: bool = False
@@ -30,8 +29,9 @@ class Config:
     song_description: str = "${song.album} (${song.date})"
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
-    config_dir: str = ""
     use_ffprobe: bool = True
+    _config_dir: str = ""
+    _metadata_url: str = ""
 
 
 @dataclass
@@ -199,7 +199,7 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
 
 def create_or_update_metadata_csv(config: Config) -> None:
     if not config.metadata_csv:
-        config.metadata_csv = os.path.join(config.config_dir, "metadata.csv")
+        config.metadata_csv = os.path.join(config._config_dir, "metadata.csv")
 
     if os.path.exists(config.metadata_csv):
         rows = {r["filename"]: r for r in read_metadata_csv(config)}
