@@ -134,3 +134,4 @@ dmypy.json
 /.envrc
 /*.yml
 /node_modules/
+/static/bundle.js

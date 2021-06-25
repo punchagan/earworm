@@ -5,7 +5,10 @@ import commonjs from "@rollup/plugin-commonjs";
 import replace from "@rollup/plugin-replace";
 
 export default {
-  input: "static/main.mjs",
+  input: "js/main.mjs",
+  output: {
+    file: "static/bundle.js",
+  },
   plugins: [
     alias({
       entries: [

@@ -10,8 +10,6 @@ import jinja2
 from PIL import Image
 import webassets
 from webassets.ext.jinja2 import AssetsExtension
-from webassets.filter import register_filter
-from webassets_rollup import Rollup
 import yaml
 
 from metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
@@ -47,19 +45,13 @@ def read_config(config_path: str) -> Config:
 
 
 def generate_index(songs: List[Dict], config: Config) -> str:
-    register_filter(Rollup)
-
     static_dir = os.path.join(HERE, "static")
     output_dir = os.path.join(config.out_dir, "static")
     assets_env = webassets.Environment(directory=output_dir, url="./static", load_path=[static_dir])
-    # FIXME: Allow running without rollup installed. Need the js to be served
-    # off a CDN. Rawgit? The easier way would be to have the file committed to
-    # the repo, but doesn't sound like a very great idea.
-    all_js = webassets.Bundle("main.mjs", filters="rollup", output="bundle.js", depends="*.mjs")
+    all_js = webassets.Bundle("bundle.js", output="bundle.js")
     all_css = webassets.Bundle("main.css", output="bundle.css")
     assets_env.register("all_js", all_js)
     assets_env.register("all_css", all_css)
-    assets_env.config["rollup_extra_args"] = ["-c", os.path.join(HERE, "rollup.config.js")]
 
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader, extensions=[AssetsExtension])
@@ -137,10 +129,6 @@ def generate_site(config: Config) -> None:
     print(f"Generating site from {config.music_dir} ...")
     songs = get_metadata(config)
 
-    # FIXME: This is ugly and probably should go away, when we are able to use
-    # a pre-built bundle file?  See the other FIXME about serving pre-built
-    # bundle off a CDN.
-    os.chdir(HERE)
     os.makedirs(config.out_dir, exist_ok=True)
 
     copy_media(songs)
