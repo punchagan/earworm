@@ -148,11 +148,15 @@ def main() -> None:
     parser.add_argument("--update-csv", action="store_true", default=False)
 
     options = parser.parse_args()
-    config = read_config(os.path.abspath(options.config))
-    if options.update_csv:
-        create_or_update_metadata_csv(config)
+    try:
+        config = read_config(os.path.abspath(options.config))
+    except FileNotFoundError:
+        print(f"Could not find the config file {options.config}.")
     else:
-        generate_site(config)
+        if options.update_csv:
+            create_or_update_metadata_csv(config)
+        else:
+            generate_site(config)
 
 
 if __name__ == "__main__":
