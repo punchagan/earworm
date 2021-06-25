@@ -124,8 +124,6 @@ tinytag==1.5.0; python_version >= "2.7" \
 urllib3==1.26.5; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4" \
     --hash=sha256:753a0374df26658f99d826cfe40394a686d05985786d946fbe4165b5148f5a7c \
     --hash=sha256:a7acd0977125325f516bda9735fa7142b909a8d01e8b2e4c8108d0984e6e0098
-webassets-rollup==1.0.0 \
-    --hash=sha256:fc2335ad9593a1dc13e81269919838159dcd377555d1398ada13a53c10706c8b
 webassets==2.0 \
     --hash=sha256:a31a55147752ba1b3dc07dee0ad8c8efff274464e08bbdb88c1fd59ffd552724 \
     --hash=sha256:167132337677c8cedc9705090f6d48da3fb262c8e0b2773b29f3352f050181cd
