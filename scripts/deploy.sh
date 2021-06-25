@@ -9,7 +9,7 @@ pushd $(dirname $0)
 rm -rf "${EXPORT_DIR}"
 
 # Build the site
-./generate.py --config my-music.yml
+earworm --config my-music.yml
 
 # Push to server
 rsync -azP --copy-links "${EXPORT_DIR}/" "${SERVER_HOST}":"${SONG_PUBLIC_DIR}"
