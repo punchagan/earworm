@@ -142,10 +142,17 @@ def generate_site(config: Config) -> None:
 
 
 def main() -> None:
-    config_default = "config.yml"
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config", action="store", default=config_default)
-    parser.add_argument("--update-csv", action="store_true", default=False)
+    parser.add_argument("-c", "--config", action="store", default="config.yml")
+    parser.set_defaults(func=generate_site)
+
+    subparsers = parser.add_subparsers(title="sub-commands")
+    parser_update_csv = subparsers.add_parser(
+        "update-csv", help="Update CSV from files in the music dir"
+    )
+    # NOTE: Added again to allow passing the arg after the sub-command
+    parser_update_csv.add_argument("-c", "--config", action="store", default="config.yml")
+    parser_update_csv.set_defaults(func=create_or_update_metadata_csv)
 
     options = parser.parse_args()
     try:
@@ -153,10 +160,7 @@ def main() -> None:
     except FileNotFoundError:
         print(f"Could not find the config file {options.config}.")
     else:
-        if options.update_csv:
-            create_or_update_metadata_csv(config)
-        else:
-            generate_site(config)
+        options.func(config)
 
 
 if __name__ == "__main__":

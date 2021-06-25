@@ -35,7 +35,7 @@ see step 3 below.
    ```
 
 1. You can generate a template for the `metadata.csv` from your `music_dir` by
-   running `earworm` with the `--update-csv` flag. Once the CSV file is
+   running `earworm` with the `update-csv` sub-command. Once the CSV file is
    generated, add a `metadata_csv` entry pointing to this file to your config.
 
 1. Run `earworm` to generate a directory called `output` with an
