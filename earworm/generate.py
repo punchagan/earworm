@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+from dataclasses import fields
 import io
 import json
 import os
@@ -25,6 +26,7 @@ def read_config(config_path: str) -> Config:
 
     config_dir = os.path.dirname(config_path)
     config["_config_dir"] = config_dir
+    config["_config_path"] = config_path
 
     music_dir = config["music_dir"]
     config["music_dir"] = os.path.join(config_dir, os.path.expanduser(music_dir))
@@ -141,8 +143,40 @@ def generate_site(config: Config) -> None:
     print(f"Site generated in {index_path}!")
 
 
+def yaml_represent_config(dumper, config):
+    """Custom YAML dump representation for Config.
+
+    NOTE: We could've simply used dataclasses.asdict to convert the config
+    object to a dict, and dumped that data, but PyYAML seems to always sort the
+    dictionaries by the keys when serializing them. This custom implementation
+    overcomes that issue.
+
+    """
+
+    data = []
+    for field in fields(config):
+        name = field.name
+        if name.startswith("_"):
+            continue
+        key = dumper.represent_data(name)
+        value = dumper.represent_data(getattr(config, name))
+        data.append((key, value))
+    return yaml.nodes.MappingNode("tag:yaml.org,2002:map", data)
+
+
+def make_config_file(config: Config) -> None:
+    yaml.add_representer(Config, yaml_represent_config)
+    with open(config._config_path, "w") as f:
+        yaml.dump(config, f)
+    print(f"Created config file at {config._config_path}")
+    print("Please update the value of music_dir to your directory of files.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
+    # NOTE: Added here for running without any sub-command. But, the
+    # sub-commands themselves add this option, again to be able to pass this
+    # argument after the sub-command name
     parser.add_argument("-c", "--config", action="store", default="config.yml")
     parser.set_defaults(func=generate_site)
 
@@ -150,15 +184,23 @@ def main() -> None:
     parser_update_csv = subparsers.add_parser(
         "update-csv", help="Update CSV from files in the music dir"
     )
-    # NOTE: Added again to allow passing the arg after the sub-command
     parser_update_csv.add_argument("-c", "--config", action="store", default="config.yml")
     parser_update_csv.set_defaults(func=create_or_update_metadata_csv)
 
+    parser_make_config = subparsers.add_parser("make-config", help="Make a sample config file")
+    parser_make_config.add_argument("-c", "--config", action="store", default="config.yml")
+    parser_make_config.set_defaults(func=make_config_file)
+
     options = parser.parse_args()
+    config_path = os.path.abspath(options.config)
     try:
-        config = read_config(os.path.abspath(options.config))
+        if options.func.__name__ == "make_config_file":
+            config = Config(music_dir="/tmp", _config_path=config_path)
+        else:
+            config = read_config(config_path)
     except FileNotFoundError:
         print(f"Could not find the config file {options.config}.")
+        print("Run `earworm make-config' to create the config file")
     else:
         options.func(config)
 

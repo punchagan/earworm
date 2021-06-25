@@ -30,6 +30,7 @@ class Config:
     description: str = "<small>Welcome to my music page.</small>"
     base_url: str = ""
     use_ffprobe: bool = True
+    _config_path: str = ""
     _config_dir: str = ""
     _metadata_url: str = ""
 
