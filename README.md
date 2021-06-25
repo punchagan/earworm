@@ -1,22 +1,13 @@
 # earworm
-A simple html/js/CSS page to play music from a local directory
+Create a simple web page to listen to audio files in a directory
 
 ## Setup
 
-Install the requirements specified in `requirements.txt`.
-
-Use your favorite tool to create a venv and install the requirements into it.
+The package is available on PyPI and you can install it using pip/conda.
 
 ```sh
-python3 -m venv .earworm-venv
-
-source .earworm-venv/bin/activate
-
-pip install -r requirements.txt
+pip install earworm
 ```
-
-*NOTE*: The code has not been tested with Python2 and it probably won't work.
-
 ## Usage
 
 This tool can generate a simple HTML page from a directory of music files. The
@@ -25,7 +16,8 @@ and ID3 tags). But, if you have files which are not MP3, you can use a CSV file
 with the metadata.
 
 The CSV file **must** have the following columns `filename` and `title`, and
-any additional ones you may want.
+any additional ones you may want. A template can be generated using the tool --
+see step 3 below.
 
 1. To get started create a copy of the example config file:
 
@@ -43,10 +35,10 @@ any additional ones you may want.
    ```
 
 1. You can generate a template for the `metadata.csv` from your `music_dir` by
-   running `./generate.py` with the `--update-csv` flag. Once the CSV file is
+   running `earworm` with the `--update-csv` flag. Once the CSV file is
    generated, add a `metadata_csv` entry pointing to this file to your config.
 
-1. Run `./generate.py` to generate a directory called `output` with an
+1. Run `earworm` to generate a directory called `output` with an
    `index.html`, `music/` directory with all the music files that have "valid
    metadata", and a `covers/` directory with the cover images for the albums.
 
@@ -68,10 +60,15 @@ any additional ones you may want.
 
 ## Dev Setup
 
-When working on the source (py/html/CSS/JS) of the site, you can
-automatically generate the html each time you make any changes to the
-input files using `entr`.
+When working on the source (py/html/CSS/JS) of the site, you can automatically
+generate the html each time you make any changes to the input files using
+`entr`.
 
 ```sh
-ls  *.{py,html,css,js} | entr ./generate.py /path/to/music/dir/
+ls /path/to/config $(git ls-files) | entr earworm --config /path/to/config-file
 ```
+
+### JS toolchain
+
+To change the JS files, you need to have `rollup` installed and you can run the
+rollup watcher (`rollup -w -c rollup.config.js`) to build the `bundle.js`.
