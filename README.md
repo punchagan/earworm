@@ -19,11 +19,11 @@ The CSV file **must** have the following columns `filename` and `title`, and
 any additional ones you may want. A template can be generated using the tool --
 see step 3 below.
 
-1. To get started create a copy of the example config file:
+1. To get started create a sample config file:
 
 
    ```sh
-   cp config.yml.example config.yml
+   earworm make-config -c config.yml
    ```
 
 1. Change the value of `music_dir` to the directory where you have your music
