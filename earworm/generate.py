@@ -144,7 +144,7 @@ def generate_site(config: Config) -> None:
 def main() -> None:
     config_default = "config.yml"
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", action="store", default=config_default)
+    parser.add_argument("-c", "--config", action="store", default=config_default)
     parser.add_argument("--update-csv", action="store_true", default=False)
 
     options = parser.parse_args()
