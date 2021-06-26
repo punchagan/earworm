@@ -10,7 +10,7 @@ from typing import Dict, List, Optional, Union
 from urllib import parse
 
 import requests
-from tinytag import TinyTag, TinyTagException
+from tinytag import TinyTag, TinyTagException  # type: ignore
 
 UNSUPPORTED_FORMATS = (".amr",)  # Not played by FF or Chrome. See issue #10
 

@@ -9,9 +9,9 @@ from typing import List, Dict
 
 import dateutil.parser
 import jinja2
-from PIL import Image
-import webassets
-from webassets.ext.jinja2 import AssetsExtension
+from PIL import Image  # type: ignore
+import webassets  # type: ignore
+from webassets.ext.jinja2 import AssetsExtension  # type: ignore
 import yaml
 
 from .metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
@@ -58,7 +58,7 @@ def generate_index(songs: List[Dict], config: Config) -> str:
 
     loader = jinja2.FileSystemLoader(searchpath=HERE)
     env = jinja2.Environment(loader=loader, extensions=[AssetsExtension])
-    env.assets_environment = assets_env
+    env.assets_environment = assets_env  # type: ignore
 
     template = env.get_template(TEMPLATE_FILE)
     metadata = [dict(src=f'music/{s["filename"]}', **s) for s in songs]
