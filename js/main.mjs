@@ -60,7 +60,7 @@ const App = ({ library }) => {
         <Playlist library={library} songElement={songElement} />
         <small>
           This page was generated using ${" "}
-          <a href="https://github.com/punchagan/earworm" rel="noopener noreferrer" target="_blank">
+          <a href="https://pypi.org/project/earworm/" rel="noopener noreferrer" target="_blank">
             earworm
           </a>
         </small>
