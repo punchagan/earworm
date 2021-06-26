@@ -7,6 +7,17 @@ include = ["earworm/static/bundle.js"]
 readme = "README.md"
 homepage = "https://github.com/punchagan/earworm/"
 repository = "https://github.com/punchagan/earworm/"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Multimedia :: Sound/Audio :: Players",
+]
 
 [tool.poetry.dependencies]
 python = "^3.6.1"
