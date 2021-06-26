@@ -65,7 +65,7 @@ generate the html each time you make any changes to the input files using
 `entr`.
 
 ```sh
-ls /path/to/config $(git ls-files) | entr earworm --config /path/to/config-file
+ls /path/to/config-file $(git ls-files) | entr earworm --config /path/to/config-file
 ```
 
 ### JS toolchain
