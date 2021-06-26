@@ -28,13 +28,14 @@ Pillow = "^8.2.0"
 PyYAML = "^5.4.1"
 python-dateutil = "^2.8.1"
 webassets = "^2.0"
-dataclasses = { version = "^0.8", python = "~3.6" }
+dataclasses = {version = "^0.8", python = "~3.6"}
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.910"
 types-requests = "^2.25.0"
 types-python-dateutil = "^0.1.4"
 types-PyYAML = "^5.4.3"
+types-dataclasses = {version = "^0.1.5", python = "~3.6"}
 
 [tool.poetry.scripts]
 earworm = 'earworm.generate:main'
