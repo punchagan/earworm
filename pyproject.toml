@@ -37,6 +37,7 @@ types-python-dateutil = "^0.1.4"
 types-PyYAML = "^5.4.3"
 types-dataclasses = {version = "^0.1.5", python = "~3.6"}
 pytest = "^6.2.4"
+requests-mock = "^1.9.3"
 
 [tool.poetry.scripts]
 earworm = 'earworm.generate:main'
