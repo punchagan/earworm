@@ -42,17 +42,17 @@ see step 3 below.
    `index.html`, `music/` directory with all the music files that have "valid
    metadata", and a `covers/` directory with the cover images for the albums.
 
-2. You can specify the `<title>` of the page by using the `title` config var
+1. You can specify the `<title>` of the page by using the `title` config var
 
-3. If the `base_url` parameter is specified, an `og:image` tag is added to the
+1. If the `base_url` parameter is specified, an `og:image` tag is added to the
    page, using the latest song's cover image.
 
-2. Open the `index.html` in your browser to view the playlist locally.
+1. Open the `index.html` in your browser to view the playlist locally.
 
 1. If you have access to a webserver, you can just sync the output directory to
    your webserver.
 
-5. If you don't have access to a webserver you can use something like [Google
+1. If you don't have access to a webserver you can use something like [Google
    Drive](https://web.archive.org/web/20201127203126/https://www.ampercent.com/host-static-websites-google-driv/11070/)
    or
    [Dropbox](https://web.archive.org/web/20210117032036/https://www.ampercent.com/host-static-website-dropbox-free-webhosting/6426/)
