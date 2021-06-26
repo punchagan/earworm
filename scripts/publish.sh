@@ -13,6 +13,7 @@ function test {
 function live {
     poetry publish
     git push origin $(poetry version -s)
+    git push origin main
 }
 
 case "${REPO}" in
