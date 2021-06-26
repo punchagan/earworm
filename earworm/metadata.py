@@ -66,7 +66,7 @@ def google_sheet_cell_link(url: str, row_num: int, column: str = "A") -> Optiona
 
 def download_file(url: str, download_dir: str) -> str:
     with requests.get(url, stream=True) as r:
-        header = r.headers["Content-Disposition"]
+        header = r.headers.get("Content-Disposition", "")
         match = re.search('filename="(.*)"', header)
         name = match.group(1) if match else "metadata.csv"
         filename = os.path.join(download_dir, name)
