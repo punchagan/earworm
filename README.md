@@ -49,8 +49,8 @@ see step 3 below.
 
 2. Open the `index.html` in your browser to view the playlist locally.
 
-4. If you have access to a webserver, you can just sync the output directory to
-   your webserver. You can modify `deploy.sh` for your purposes, if you like.
+1. If you have access to a webserver, you can just sync the output directory to
+   your webserver.
 
 5. If you don't have access to a webserver you can use something like [Google
    Drive](https://web.archive.org/web/20201127203126/https://www.ampercent.com/host-static-websites-google-driv/11070/)
