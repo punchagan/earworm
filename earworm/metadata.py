@@ -103,7 +103,15 @@ def read_metadata_csv(config: Config) -> List[Dict]:
 def get_song_list_from_csv(config: Config) -> List[Dict]:
     music_dir = config.music_dir
     rows = read_metadata_csv(config)
-    metadata = {os.path.join(config.music_dir, row["filename"]): Row(**row) for row in rows}
+
+    def _path(row):
+        return (
+            row["filename"]
+            if config.music_dir is None
+            else os.path.join(config.music_dir, row["filename"])
+        )
+
+    metadata = {_path(row): Row(**row) for row in rows}
     return metadata_to_song_list(metadata, config)
 
 
@@ -167,7 +175,7 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
     for num_row, (path, tags) in enumerate(metadata.items(), start=2):
         src = os.path.basename(path)
 
-        if not os.path.exists(path):
+        if not ((config.music_dir is None and is_url(path)) or os.path.exists(path)):
             continue
         elif config.title_required and not tags.title:
             continue
@@ -181,7 +189,7 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
         metadata_link = google_sheet_cell_link(config._metadata_url, num_row)
         song = {
             "path": path,
-            "filename": src,
+            "filename": path if config.music_dir is None else src,
             "title": tags.title or src,
             "artist": tags.artist,
             "album": tags.album,
