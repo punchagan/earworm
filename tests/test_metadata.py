@@ -1,6 +1,14 @@
+import os
+
 import requests_mock
 
-from earworm.metadata import download_file, google_sheet_cell_link, is_url
+from earworm.metadata import (
+    download_file,
+    google_sheet_cell_link,
+    is_url,
+    Config,
+    get_metadata,
+)
 
 
 def test_is_url():
@@ -42,3 +50,11 @@ def test_google_sheet_cell_link():
     example_url = "https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/export?format=csv&id=1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&gid=0"
     url = google_sheet_cell_link(example_url, 10)
     assert "range=A10" in url
+
+
+def test_get_metadata_from_csv():
+    csv_path = os.path.join(os.path.dirname(__file__), "sample.csv")
+    config = Config(music_dir=None, metadata_csv=csv_path)
+    songs = get_metadata(config)
+    assert len(songs) == 4
+    assert all(is_url(s["filename"]) for s in songs)
