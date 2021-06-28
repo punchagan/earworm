@@ -1,15 +1,9 @@
 music_dir: null
 metadata_csv: 'sample.csv'
-title_required: false
-album_required: false
-date_required: false
-date_regex: (?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})
-ignored_dates: !!set {}
-out_dir: ./public
+out_dir: './public'
 title: Earworm Demo Page
 song_description: ${song.artist} (${song.album})
 description: '<p>This is a demo page to demonstrate the earworm music player. The config file for this can be found on <a href="https://github.com/punchagan/earworm/blob/main/tests/sample-config.yml" rel="noreferrer noopener" target="_blank">GitHub</a>.</p>
 
 <p>The music on this page is Royalty Free Music from <a href="https://bensound.com" rel="noreferrer noopener" target="_blank">Bensound.com</a>.</p>'
-base_url: ''
-use_ffprobe: true
+base_url: 'https://punchagan.github.io/earworm'
