@@ -136,3 +136,4 @@ dmypy.json
 /node_modules/
 # Bundled js
 bundle.js
+/tests/public/
