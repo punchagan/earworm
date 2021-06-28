@@ -59,7 +59,7 @@ const App = ({ library }) => {
         <Header description={pageDescription} title={pageTitle} />
         <Playlist library={library} songElement={songElement} />
         <small>
-          This page was generated using ${" "}
+          This page was generated using{" "}
           <a href="https://pypi.org/project/earworm/" rel="noopener noreferrer" target="_blank">
             earworm
           </a>
