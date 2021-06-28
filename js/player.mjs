@@ -7,6 +7,7 @@ import RepeatIcon from "@material-ui/icons/Repeat";
 import RepeatOneIcon from "@material-ui/icons/RepeatOne";
 import ShuffleIcon from "@material-ui/icons/Shuffle";
 import Plyr from "plyr";
+import { Popover } from "./popover.mjs";
 
 import {
   AppStore,
@@ -26,12 +27,25 @@ const Player = () => {
     }
   }, []);
 
+  const [playError, setPlayError] = useState(false);
+  const play = (player) => {
+    player.play().then(null, (e) => {
+      if (e.name === "NotAllowedError") {
+        setPlaying(false);
+        setPlayError(true);
+        setTimeout(() => setPlayError(false), 1500);
+      } else {
+        console.error(e);
+      }
+    });
+  };
+
   // Play/Pause
   const playing = AppStore.useState((s) => s.playing);
   const togglePlaying = () => setPlaying(!playing);
   useEffect(() => {
     const player = plyrRef.current;
-    playing ? player.play() : player.pause();
+    playing ? play(player) : player.pause();
   }, [playing]);
   const playIndex = Number(playing);
   const playIcons = [<PlayArrowIcon />, <PauseIcon />];
@@ -74,7 +88,7 @@ const Player = () => {
     };
     const player = plyrRef.current;
     player.source = source;
-    playing ? player.play() : player.pause();
+    playing ? play(player) : player.pause();
   }, [currentSong?.src]);
 
   // NOTE: songEnded is used kind of like an event to mirror the plyr
@@ -164,6 +178,7 @@ const Player = () => {
           </span>
         </div>
       </div>
+      <Popover open={playError} text="Auto play blocked!" />
       <audio ref={plyrRef} id="player" style={hideStyle}></audio>
     </div>
   );
