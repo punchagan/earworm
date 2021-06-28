@@ -5,7 +5,7 @@ description = "Create a simple web page to listen to audio files in a directory"
 authors = ["Puneeth Chaganti <punchagan@muse-amuse.in>"]
 include = ["earworm/static/bundle.js"]
 readme = "README.md"
-homepage = "https://github.com/punchagan/earworm/"
+homepage = "https://punchagan.github.io/earworm/"
 repository = "https://github.com/punchagan/earworm/"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
