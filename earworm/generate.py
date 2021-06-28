@@ -29,7 +29,9 @@ def read_config(config_path: str) -> Config:
     config["_config_path"] = config_path
 
     music_dir = config["music_dir"]
-    config["music_dir"] = os.path.join(config_dir, os.path.expanduser(music_dir))
+    config["music_dir"] = (
+        None if music_dir is None else os.path.join(config_dir, os.path.expanduser(music_dir))
+    )
 
     metadata_csv = config.get("metadata_csv")
     if is_url(metadata_csv):
@@ -61,7 +63,10 @@ def generate_index(songs: List[Dict], config: Config) -> str:
     env.assets_environment = assets_env  # type: ignore
 
     template = env.get_template(TEMPLATE_FILE)
-    metadata = [dict(src=f'music/{s["filename"]}', **s) for s in songs]
+    metadata = [
+        dict(src=s["filename"] if config.music_dir is None else f'music/{s["filename"]}', **s)
+        for s in songs
+    ]
     output = template.render(
         config=config,
         songs=songs,
@@ -129,12 +134,13 @@ def create_favicon(config: Config, path: str) -> None:
 
 
 def generate_site(config: Config) -> None:
-    print(f"Generating site from {config.music_dir} ...")
+    print(f"Generating site from {config.music_dir or config._config_path} ...")
     songs = get_metadata(config)
 
     os.makedirs(config.out_dir, exist_ok=True)
 
-    copy_media(config, songs)
+    if config.music_dir:
+        copy_media(config, songs)
     cover_images = create_covers(config, songs)
     if cover_images and config.base_url:
         create_og_image(config, cover_images[0])
