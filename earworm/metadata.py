@@ -90,7 +90,7 @@ def get_metadata(config: Config) -> List[Dict]:
         print("\n\033[91mWARNING: The following files have unsupported formats:\n    ", end="")
         print("\n    ".join(excluded_songs))
         print("\033[00m")
-    return songs
+    return filtered_songs
 
 
 def read_metadata_csv(config: Config) -> List[Dict]:

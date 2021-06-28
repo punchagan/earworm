@@ -3,4 +3,5 @@ filename,title,artist,album,date,duration
 "https://www.bensound.com/bensound-music/bensound-happyrock.mp3","Happy Rock","Ben Sound","bensound.com",today,105
 "https://www.bensound.com/bensound-music/bensound-hey.mp3","Hey!","Ben Sound","bensound.com","a year ago",172
 "https://www.bensound.com/bensound-music/bensound-memories.mp3","Memories","Ben Sound","bensound.com","YYY-MM-DD",230
+"https://www.bensound.com/bensound-music/bensound-memories.amr","Ignored AMR file","Ben Sound","bensound.com","YYY-MM-DD",230
 "random/path/ignored","Ignored Song"
