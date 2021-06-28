@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import copy from "copy-to-clipboard";
-import Popover from "@material-ui/core/Popover";
-import { makeStyles } from "@material-ui/core/styles";
 
 // Icons
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
@@ -14,6 +12,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 
 import { AppStore } from "./app-store.mjs";
+import { Popover } from "./popover.mjs";
 
 // From https://stackoverflow.com/a/41015840
 String.prototype.interpolate = function (params) {
@@ -28,20 +27,9 @@ const getDurationFormatted = (duration) => {
   return `${minutes}:${seconds}`;
 };
 
-const useStyles = makeStyles((theme) => ({
-  copiedText: {
-    padding: theme.spacing(2),
-    margin: 0,
-    background: "var(--plyr-color-main)",
-    color: "white",
-  },
-}));
-
 const ActionMenu = ({ metadataLink, hash }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-
-  const classes = useStyles();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -95,18 +83,7 @@ const ActionMenu = ({ metadataLink, hash }) => {
           </a>
         )}
       </Menu>
-      <Popover
-        open={copied}
-        onClose={hidePopover}
-        anchorReference="anchorPosition"
-        anchorPosition={{ top: window.innerHeight - 80, left: window.innerWidth / 2 }}
-        transformOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-      >
-        <p className={classes.copiedText}>Link copied to clipboard</p>
-      </Popover>
+      <Popover open={copied} onClose={hidePopover} text="Link copied to clipboard" />
     </div>
   );
 };
