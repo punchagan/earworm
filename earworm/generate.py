@@ -156,7 +156,7 @@ def generate_site(config: Config) -> None:
         copy_media(config, songs)
     cover_images = create_covers(config, songs)
     first_image = cover_images and cover_images[0]
-    if config.base_url and not is_url(first_image):
+    if config.base_url and first_image and not is_url(first_image):
         create_og_image(config, first_image)
         create_favicon(config, first_image)
     index_path = generate_index(songs, config)
