@@ -64,7 +64,12 @@ def generate_index(songs: List[Dict], config: Config) -> str:
 
     template = env.get_template(TEMPLATE_FILE)
     metadata = [
-        dict(src=s["filename"] if config.music_dir is None else f'music/{s["filename"]}', **s)
+        dict(
+            src=s["filename"]
+            if config.music_dir is None
+            else f'{config.media_dir}/{s["filename"]}',
+            **s,
+        )
         for s in songs
     ]
     output = template.render(
@@ -81,7 +86,7 @@ def generate_index(songs: List[Dict], config: Config) -> str:
 
 
 def copy_media(config: Config, songs: List[Dict]) -> None:
-    music_dir = os.path.join(config.out_dir, "music")
+    music_dir = os.path.join(config.out_dir, config.media_dir)
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
         shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))

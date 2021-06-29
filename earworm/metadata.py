@@ -25,6 +25,7 @@ class Config:
     date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
     ignored_dates: set = field(default_factory=set)
     out_dir: str = "./public"
+    media_dir: str = "music"
     title: str = "My Music"
     song_description: str = "${song.album} (${song.date})"
     description: str = "<small>Welcome to my music page.</small>"
