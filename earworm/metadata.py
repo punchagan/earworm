@@ -115,7 +115,7 @@ def get_song_list_from_csv(config: Config) -> List[Dict]:
         )
 
     metadata = {_path(row): Row(**row) for row in rows}
-    return metadata_to_song_list(metadata, config)
+    return metadata_to_song_list(config, metadata)
 
 
 def ffprobe_metadata(path: str) -> Dict:
@@ -171,10 +171,10 @@ def get_metadata_from_music_dir(
 
 def get_song_list_from_music_dir(config: Config) -> List[Dict]:
     metadata = get_metadata_from_music_dir(config)
-    return metadata_to_song_list(metadata, config)
+    return metadata_to_song_list(config, metadata)
 
 
-def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict]:
+def metadata_to_song_list(config: Config, metadata: Dict[str, Row]) -> List[Dict]:
     songs = []
 
     for num_row, (path, tags) in enumerate(metadata.items(), start=2):

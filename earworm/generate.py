@@ -49,7 +49,7 @@ def read_config(config_path: str) -> Config:
     return Config(**config)
 
 
-def generate_index(songs: List[Dict], config: Config) -> str:
+def generate_index(config: Config, songs: List[Dict]) -> str:
     static_dir = os.path.join(HERE, "static")
     output_dir = os.path.join(config.out_dir, "static")
     assets_env = webassets.Environment(directory=output_dir, url="./static", load_path=[static_dir])
@@ -154,7 +154,7 @@ def generate_site(config: Config) -> None:
     if config.base_url and first_image and not is_url(first_image):
         create_og_image(config, first_image)
         create_favicon(config, first_image)
-    index_path = generate_index(songs, config)
+    index_path = generate_index(config, songs)
     print(f"Site generated in {index_path}!")
 
 
