@@ -63,19 +63,9 @@ def generate_index(songs: List[Dict], config: Config) -> str:
     env.assets_environment = assets_env  # type: ignore
 
     template = env.get_template(TEMPLATE_FILE)
-    metadata = [
-        dict(
-            src=s["filename"]
-            if config.music_dir is None
-            else f'{config.media_dir}/{s["filename"]}',
-            **s,
-        )
-        for s in songs
-    ]
     output = template.render(
         config=config,
         songs=songs,
-        metadata=metadata,
         title=config.title,
         base_url=config.base_url,
         description=config.description,
@@ -89,7 +79,7 @@ def copy_media(config: Config, songs: List[Dict]) -> None:
     music_dir = os.path.join(config.out_dir, config.media_dir)
     os.makedirs(music_dir, exist_ok=True)
     for song in songs:
-        shutil.copyfile(song["path"], os.path.join(music_dir, song["filename"]))
+        shutil.copyfile(song["path"], os.path.join(config.out_dir, song["src"]))
 
 
 def create_covers(config: Config, songs: List[Dict]) -> List[str]:

@@ -36,7 +36,7 @@
   <body>
     <div id="app"></div>
     <script type="text/javascript">
-      const songs = {{metadata | tojson}};
+      const songs = {{songs | tojson}};
       const songDescription = {{config.song_description | tojson}};
       const pageTitle = {{config.title | tojson}};
       const pageDescription = {{config.description | tojson }};

@@ -193,6 +193,7 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
         song = {
             "path": path,
             "filename": path if config.music_dir is None else src,
+            "src": path if config.music_dir is None else os.path.join(config.media_dir, src),
             "title": tags.title or src,
             "artist": tags.artist,
             "album": tags.album,
