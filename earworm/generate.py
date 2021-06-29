@@ -7,13 +7,13 @@ import os
 import shutil
 from typing import List, Dict
 
-import dateutil.parser
 import jinja2
 from PIL import Image  # type: ignore
 import webassets  # type: ignore
 from webassets.ext.jinja2 import AssetsExtension  # type: ignore
 import yaml
 
+from .feed import generate_feed
 from .metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -154,6 +154,8 @@ def generate_site(config: Config) -> None:
     if config.base_url and first_image and not is_url(first_image):
         create_og_image(config, first_image)
         create_favicon(config, first_image)
+    if config.generate_feed:
+        generate_feed(config, songs)
     index_path = generate_index(config, songs)
     print(f"Site generated in {index_path}!")
 

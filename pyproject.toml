@@ -29,6 +29,7 @@ PyYAML = "^5.4.1"
 python-dateutil = "^2.8.1"
 webassets = "^2.0"
 dataclasses = {version = "^0.8", python = "~3.6"}
+feedgen = "^0.9.0"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.910"
