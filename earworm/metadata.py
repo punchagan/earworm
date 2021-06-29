@@ -46,6 +46,7 @@ class Row:
     instrument: str = ""
     date: str = ""
     duration: str = ""
+    image: str = ""
 
 
 def is_url(text: str) -> bool:
@@ -196,7 +197,7 @@ def metadata_to_song_list(metadata: Dict[str, Row], config: Config) -> List[Dict
             "album": tags.album,
             "date": tags.date or "",
             "duration": duration,
-            "image": tags.get_image() if isinstance(tags, TinyTag) else None,
+            "image": tags.get_image() if isinstance(tags, TinyTag) else tags.image,
             "album_slug": album_slug,
             "metadata_link": metadata_link,
         }

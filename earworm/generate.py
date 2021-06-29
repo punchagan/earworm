@@ -88,21 +88,34 @@ def copy_media(config: Config, songs: List[Dict]) -> None:
 
 
 def create_covers(config: Config, songs: List[Dict]) -> List[str]:
+    """Create cover images for albums in the song list.
+
+    NOTE: When image is a binary blob of data in the song, we assume albums
+    have a single cover image. FIXME: This could potentially be fixed, later?
+
+    """
     covers_dir = os.path.join(config.out_dir, "covers")
     os.makedirs(covers_dir, exist_ok=True)
     cover_images = []
     for song in songs:
         image = song.get("image")
-        if image is None:
+        if not image:
             continue
-        # NOTE: We assume all the songs in an album to have the same
-        # cover image.
-        image_path = os.path.join(covers_dir, f'{song["album_slug"]}.jpg')
-        song["image"] = os.path.relpath(image_path, start=config.out_dir)
-        if os.path.exists(image_path):
-            continue
-        img = resize_image(image)
-        img.save(image_path, quality=95, optimize=True)
+
+        if isinstance(image, bytes):
+            image_path = os.path.join(covers_dir, f'{song["album_slug"]}.jpg')
+            song["image"] = os.path.relpath(image_path, start=config.out_dir)
+            if os.path.exists(image_path):
+                continue
+            img = resize_image(image)
+            img.save(image_path, quality=95, optimize=True)
+
+        elif not is_url(image):
+            raise NotImplementedError
+
+        else:
+            image_path = image
+
         cover_images.append(image_path)
     return cover_images
 
@@ -142,9 +155,10 @@ def generate_site(config: Config) -> None:
     if config.music_dir:
         copy_media(config, songs)
     cover_images = create_covers(config, songs)
-    if cover_images and config.base_url:
-        create_og_image(config, cover_images[0])
-        create_favicon(config, cover_images[0])
+    first_image = cover_images and cover_images[0]
+    if config.base_url and not is_url(first_image):
+        create_og_image(config, first_image)
+        create_favicon(config, first_image)
     index_path = generate_index(songs, config)
     print(f"Site generated in {index_path}!")
 

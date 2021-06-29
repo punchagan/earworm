@@ -1,7 +1,7 @@
-filename,title,artist,album,date,duration
-"https://www.bensound.com/bensound-music/bensound-ukulele.mp3","Ukulele","Benjamin Tissot","bensound.com",today,146
-"https://www.bensound.com/bensound-music/bensound-happyrock.mp3","Happy Rock","Benjamin Tissot","bensound.com",today,105
-"https://www.bensound.com/bensound-music/bensound-hey.mp3","Hey!","Benjamin Tissot","bensound.com","a year ago",172
-"https://www.bensound.com/bensound-music/bensound-memories.mp3","Memories","Benjamin Tissot","bensound.com","YYY-MM-DD",230
-"https://www.bensound.com/bensound-music/bensound-memories.amr","Ignored AMR file","Benjamin Tissot","bensound.com","YYY-MM-DD",230
+filename,title,artist,album,date,duration,image
+"https://www.bensound.com/bensound-music/bensound-ukulele.mp3","Ukulele","Benjamin Tissot","bensound.com",today,146,https://www.bensound.com/bensound-img/ukulele.jpg
+"https://www.bensound.com/bensound-music/bensound-happyrock.mp3","Happy Rock","Benjamin Tissot","bensound.com",today,105,https://www.bensound.com/bensound-img/happyrock.jpg
+"https://www.bensound.com/bensound-music/bensound-hey.mp3","Hey!","Benjamin Tissot","bensound.com","a year ago",172,https://www.bensound.com/bensound-img/hey.jpg
+"https://www.bensound.com/bensound-music/bensound-memories.mp3","Memories","Benjamin Tissot","bensound.com","YYY-MM-DD",230,https://www.bensound.com/bensound-img/memories.jpg
+"https://www.bensound.com/bensound-music/bensound-memories.amr","Ignored AMR file","Benjamin Tissot","bensound.com","YYY-MM-DD",230,https://www.bensound.com/bensound-img/memories.jpg
 "random/ignored/path","Ignored Song"

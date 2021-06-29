@@ -58,3 +58,4 @@ def test_get_metadata_from_csv():
     songs = get_metadata(config)
     assert len(songs) == 4
     assert all(is_url(s["filename"]) for s in songs)
+    assert all(is_url(s["image"]) for s in songs)
