@@ -47,7 +47,6 @@ const App = ({ library }) => {
     if (!currentSong) {
       return;
     }
-    location.hash = currentSong.src;
     songElement.current && showSong(songElement.current);
     document.title = `${currentSong.title} — ${currentSong.artist} — ${pageTitle}`;
   }, [currentSong?.src]);
