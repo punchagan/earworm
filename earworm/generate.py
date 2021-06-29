@@ -115,7 +115,7 @@ def create_covers(config: Config, songs: List[Dict]) -> List[str]:
     return cover_images
 
 
-def resize_image(data: bytes, size=(300, 300)) -> Image:
+def resize_image(data: bytes, size: tuple = (300, 300)) -> Image:
     img = Image.open(io.BytesIO(data))
     w, h = img.size
     l = max(w, h)
@@ -158,7 +158,7 @@ def generate_site(config: Config) -> None:
     print(f"Site generated in {index_path}!")
 
 
-def yaml_represent_config(dumper, config):
+def yaml_represent_config(dumper: yaml.dumper.Dumper, config: Config) -> yaml.nodes.MappingNode:
     """Custom YAML dump representation for Config.
 
     NOTE: We could've simply used dataclasses.asdict to convert the config

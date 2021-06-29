@@ -107,7 +107,7 @@ def get_song_list_from_csv(config: Config) -> List[Dict]:
     music_dir = config.music_dir
     rows = read_metadata_csv(config)
 
-    def _path(row):
+    def _path(row: Dict) -> str:
         return (
             row["filename"]
             if config.music_dir is None
@@ -140,7 +140,9 @@ def ffprobe_metadata(path: str) -> Dict:
     return output.get("format")
 
 
-def get_metadata_from_music_dir(config, song_list: bool = True) -> Dict[str, Union[Row, TinyTag]]:
+def get_metadata_from_music_dir(
+    config: Config, song_list: bool = True
+) -> Dict[str, Union[Row, TinyTag]]:
     music_dir = config.music_dir
     paths = glob.glob(f"{music_dir}/**/*", recursive=True)
     metadata = {}
