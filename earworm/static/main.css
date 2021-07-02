@@ -181,3 +181,10 @@ nav {
     color: white;
     background: var(--plyr-color-main);
 }
+
+.feed-icon {
+    top: 0.25em;
+    position: absolute;
+    right: 0.25em;
+    color: #ff5d5d;
+}

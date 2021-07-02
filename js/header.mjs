@@ -1,5 +1,7 @@
 import React from "react";
 
+import RssFeedIcon from "@material-ui/icons/RssFeed";
+
 import { AppStore } from "./app-store.mjs";
 
 const Header = ({ title, description }) => {
@@ -11,6 +13,11 @@ const Header = ({ title, description }) => {
   return (
     <header className="heading">
       <h1>{title}</h1>
+      {feedUrl && (
+        <a href={feedUrl} target="_blank" rel="noopener noreferrer">
+          <RssFeedIcon className="feed-icon" />
+        </a>
+      )}
       <p dangerouslySetInnerHTML={{ __html: description }} />
       <span>{queue.length} songs</span>
       <span> · </span>

@@ -6,6 +6,7 @@ import json
 import os
 import shutil
 from typing import List, Dict
+from urllib.parse import urljoin
 
 import jinja2
 from PIL import Image  # type: ignore
@@ -69,6 +70,7 @@ def generate_index(config: Config, songs: List[Dict]) -> str:
         title=config.title,
         base_url=config.base_url,
         description=config.description,
+        feed_url=urljoin(config.base_url, "index.xml") if config.generate_feed else None,
     )
     with open(os.path.join(config.out_dir, "index.html"), "w") as f:
         f.write(output)

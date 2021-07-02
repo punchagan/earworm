@@ -7,9 +7,8 @@
     {% if base_url %}
       <link rel="icon" type="image/x-icon" href="{{base_url}}/favicon.ico" />
     {% endif %}
-    {% if base_url and config.generate_feed %}
-      <link rel="alternate" type="application/rss+xml" href="{{base_url}}/index.xml"
-            title="RSS Feed" />
+    {% if feed_url %}
+      <link rel="alternate" type="application/rss+xml" href="{{feed_url}}" title="RSS Feed" />
     {% endif %}
     <!-- Preload -->
     <link
@@ -41,7 +40,8 @@
       const songs = {{songs | tojson}};
       const songDescription = {{config.song_description | tojson}};
       const pageTitle = {{config.title | tojson}};
-      const pageDescription = {{config.description | tojson }};
+      const pageDescription = {{config.description | tojson}};
+      const feedUrl = {{feed_url | tojson}};
     </script>
     {% assets "all_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
