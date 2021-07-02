@@ -47,6 +47,11 @@ def read_config(config_path: str) -> Config:
     out_dir = os.path.join(config_dir, config.get("out_dir", "output"))
     config["out_dir"] = out_dir
 
+    # Ensure base_url always ends with /
+    base_url = config.get("base_url", "")
+    if base_url and not base_url.endswith("/"):
+        config["base_url"] = f"{base_url}/"
+
     return Config(**config)
 
 
