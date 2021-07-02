@@ -48,6 +48,7 @@ class Row:
     date: str = ""
     duration: str = ""
     image: str = ""
+    filesize: str = ""
 
 
 def is_url(text: str) -> bool:
@@ -137,7 +138,9 @@ def ffprobe_metadata(path: str) -> Dict:
     except subprocess.CalledProcessError:
         output = {}
 
-    return output.get("format")
+    data = output.get("format")
+    data["filesize"] = data.get("size", "")
+    return data
 
 
 def get_metadata_from_music_dir(
@@ -204,6 +207,7 @@ def metadata_to_song_list(config: Config, metadata: Dict[str, Row]) -> List[Dict
             "image": tags.get_image() if isinstance(tags, TinyTag) else tags.image,
             "album_slug": album_slug,
             "metadata_link": metadata_link,
+            "filesize": str(tags.filesize),
         }
         songs.append(song)
 
