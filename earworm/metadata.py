@@ -228,13 +228,15 @@ def create_or_update_metadata_csv(config: Config) -> None:
         rows = {}
 
     file_metadata = get_metadata_from_music_dir(config, song_list=False)
+    fieldnames = [f.name for f in fields(Row)]
     for path, metadata in file_metadata.items():
         filename = os.path.basename(path)
         if filename in rows:
             old_metadata = rows[filename]
-            for key, value in old_metadata.items():
+            for key in fieldnames:
+                old_value = old_metadata.get(key)
                 new_value = metadata.__dict__.get(key)
-                if not value and new_value:
+                if not old_value and new_value:
                     old_metadata[key] = new_value
         else:
             new_metadata = {
@@ -243,7 +245,6 @@ def create_or_update_metadata_csv(config: Config) -> None:
             new_metadata["filename"] = filename
             rows[filename] = new_metadata
 
-    fieldnames = [f.name for f in fields(Row)]
     with open(config.metadata_csv, "w") as f:
         writer = csv.DictWriter(f, fieldnames)
         writer.writeheader()
