@@ -58,7 +58,7 @@ def generate_feed(config: Config, songs: List[Dict]) -> None:
     fg.link(href=base_url, rel="alternate")
     artists = {s["artist"] for s in songs if s.get("artist")}
     fg.author([{"name": artist} for artist in artists])
-    fg.logo(f"{base_url}/favicon.ico")
+    fg.logo(urljoin(base_url, "favicon.ico"))
     fg.link(href=urljoin(base_url, feed_name), rel="self")
     fg.language("en")
 
