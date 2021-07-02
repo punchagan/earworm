@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
     {% if base_url %}
-      <link rel="icon"
-            type="image/x-icon"
-            href="{{base_url}}/favicon.ico">
+      <link rel="icon" type="image/x-icon" href="{{base_url}}/favicon.ico" />
+    {% endif %}
+    {% if base_url and config.generate_feed %}
+      <link rel="alternate" type="application/rss+xml" href="{{base_url}}/index.xml"
+            title="RSS Feed" />
     {% endif %}
     <!-- Preload -->
     <link
