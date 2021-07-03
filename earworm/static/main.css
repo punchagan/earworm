@@ -223,4 +223,6 @@ nav {
 
 .currentSong-description .title {
     font-weight: 600;
+    color: #3391ff;
+    cursor: pointer;
 }

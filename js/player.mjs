@@ -17,7 +17,7 @@ import {
   setRepeatIndex,
 } from "./app-store.mjs";
 
-const Player = () => {
+const Player = ({ jumpToSong }) => {
   // Player Setup
   const plyrRef = useCallback((node) => {
     if (node !== null) {
@@ -150,7 +150,9 @@ const Player = () => {
                 }}
               ></span>
               <span className="currentSong-description">
-                <span className="title">{currentSong.title}</span>
+                <span className="title" onClick={jumpToSong}>
+                  {currentSong.title}
+                </span>
                 <span>{currentSong.album || currentSong.artist}</span>
               </span>
             </div>

@@ -61,7 +61,7 @@ const App = ({ library }) => {
 
   return (
     <div>
-      <Player />
+      <Player jumpToSong={jumpToSong} />
       <div id="container">
         <Header description={pageDescription} title={pageTitle} />
         <Playlist library={library} songElement={songElement} />
