@@ -37,6 +37,8 @@ const App = ({ library }) => {
       setCurrentSong(song);
       setPlaying(true);
       setRepeatIndex(0);
+    } else {
+      setCurrentSong(library[0]);
     }
   }, []);
 
