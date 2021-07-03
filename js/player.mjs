@@ -139,43 +139,61 @@ const Player = () => {
 
   return (
     <div className="player">
-      <div className="plyr--audio ">
-        <div className="player-controls plyr__controls">
-          <span
-            className="plyr__controls__item plyr__control"
-            title="Play Previous"
-            onClick={() => playNext(true)}
-          >
-            <SkipPreviousIcon />
-          </span>
-          <span
-            className="plyr__controls__item plyr__control"
-            title={playTitles[playIndex]}
-            onClick={togglePlaying}
-          >
-            {playIcons[playIndex]}
-          </span>
-          <span
-            className="plyr__controls__item plyr__control"
-            title="Play Next"
-            onClick={() => playNext()}
-          >
-            <SkipNextIcon />
-          </span>
-          <span
-            className="plyr__controls__item plyr__control"
-            title={`Repeating ${repeatTitles[repeatIndex]}`}
-            onClick={cycleRepeat}
-          >
-            {repeatIcons[repeatIndex]}
-          </span>
-          <span
-            className="plyr__controls__item plyr__control"
-            title={`Shuffling ${shuffleTitles[shuffleIndex]}`}
-            onClick={toggleShuffle}
-          >
-            <ShuffleIcon className={shuffleClass} />
-          </span>
+      <div style={{ display: "flex" }}>
+        {currentSong && (
+          <div className="plyr--audio ">
+            <div className="player-controls plyr__controls">
+              <span
+                className="currentSong-cover"
+                style={{
+                  backgroundImage: `url(${currentSong.image})`,
+                }}
+              ></span>
+              <span className="currentSong-description">
+                <span className="title">{currentSong.title}</span>
+                <span>{currentSong.album || currentSong.artist}</span>
+              </span>
+            </div>
+          </div>
+        )}
+        <div className="plyr--audio " style={{ flex: 1 }}>
+          <div className="player-controls plyr__controls">
+            <span
+              className="plyr__controls__item plyr__control"
+              title="Play Previous"
+              onClick={() => playNext(true)}
+            >
+              <SkipPreviousIcon />
+            </span>
+            <span
+              className="plyr__controls__item plyr__control"
+              title={playTitles[playIndex]}
+              onClick={togglePlaying}
+            >
+              {playIcons[playIndex]}
+            </span>
+            <span
+              className="plyr__controls__item plyr__control"
+              title="Play Next"
+              onClick={() => playNext()}
+            >
+              <SkipNextIcon />
+            </span>
+            <span
+              className="plyr__controls__item plyr__control"
+              title={`Repeating ${repeatTitles[repeatIndex]}`}
+              onClick={cycleRepeat}
+            >
+              {repeatIcons[repeatIndex]}
+            </span>
+            <span
+              className="plyr__controls__item plyr__control"
+              title={`Shuffling ${shuffleTitles[shuffleIndex]}`}
+              onClick={toggleShuffle}
+            >
+              <ShuffleIcon className={shuffleClass} />
+            </span>
+          </div>
         </div>
       </div>
       <Popover open={playError} text="Auto play blocked!" />

@@ -193,3 +193,34 @@ nav {
     margin-left: 0;
     margin-right: 0;
 }
+
+.currentSong-cover {
+    margin: 0 0.5em;
+    height: 2em;
+    width: 2em;
+    display: block;
+    border-radius: 1em;
+    background-position: center;
+    background-size: cover;
+}
+
+.currentSong-description {
+    line-height: 1.2;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 12em;
+}
+
+.currentSong-description span {
+    height: 1.2em;
+    display: inline-block;
+    font-size: small;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.currentSong-description .title {
+    font-weight: 600;
+}
