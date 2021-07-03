@@ -45,11 +45,17 @@ const App = ({ library }) => {
   // Set page props based on current song
   const currentSong = AppStore.useState((s) => s.currentSong);
   const songElement = useRef();
+  const jumpToSong = () => songElement.current && showSong(songElement.current);
   useEffect(() => {
     if (!currentSong) {
       return;
     }
-    songElement.current && showSong(songElement.current);
+    if (hash !== "") {
+      document.location.hash = "";
+      if (currentSong?.src === hash) {
+        jumpToSong();
+      }
+    }
     document.title = `${currentSong.title} — ${currentSong.artist} — ${pageTitle}`;
   }, [currentSong?.src]);
 
