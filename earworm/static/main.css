@@ -188,3 +188,8 @@ nav {
     right: 0.25em;
     color: #ff5d5d;
 }
+
+.plyr__controls .plyr__controls__item:first-child {
+    margin-left: 0;
+    margin-right: 0;
+}
