@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.6.8/plyr.css" />
+    
+      <link rel="icon" type="image/x-icon" href="https://punchagan.github.io/earworm//favicon.ico" />
+    
+    
+      <link rel="alternate" type="application/rss+xml" href="https://punchagan.github.io/earworm/index.xml" title="RSS Feed" />
+    
+    <!-- Preload -->
+    <link
+      rel="preload"
+      as="font"
+      crossorigin
+      type="font/woff2"
+      href="https://cdn.plyr.io/static/fonts/gordita-medium.woff2"
+    />
+    <link
+      rel="preload"
+      as="font"
+      crossorigin
+      type="font/woff2"
+      href="https://cdn.plyr.io/static/fonts/gordita-bold.woff2"
+    />
+    
+      <link rel="stylesheet" href="static/bundle.css?2e3fe4c7" />
+    
+    <title>Earworm Demo Page</title>
+    
+      <meta property="og:image" itemprop="image" content="https://punchagan.github.io/earworm//covers/og-image.jpg">
+    
+  </head>
+
+  <body>
+    <div id="app"></div>
+    <script type="text/javascript">
+      const songs = [{"album": "bensound.com", "album_slug": "bensound.com", "artist": "Benjamin Tissot", "date": "2020-12-31", "duration": 230, "filename": "https://www.bensound.com/bensound-music/bensound-memories.mp3", "filesize": "", "image": "https://www.bensound.com/bensound-img/memories.jpg", "metadata_link": null, "path": "https://www.bensound.com/bensound-music/bensound-memories.mp3", "src": "https://www.bensound.com/bensound-music/bensound-memories.mp3", "title": "Memories"}, {"album": "bensound.com", "album_slug": "bensound.com", "artist": "Benjamin Tissot", "date": "2020-10-03", "duration": 172, "filename": "https://www.bensound.com/bensound-music/bensound-hey.mp3", "filesize": "", "image": "https://www.bensound.com/bensound-img/hey.jpg", "metadata_link": null, "path": "https://www.bensound.com/bensound-music/bensound-hey.mp3", "src": "https://www.bensound.com/bensound-music/bensound-hey.mp3", "title": "Hey!"}, {"album": "bensound.com", "album_slug": "bensound.com", "artist": "Benjamin Tissot", "date": "2020-06-08", "duration": 105, "filename": "https://www.bensound.com/bensound-music/bensound-happyrock.mp3", "filesize": "", "image": "https://www.bensound.com/bensound-img/happyrock.jpg", "metadata_link": null, "path": "https://www.bensound.com/bensound-music/bensound-happyrock.mp3", "src": "https://www.bensound.com/bensound-music/bensound-happyrock.mp3", "title": "Happy Rock"}, {"album": "bensound.com", "album_slug": "bensound.com", "artist": "Benjamin Tissot", "date": "2020-04-01", "duration": 146, "filename": "https://www.bensound.com/bensound-music/bensound-ukulele.mp3", "filesize": "", "image": "https://www.bensound.com/bensound-img/ukulele.jpg", "metadata_link": null, "path": "https://www.bensound.com/bensound-music/bensound-ukulele.mp3", "src": "https://www.bensound.com/bensound-music/bensound-ukulele.mp3", "title": "Ukulele"}];
+      const songDescription = "${song.artist} (${song.album})";
+      const pageTitle = "Earworm Demo Page";
+      const pageDescription = "\u003cp\u003eThis is a demo page to demonstrate the earworm music player. The config file for this can be found on \u003ca href=\"https://github.com/punchagan/earworm/blob/main/tests/sample-config.yml\" rel=\"noreferrer noopener\" target=\"_blank\"\u003eGitHub\u003c/a\u003e.\u003c/p\u003e\n\u003cp\u003eThe music on this page is Royalty Free Music from \u003ca href=\"https://bensound.com\" rel=\"noreferrer noopener\" target=\"_blank\"\u003eBensound.com\u003c/a\u003e.\u003c/p\u003e";
+      const feedUrl = "https://punchagan.github.io/earworm/index.xml";
+    </script>
+    
+      <script type="text/javascript" src="static/bundle.js?7da634ba"></script>
+    
+  </body>
+</html>

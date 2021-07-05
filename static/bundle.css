@@ -1,0 +1,228 @@
+:root {
+    --plyr-color-main:#00b3ff;
+    --plyr-font-size-base:13px;
+    --plyr-font-size-small:12px;
+    --plyr-font-size-time:11px;
+    --plyr-font-size-badges:9px;
+    --plyr-font-size-menu:var(--plyr-font-size-base);
+    --plyr-font-weight-regular:600;
+    --plyr-font-weight-bold:600;
+    --plyr-font-size-captions-medium:18px;
+    --plyr-font-size-captions-large:21px;
+    --plyr-font-family: Gordita,Avenir,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+}
+html {
+    background:linear-gradient(to left top,#e0f6ff,#f5fcff);
+    background-attachment:fixed;
+    height: 100%;
+}
+body {
+    min-height:100%;
+    margin: 0;
+    -moz-osx-font-smoothing:grayscale;
+    -webkit-font-smoothing:antialiased;
+    font-family: Gordita,Avenir,"Helvetica Neue",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-weight: 500;
+}
+li,
+ul {
+    list-style:none;
+    margin:0;
+    padding:0
+}
+audio,
+img,
+video {
+    max-width:100%;
+    vertical-align: middle;
+}
+nav {
+    display:flex;
+    justify-content:center;
+    margin-bottom:16px
+}
+.plyr {
+    border-radius:8px;
+    box-shadow:0 2px 15px rgba(0,0,0,.1);
+    margin:16px auto;
+}
+#container {
+    max-width: 600px;
+    text-align: center;
+    margin: 0px auto 0px;
+    padding-bottom: 100px;
+}
+.heading {
+    text-align: left;
+}
+.heading span {
+    font-size: 0.8em;
+    font-weight: 600;
+}
+.plyr audio {
+    display: none;
+}
+.song {
+    text-align: left;
+    padding: 1rem 1rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+    margin: 15px 0px;
+    background-color: #eee;
+}
+.current {
+    background: white;
+    outline: 3px solid yellow;
+}
+.song small {
+    align-items: center;
+}
+.song-description {
+    flex: 8;
+    display: flex;
+    flex-direction: column;
+}
+.song-title {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.song-album {
+    opacity: 0.5;
+    margin: 0.25em 0;
+}
+.song-duration {
+    flex: 1;
+    opacity: 0.8;
+}
+.song-info-link {
+    margin: 0.7em;
+    padding: 0em;
+    opacity: 0.5;
+    flex: 1;
+    color: gray;
+    text-decoration: none;
+}
+.song-date {
+    flex: 2;
+    opacity: 0.5;
+}
+.song-controls {
+    flex: 1;
+    margin: 0 1em;
+}
+.song-cover-art {
+    height: 2em;
+    width: 2em;
+    display: block;
+    border-radius: 1em;
+    background-position: center;
+    background-size: cover;
+    margin-right: 1em;
+}
+.play-button {
+    align-items: center;
+    border: 0;
+    border-radius: 0.5em;
+    padding: 0.25em 0.5em;
+    background: white;
+    color: black;
+    display: flex;
+}
+.current .play-button {
+   background: var(--plyr-color-main);
+   color: white;
+}
+.player {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: fixed;
+    bottom: 0px;
+    background: #eee;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    box-shadow: 0 -5px 5px rgba(0,0,0,.1);
+}
+.plyr {
+    width: 100%;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+.player-controls {
+    margin-left: 0.5em;
+    padding: 2px !important;
+    border-radius: 8px !important;
+}
+@media (max-width: 768px) {
+    body {
+        margin: 0;
+    }
+    #container {
+        width: 100%;
+        flex-direction: column;
+    }
+    .song-date {
+        display: none;
+    }
+    .player {
+        display: grid;
+    }
+    .player-controls {
+        max-width: 12.5em;
+        margin: 0.5em auto 0;
+        background: none !important;
+    }
+    .heading {
+        padding-left: 1em;
+    }
+}
+.btn-on {
+    color: white;
+    background: var(--plyr-color-main);
+}
+
+.feed-icon {
+    top: 0.25em;
+    position: absolute;
+    right: 0.25em;
+    color: #ff5d5d;
+}
+
+.plyr__controls .plyr__controls__item:first-child {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.currentSong-cover {
+    margin: 0 0.5em;
+    height: 2em;
+    width: 2em;
+    display: block;
+    border-radius: 1em;
+    background-position: center;
+    background-size: cover;
+}
+
+.currentSong-description {
+    line-height: 1.2;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 12em;
+}
+
+.currentSong-description span {
+    height: 1.2em;
+    display: inline-block;
+    font-size: small;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.currentSong-description .title {
+    font-weight: 600;
+    color: #3391ff;
+    cursor: pointer;
+}

@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Earworm Demo Page</title><link>https://punchagan.github.io/earworm/index.xml</link><description>&lt;p&gt;This is a demo page to demonstrate the earworm music player. The config file for this can be found on &lt;a href="https://github.com/punchagan/earworm/blob/main/tests/sample-config.yml" rel="noreferrer noopener" target="_blank"&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The music on this page is Royalty Free Music from &lt;a href="https://bensound.com" rel="noreferrer noopener" target="_blank"&gt;Bensound.com&lt;/a&gt;.&lt;/p&gt;</description><atom:link href="https://punchagan.github.io/earworm/index.xml" rel="self"/><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://punchagan.github.io/earworm/favicon.ico</url><title>Earworm Demo Page</title><link>https://punchagan.github.io/earworm/index.xml</link></image><language>en</language><lastBuildDate>Mon, 05 Jul 2021 03:54:34 +0000</lastBuildDate><item><title>Memories</title><link>https://punchagan.github.io/earworm/#https://www.bensound.com/bensound-music/bensound-memories.mp3</link><description>&lt;img src="https://www.bensound.com/bensound-img/memories.jpg" /&gt;
+
+
+
+  &lt;p&gt;Artist: Benjamin Tissot&lt;/p&gt;
+
+
+
+  &lt;p&gt;Album: bensound.com&lt;/p&gt;
+
+
+
+  &lt;p&gt;Date: 2020-12-31&lt;/p&gt;</description><guid isPermaLink="false">https://www.bensound.com/bensound-music/bensound-memories.mp3</guid><enclosure url="https://www.bensound.com/bensound-music/bensound-memories.mp3" length="0" type="audio/mpeg"/><pubDate>Thu, 31 Dec 2020 00:00:00 +0000</pubDate></item><item><title>Hey!</title><link>https://punchagan.github.io/earworm/#https://www.bensound.com/bensound-music/bensound-hey.mp3</link><description>&lt;img src="https://www.bensound.com/bensound-img/hey.jpg" /&gt;
+
+
+
+  &lt;p&gt;Artist: Benjamin Tissot&lt;/p&gt;
+
+
+
+  &lt;p&gt;Album: bensound.com&lt;/p&gt;
+
+
+
+  &lt;p&gt;Date: 2020-10-03&lt;/p&gt;</description><guid isPermaLink="false">https://www.bensound.com/bensound-music/bensound-hey.mp3</guid><enclosure url="https://www.bensound.com/bensound-music/bensound-hey.mp3" length="0" type="audio/mpeg"/><pubDate>Sat, 03 Oct 2020 00:00:00 +0000</pubDate></item><item><title>Happy Rock</title><link>https://punchagan.github.io/earworm/#https://www.bensound.com/bensound-music/bensound-happyrock.mp3</link><description>&lt;img src="https://www.bensound.com/bensound-img/happyrock.jpg" /&gt;
+
+
+
+  &lt;p&gt;Artist: Benjamin Tissot&lt;/p&gt;
+
+
+
+  &lt;p&gt;Album: bensound.com&lt;/p&gt;
+
+
+
+  &lt;p&gt;Date: 2020-06-08&lt;/p&gt;</description><guid isPermaLink="false">https://www.bensound.com/bensound-music/bensound-happyrock.mp3</guid><enclosure url="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" length="0" type="audio/mpeg"/><pubDate>Mon, 08 Jun 2020 00:00:00 +0000</pubDate></item><item><title>Ukulele</title><link>https://punchagan.github.io/earworm/#https://www.bensound.com/bensound-music/bensound-ukulele.mp3</link><description>&lt;img src="https://www.bensound.com/bensound-img/ukulele.jpg" /&gt;
+
+
+
+  &lt;p&gt;Artist: Benjamin Tissot&lt;/p&gt;
+
+
+
+  &lt;p&gt;Album: bensound.com&lt;/p&gt;
+
+
+
+  &lt;p&gt;Date: 2020-04-01&lt;/p&gt;</description><guid isPermaLink="false">https://www.bensound.com/bensound-music/bensound-ukulele.mp3</guid><enclosure url="https://www.bensound.com/bensound-music/bensound-ukulele.mp3" length="0" type="audio/mpeg"/><pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate></item></channel></rss>
