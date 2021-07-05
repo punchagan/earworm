@@ -139,7 +139,7 @@ const Player = ({ jumpToSong }) => {
 
   return (
     <div className="player">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", "justify-content": "space-between" }}>
         {currentSong && (
           <div className="plyr--audio ">
             <div className="player-controls plyr__controls">
@@ -158,7 +158,7 @@ const Player = ({ jumpToSong }) => {
             </div>
           </div>
         )}
-        <div className="plyr--audio " style={{ flex: 1 }}>
+        <div className="plyr--audio ">
           <div className="player-controls plyr__controls">
             <span
               className="plyr__controls__item plyr__control"
