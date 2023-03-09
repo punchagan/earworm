@@ -214,7 +214,6 @@ def metadata_to_song_list(config: Config, metadata: Dict[str, Row]) -> List[Dict
         songs.append(song)
 
     n = len(songs)
-    print(f"Found {n} songs ...")
     return sorted(songs, key=lambda s: s["date"], reverse=True)
 
 
