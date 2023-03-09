@@ -10,7 +10,7 @@ pushd $(dirname $0)/..
 
 # Build the demo site
 rm -rf ./tests/public/
-rollup -c rollup.config.js
+./node_modules/.bin/rollup --bundleConfigAsCjs -c rollup.config.js
 poetry build
 earworm -c tests/sample-config.yml
 
