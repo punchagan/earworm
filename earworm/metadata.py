@@ -1,11 +1,10 @@
 import csv
-from dataclasses import dataclass, field, fields
 import glob
-import io
 import json
 import os
 import re
 import subprocess
+from dataclasses import dataclass, field, fields
 from typing import Dict, List, Optional, Union
 from urllib import parse
 
@@ -88,10 +87,15 @@ def get_metadata(config: Config) -> List[Dict]:
     else:
         songs = get_song_list_from_music_dir(config)
 
-    excluded_songs = {song["path"] for song in songs if song["path"].endswith(UNSUPPORTED_FORMATS)}
+    excluded_songs = {
+        song["path"] for song in songs if song["path"].endswith(UNSUPPORTED_FORMATS)
+    }
     filtered_songs = [song for song in songs if song["path"] not in excluded_songs]
     if excluded_songs:
-        print("\n\033[91mWARNING: The following files have unsupported formats:\n    ", end="")
+        print(
+            "\n\033[91mWARNING: The following files have unsupported formats:\n    ",
+            end="",
+        )
         print("\n    ".join(excluded_songs))
         print("\033[00m")
     print(f"Publishing {len(filtered_songs)} songs ...")
@@ -101,7 +105,9 @@ def get_metadata(config: Config) -> List[Dict]:
 def read_metadata_csv(config: Config) -> List[Dict]:
     with open(config.metadata_csv) as f:
         reader = csv.DictReader(f)
-        reader.fieldnames = [f.lower() for f in reader.fieldnames] if reader.fieldnames else None
+        reader.fieldnames = (
+            [f.lower() for f in reader.fieldnames] if reader.fieldnames else None
+        )
         return [row for row in reader]
 
 
@@ -199,7 +205,9 @@ def metadata_to_song_list(config: Config, metadata: Dict[str, Row]) -> List[Dict
         song = {
             "path": path,
             "filename": path if config.music_dir is None else src,
-            "src": path if config.music_dir is None else os.path.join(config.media_dir, src),
+            "src": path
+            if config.music_dir is None
+            else os.path.join(config.media_dir, src),
             "title": tags.title or src,
             "artist": tags.artist,
             "album": tags.album,
@@ -240,7 +248,9 @@ def create_or_update_metadata_csv(config: Config) -> None:
                     old_metadata[key] = new_value
         else:
             new_metadata = {
-                key: value for key, value in metadata.__dict__.items() if hasattr(Row, key)
+                key: value
+                for key, value in metadata.__dict__.items()
+                if hasattr(Row, key)
             }
             new_metadata["filename"] = filename
             rows[filename] = new_metadata
