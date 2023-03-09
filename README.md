@@ -58,6 +58,13 @@ see step 3 below.
    [Dropbox](https://web.archive.org/web/20210117032036/https://www.ampercent.com/host-static-website-dropbox-free-webhosting/6426/)
    to host this as a static website.
 
+1. A new music file can be added to an existing music directory and site using
+   the `add-audio` subcommand.
+
+   ```sh
+   earworm add-audio -c config.yml -i ~/Downloads/cover-image.jpg ~/Music/covers/song123.mp3
+   ```
+
 ## Dev Setup
 
 When working on the source (py/html/CSS/JS) of the site, you can automatically
