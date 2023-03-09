@@ -35,3 +35,8 @@ jobs:
         run: |
           source $VENV
           mypy --disallow-incomplete-defs --disallow-untyped-calls earworm
+
+      - name: Run tests
+        run: |
+          source $VENV
+          pytest
