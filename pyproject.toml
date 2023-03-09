@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "earworm"
-version = "0.3.1"
+version = "0.3.2"
 description = "Create a simple web page to listen to audio files in a directory"
 authors = ["Puneeth Chaganti <punchagan@muse-amuse.in>"]
 include = ["earworm/static/bundle.js"]
