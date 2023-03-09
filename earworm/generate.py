@@ -150,6 +150,7 @@ def create_favicon(config: Config, path: str) -> None:
 def generate_site(config: Config) -> None:
     print(f"Generating site from {config.music_dir or config._config_path} ...")
     songs = get_metadata(config)
+    print(f"Publishing {len(songs)} songs ...")
 
     os.makedirs(config.out_dir, exist_ok=True)
 

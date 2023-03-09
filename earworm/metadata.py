@@ -98,7 +98,6 @@ def get_metadata(config: Config) -> List[Dict]:
         )
         print("\n    ".join(excluded_songs))
         print("\033[00m")
-    print(f"Publishing {len(filtered_songs)} songs ...")
     return filtered_songs
 
 
