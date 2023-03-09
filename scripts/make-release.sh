@@ -24,6 +24,6 @@ else
     git add pyproject.toml
     git commit -m "release: ${NOTE}"
     git tag $(poetry version -s)
-    rollup -c rollup.config.js
+    ./node_modules/.bin/rollup --bundleConfigAsCjs -c rollup.config.js
     poetry build
 fi
