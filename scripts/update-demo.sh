@@ -12,6 +12,9 @@ pushd $(dirname $0)/..
 rm -rf ./tests/public/
 ./node_modules/.bin/rollup --bundleConfigAsCjs -c rollup.config.js
 poetry build
+if [ ! -z "${GITHUB_ACTIONS}" ]; then
+    pip install dist/earworm*.whl
+fi
 earworm -c tests/sample-config.yml
 
 # Commit and publish the site

@@ -40,3 +40,16 @@ jobs:
         run: |
           source $VENV
           pytest
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: Build demo site
+        # We build the demo site, but don't update it.  This is purely for CI
+        # purposes.
+        run: |
+          yarn
+          ./scripts/update-demo.sh
