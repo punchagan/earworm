@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 import argparse
+import datetime
 import io
 import os
+import re
 import shutil
+import subprocess
+import tempfile
 from dataclasses import fields
-from typing import Dict, List
+from pathlib import Path
+from typing import Dict, List, Optional
 from urllib.parse import urljoin
 
 import jinja2
@@ -196,6 +201,62 @@ def make_config_file(config: Config) -> None:
     print("Please update the value of music_dir to your directory of files.")
 
 
+def add_audio_file(config: Config, audio_path: Path, cover_image: Optional[Path] = None) -> None:
+
+    name = audio_path.name
+    date_re = re.compile(config.date_regex)
+
+    today = datetime.date.today().strftime(config.date_format)
+    new_name = (
+        f"{audio_path.stem}_{today}{audio_path.suffix}"
+        if not re.search(config.date_regex, name)
+        else name
+    )
+    new_path = Path(config.music_dir).joinpath(new_name)
+    songlist = get_metadata(config)
+
+    metadata = {}
+    metadata["title"] = input("Enter Title: ").strip()
+    artists = {song["artist"] for song in songlist}
+    if artists:
+        print(f"Artists for other songs in the music dir: {' | '.join(artists)}")
+    metadata["artist"] = input("Enter Artist: ").strip()
+    albums = {song["album"] for song in songlist}
+    if albums:
+        print(f"Albums for other songs in the music dir: {' | '.join(albums)}")
+    metadata["album"] = input("Enter Album: ").strip()
+
+    shutil.copyfile(str(audio_path), str(new_path))
+    name = f"{new_path.stem}_md{new_path.suffix}"
+    path = Path(config.music_dir).joinpath(name)
+
+    md = [
+        arg
+        for key, value in metadata.items()
+        if value.strip()
+        for arg in ("-metadata", f"{key}={value}")
+    ]
+    if not cover_image:
+        image_data = {song["album"]: song["image"] for song in songlist}.get(metadata["album"])
+        if image_data:
+            with tempfile.NamedTemporaryFile(delete=False) as f:
+                f.write(image_data)
+            cover_image = Path(f.name)
+
+    prefix1 = ["ffmpeg", "-i", new_path.name]
+    prefix2 = ["-map", "0", "-map", "1"]
+    copy = ["-c", "copy"]
+
+    if cover_image:
+        prefix = prefix1 + ["-i", str(cover_image)] + copy + prefix2
+    else:
+        prefix = prefix1 + copy
+    command = prefix + md + [name]
+    subprocess.check_output(command, cwd=config.music_dir)
+    os.unlink(new_path)
+    print(f"Copied audio file to {path}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     # NOTE: Added here for running without any sub-command. But, the
@@ -205,6 +266,7 @@ def main() -> None:
     parser.set_defaults(func=generate_site)
 
     subparsers = parser.add_subparsers(title="sub-commands")
+
     parser_update_csv = subparsers.add_parser(
         "update-csv", help="Update CSV from files in the music dir"
     )
@@ -214,6 +276,14 @@ def main() -> None:
     parser_make_config = subparsers.add_parser("make-config", help="Make a sample config file")
     parser_make_config.add_argument("-c", "--config", action="store", default="config.yml")
     parser_make_config.set_defaults(func=make_config_file)
+
+    parser_make_config = subparsers.add_parser(
+        "add-audio", help="Add an audio file to the music_dir"
+    )
+    parser_make_config.add_argument("-c", "--config", action="store", default="config.yml")
+    parser_make_config.add_argument("-i", "--cover-image", type=Path)
+    parser_make_config.add_argument("audio", type=Path)
+    parser_make_config.set_defaults(func=add_audio_file)
 
     options = parser.parse_args()
     config_path = os.path.abspath(options.config)
@@ -226,7 +296,14 @@ def main() -> None:
         print(f"Could not find the config file {options.config}.")
         print("Run `earworm make-config' to create the config file")
     else:
-        options.func(config)
+        if options.func.__name__ == "add_audio_file":
+            audio = options.audio
+            if not audio.exists():
+                print(f"{audio} file does not exist")
+            else:
+                options.func(config, options.audio, options.cover_image)
+        else:
+            options.func(config)
 
 
 if __name__ == "__main__":

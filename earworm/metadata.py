@@ -22,6 +22,7 @@ class Config:
     album_required: bool = False
     date_required: bool = False
     date_regex: str = r"(?P<year>\d{4})_(?P<month>\d{2})_(?P<day>\d{2})"
+    date_format: str = "%Y_%m_%d"
     ignored_dates: set = field(default_factory=set)
     out_dir: str = "./public"
     media_dir: str = "music"
