@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 import argparse
-from dataclasses import fields
 import io
-import json
 import os
 import shutil
-from typing import List, Dict
+from dataclasses import fields
+from typing import Dict, List
 from urllib.parse import urljoin
 
 import jinja2
-from PIL import Image  # type: ignore
 import webassets  # type: ignore
-from webassets.ext.jinja2 import AssetsExtension  # type: ignore
 import yaml
+from PIL import Image  # type: ignore
+from webassets.ext.jinja2 import AssetsExtension  # type: ignore
 
 from .feed import generate_feed
 from .metadata import Config, create_or_update_metadata_csv, download_file, get_metadata, is_url
